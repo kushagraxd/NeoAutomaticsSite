@@ -1,65 +1,316 @@
 import { motion } from 'framer-motion';
-import { Shield, Award, CheckCircle } from 'lucide-react';
+import { Shield, Award, CheckCircle, Target, Users, Zap, Eye, FileText, Settings, BarChart3 } from 'lucide-react';
 
-const qualityFeatures = [
+const qualityCertifications = [
   {
     icon: Shield,
-    title: "ISO 9001:2015 Certified",
-    description: "Internationally recognized quality management system certification"
+    title: "ISO 9001:2015",
+    description: "Internationally recognized quality management system ensuring consistent product quality",
+    year: "2015",
+    scope: "Design & Manufacturing",
+    color: "lime"
   },
   {
     icon: Award,
-    title: "Advanced Inspection",
-    description: "State-of-the-art measurement and inspection equipment"
+    title: "PPAP Level 3",
+    description: "Production Part Approval Process certification for automotive suppliers",
+    year: "Ready",
+    scope: "Automotive Components",
+    color: "violet"
   },
   {
-    icon: CheckCircle,
-    title: "Quality Assurance",
-    description: "Rigorous testing and validation processes for every component"
+    icon: Target,
+    title: "Lean Manufacturing",
+    description: "Continuous improvement methodologies for waste reduction and efficiency",
+    year: "Ongoing",
+    scope: "All Operations",
+    color: "lime"
   }
+];
+
+const qualityProcesses = [
+  {
+    icon: Eye,
+    title: "Incoming Inspection",
+    description: "100% material verification and certification review before production",
+    steps: ["Material certificates review", "Dimensional verification", "Chemical composition check", "Surface quality assessment"]
+  },
+  {
+    icon: Settings,
+    title: "In-Process Control",
+    description: "Statistical process control and real-time monitoring during manufacturing",
+    steps: ["SPC implementation", "First article inspection", "Process capability studies", "Control chart monitoring"]
+  },
+  {
+    icon: BarChart3,
+    title: "Final Inspection",
+    description: "Comprehensive final inspection using advanced measurement systems",
+    steps: ["CMM dimensional analysis", "Surface finish measurement", "Functional testing", "Documentation package"]
+  },
+  {
+    icon: FileText,
+    title: "Documentation",
+    description: "Complete traceability and quality documentation for every component",
+    steps: ["Certificate of compliance", "Inspection reports", "Material traceability", "PPAP documentation"]
+  }
+];
+
+const qualityEquipment = [
+  { name: "CMM (Coordinate Measuring Machine)", capability: "±0.002mm accuracy", applications: "Dimensional inspection" },
+  { name: "Surface Roughness Tester", capability: "Ra 0.025μm resolution", applications: "Surface finish verification" },
+  { name: "Hardness Testing", capability: "HRC, HV, HB scales", applications: "Material property validation" },
+  { name: "Optical Comparator", capability: "0.001mm resolution", applications: "Profile measurement" },
+  { name: "Gauge Blocks & Standards", capability: "Grade 0 precision", applications: "Calibration standards" },
+  { name: "Thread Gauges", capability: "Class 6H/6g tolerance", applications: "Thread verification" }
+];
+
+const qualityMetrics = [
+  { metric: "99.8%", label: "On-Time Delivery", icon: Target },
+  { metric: "99.5%", label: "First Pass Yield", icon: CheckCircle },
+  { metric: "0.02%", label: "PPM Defect Rate", icon: Shield },
+  { metric: "100%", label: "PPAP Success", icon: Award }
 ];
 
 export default function QualityPage() {
   return (
-    <div className="min-h-screen bg-slate-950 py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <h1 className="text-5xl font-bold text-slate-100 mb-6">
-            Quality <span className="gradient-text">Excellence</span>
-          </h1>
-          <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-            Committed to delivering the highest quality precision components through
-            rigorous quality management systems and advanced inspection processes.
-          </p>
-        </motion.div>
+    <div className="min-h-screen bg-base">
+      {/* Hero Section */}
+      <section className="relative py-28 overflow-hidden">
+        {/* Background Effects */}
+        <div className="absolute inset-0 aurora-bg opacity-10" />
+        <div className="geometric-shape geometric-shape-1" />
+        <div className="geometric-shape geometric-shape-2" />
+        
+        <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <h1 className="text-4xl md:text-6xl font-display font-bold text-primary mb-6 tracking-tight leading-tight">
+              Quality <span className="gradient-text">Excellence</span>
+            </h1>
+            <p className="text-xl md:text-2xl text-muted max-w-4xl mx-auto leading-relaxed">
+              Committed to delivering the highest quality precision components through
+              <span className="text-lime font-semibold"> ISO 9001:2015 certified</span> processes and advanced inspection systems.
+            </p>
+          </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {qualityFeatures.map((feature, index) => {
-            const IconComponent = feature.icon;
-            return (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="glass-card p-8 rounded-2xl glow-hover"
-                data-testid={`quality-${feature.title.toLowerCase().replace(/[^a-z]/g, '-')}`}
-              >
-                <IconComponent className="h-12 w-12 text-emerald-400 mb-6" />
-                <h3 className="text-2xl font-semibold text-slate-100 mb-4">
-                  {feature.title}
-                </h3>
-                <p className="text-slate-400">{feature.description}</p>
-              </motion.div>
-            );
-          })}
+          {/* Quality Metrics */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-20">
+            {qualityMetrics.map((item, index) => {
+              const IconComponent = item.icon;
+              return (
+                <motion.div
+                  key={item.label}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="text-center glass-card p-6 glow-hover group"
+                >
+                  <IconComponent className="h-8 w-8 text-lime mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
+                  <div className="text-3xl font-display font-bold text-lime mb-2">{item.metric}</div>
+                  <div className="text-muted font-medium">{item.label}</div>
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      </section>
+
+      {/* Certifications */}
+      <section className="py-20 md:py-28 bg-elevated">
+        <div className="max-w-7xl mx-auto px-6 md:px-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6 tracking-tight">
+              Certifications & <span className="gradient-text">Standards</span>
+            </h2>
+            <p className="text-xl text-muted max-w-3xl mx-auto leading-relaxed">
+              Our quality management systems meet international standards and industry-specific requirements.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {qualityCertifications.map((cert, index) => {
+              const IconComponent = cert.icon;
+              const iconColor = cert.color === 'lime' ? 'text-lime' : 'text-violet';
+              
+              return (
+                <motion.div
+                  key={cert.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="glass-card p-8 glow-hover group text-center"
+                  data-testid={`certification-${cert.title.toLowerCase().replace(/[^a-z]/g, '-')}`}
+                >
+                  <IconComponent className={`h-16 w-16 ${iconColor} mx-auto mb-6 group-hover:scale-110 transition-transform duration-300`} />
+                  <h3 className="text-xl font-display font-semibold text-primary mb-4">
+                    {cert.title}
+                  </h3>
+                  <p className="text-muted mb-6 leading-relaxed">{cert.description}</p>
+                  
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted">Year:</span>
+                      <span className={iconColor}>{cert.year}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted">Scope:</span>
+                      <span className="text-primary">{cert.scope}</span>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Quality Processes */}
+      <section className="py-20 md:py-28">
+        <div className="max-w-7xl mx-auto px-6 md:px-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6 tracking-tight">
+              Quality <span className="gradient-text">Process</span>
+            </h2>
+            <p className="text-xl text-muted max-w-3xl mx-auto leading-relaxed">
+              Comprehensive quality control at every stage from raw material to finished component.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {qualityProcesses.map((process, index) => {
+              const IconComponent = process.icon;
+              
+              return (
+                <motion.div
+                  key={process.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="glass-card p-8 glow-hover group"
+                >
+                  <IconComponent className="h-12 w-12 text-lime mb-6 group-hover:scale-110 transition-transform duration-300" />
+                  <h3 className="text-xl font-display font-semibold text-primary mb-4">
+                    {process.title}
+                  </h3>
+                  <p className="text-muted mb-6 leading-relaxed">{process.description}</p>
+                  
+                  <ul className="space-y-2">
+                    {process.steps.map((step, stepIndex) => (
+                      <li key={stepIndex} className="flex items-center text-sm text-muted">
+                        <CheckCircle className="h-4 w-4 text-violet mr-3 flex-shrink-0" />
+                        {step}
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Quality Equipment */}
+      <section className="py-20 md:py-28 bg-elevated">
+        <div className="max-w-7xl mx-auto px-6 md:px-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6 tracking-tight">
+              Inspection <span className="gradient-text">Equipment</span>
+            </h2>
+            <p className="text-xl text-muted max-w-3xl mx-auto leading-relaxed">
+              State-of-the-art measurement and inspection equipment ensuring precise quality verification.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {qualityEquipment.map((equipment, index) => (
+              <motion.div
+                key={equipment.name}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className="glass-card p-6 glow-hover"
+              >
+                <h3 className="font-display font-semibold text-primary mb-3">{equipment.name}</h3>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-muted">Capability:</span>
+                    <span className="text-lime font-medium">{equipment.capability}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted">Application:</span>
+                    <span className="text-violet">{equipment.applications}</span>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 md:py-28">
+        <div className="max-w-4xl mx-auto px-6 md:px-10 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6 tracking-tight">
+              Quality You Can <span className="gradient-text">Trust</span>
+            </h2>
+            <p className="text-xl text-muted mb-12 leading-relaxed">
+              Experience the confidence that comes with ISO 9001:2015 certified quality and comprehensive documentation.
+            </p>
+            
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="flex flex-col sm:flex-row gap-6 justify-center"
+            >
+              <a 
+                href="/contact" 
+                className="btn-primary magnetic-btn group inline-flex items-center justify-center"
+                data-testid="cta-quality-consultation"
+              >
+                <Shield className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
+                Quality Consultation
+              </a>
+              <a 
+                href="/neo-quality-manual.pdf" 
+                className="btn-secondary magnetic-btn inline-flex items-center justify-center"
+                data-testid="cta-download-quality-manual"
+                download
+              >
+                Download Quality Manual
+              </a>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
     </div>
   );
 }

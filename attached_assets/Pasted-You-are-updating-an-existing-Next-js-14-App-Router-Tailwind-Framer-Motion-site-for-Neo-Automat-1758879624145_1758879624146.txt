@@ -1,0 +1,79 @@
+You are updating an existing Next.js 14 (App Router) + Tailwind + Framer Motion site for Neo Automatics. Implement ALL changes below precisely.
+1) Navigation (links at top)
+Create a sticky top Navbar with left-aligned logo text Neo Automatics and right-aligned links: Home, Capabilities, Industries, Quality, Products, About, Contact.
+Ensure these routes exist and render; no 404s. Use / /capabilities /industries /quality /products /about /contact.
+Active link gets an accent underline and subtle glow.
+On mobile: hamburger → slide-in menu with the same links.
+2) Hero copy & layout
+Replace current headline with:
+H1 (big): Neo Automatics
+H2 (below, smaller): Precision Machined Components for OEMs & Tier-1s
+Supporting line: End-to-end machining, heat treatment & QA—delivered at scale.
+Primary CTA: Request a Quote → /contact (or scroll to RFQ section on the same page).
+Secondary CTA: Download Capability Profile (link to /public/neo-capability-profile.pdf).
+3) Background: nut/bolt video or animated graphic
+Add a muted, autoplay, loop, playsinline background video behind the hero using a <video> tag with poster fallback. File path: /public/assets/nut-bolt.mp4.
+If video cannot be added, fallback to a lightweight animated SVG (rotating nut/bolt line art) or particles using CSS only (no heavy libs).
+Apply a subtle dark overlay (bg-black/50) so text maintains contrast ≥ 4.5:1.
+4) New color theme (no green/purple, no blue)
+Remove all green/purple/blue accents.
+Tailwind custom tokens in tailwind.config:
+Backgrounds: base #0A0A0B, elevated #111112
+Text: primary #EDEDEF, muted #A2A2AD
+Accent (primary): Safety Amber #F5B301
+Accent (secondary): Signal Red #FF4D4D
+Surfaces: glass cards bg-white/5 backdrop-blur-xl ring-1 ring-white/10
+Gradients: amber→red, very subtle; NO blue/green/purple anywhere.
+Buttons:
+Primary: amber fill with soft glow on hover.
+Secondary: outline with red accent; hover adds inner glow.
+5) Detail-oriented content & sections
+On Home page, add these sections with clean spacing and micro-interactions:
+Trust Bar: “Trusted by leading OEMs & Tier-1s” with neutral greyscale placeholder logos.
+Value Pillars (3): Cost Leadership • Reliability • Speed/Agility (each a small glass card with icon).
+Metrics Row: 30 CNC, 3 Units, ISO 9001:2015, PPAP Ready (animated counters).
+Capabilities Snapshot: 3 cards linking to /capabilities (Machining, Heat Treatment, Inspection & QA).
+Process Timeline: 5 steps — RFQ → Feasibility → Proto/PPAP → Pilot → SOP & Scale.
+Case Teasers: two mini “results” cards (e.g., “15% cost down via process optimization”; “<0.5% PPM over 12 months”). Use placeholder text.
+CTA Band: “Ready to start a project?” with Request a Quote button.
+Capabilities page:
+Sections for Machining, Heat Treatment, Inspection & QA with brief, buyer-focused copy.
+MachinesTable pulling from JSON (CNC 30, TRAUB counts, grinders, etc.).
+Industries page:
+Cards for Automotive, Agriculture Machinery, Industrial Equipment, Kitchen Tools. Each card: pain-point → how Neo solves it.
+Quality page:
+ISO + PPAP overview, instruments gallery, bullet list of gauges/testers.
+A small capability histogram or spec badge row.
+Products page:
+Grid of key parts (Collars, Ratchet Starter & Pinion, Rocker Arms, Engine Bushes, Sprockets, Gear Blanks).
+Each card opens a modal with short specs and a “Request quote for this part” button → /contact prefilled subject.
+About page:
+Short note from Kushagra Dhingra, simple timeline, SVG map of 3 units.
+Contact page:
+RFQ form (Name, Company, Email, Phone, Part, Annual Volume, Material, Drawing PDF/DWG up to 10MB, Message).
+Server route /api/rfq via Nodemailer (env: SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, TO_EMAIL=neo.automatics@gmail.com), fallback to Formspree with FORMSPREE_ID.
+6) Typography & spacing
+Fonts: Space Grotesk for headings, Inter for body.
+H1: text-6xl md:text-7xl tracking-tight, H2: text-2xl md:text-3xl.
+Section wrapper: max-w-7xl mx-auto px-6 md:px-10 py-20 md:py-28.
+Consistent vertical rhythm; remove cramped spacing.
+7) Icons & motion
+lucide-react icons for sections.
+Framer Motion: fade/slide on section entry; hover lift + glow on cards/buttons.
+Respect prefers-reduced-motion.
+8) Cleanup & QA
+Replace any leftover blue/green/purple tokens with the new palette.
+Ensure all nav links route correctly (no 404s). If a page lacks content, create polished placeholders.
+Contrast check on hero over video.
+Add /public/assets/nut-bolt.mp4 and a static poster image. If video absent, default to animated SVG.
+9) Data (hard-code/update)
+Use or update a /data/company.json with:
+name: "Neo Automatics", email: "neo.automatics@gmail.com", phone: "+91 88130 79855", owner: "Kushagra Dhingra"
+machines.CNC = 30 and the rest per earlier spec
+certifications: ["ISO 9001:2015", "PPAP Ready"]
+10) Deliverables
+Updated theme, pages, working navbar, hero with video/graphics, enhanced content.
+/public/ assets: assets/nut-bolt.mp4, assets/nut-bolt-poster.jpg, minimal industrial SVGs.
+.env.example with SMTP + FORMSPREE_ID.
+No TypeScript or ESLint errors.
+Now implement all changes.
