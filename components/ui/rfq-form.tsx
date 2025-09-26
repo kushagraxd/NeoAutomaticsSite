@@ -30,7 +30,7 @@ const formSchema = z.object({
   email: z.string().email("Invalid email address"),
   phone: z.string().min(10, "Phone number must be at least 10 digits"),
   component: z.string().min(2, "Component/Part description is required"),
-  volume: z.string().min(1, "Annual volume is required"),
+  annualVolume: z.string().min(1, "Annual volume is required"),
   material: z.string().min(2, "Material specification is required"),
   message: z.string().optional(),
 });
@@ -50,7 +50,7 @@ export function RFQForm() {
       email: "",
       phone: "",
       component: "",
-      volume: "",
+      annualVolume: "",
       material: "",
       message: "",
     },
@@ -244,7 +244,7 @@ export function RFQForm() {
           <div className="grid md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
-              name="volume"
+              name="annualVolume"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Annual Volume *</FormLabel>
