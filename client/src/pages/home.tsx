@@ -153,7 +153,10 @@ export default function HomePage() {
               className="flex flex-col sm:flex-row gap-6 justify-center items-center"
             >
               <Link href="/contact">
-                <Button className="btn-primary magnetic-btn group">
+                <Button 
+                  className="btn-primary magnetic-btn group" 
+                  data-testid="hero-request-quote"
+                >
                   <ArrowRight className="mr-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   Request a Quote
                 </Button>
@@ -163,6 +166,7 @@ export default function HomePage() {
                 href="/neo-capability-profile.pdf" 
                 download
                 className="btn-secondary magnetic-btn group inline-flex items-center"
+                data-testid="hero-download-capability"
               >
                 <Download className="mr-2 h-5 w-5 group-hover:translate-y-0.5 transition-transform" />
                 Download Capability Profile
@@ -272,12 +276,192 @@ export default function HomePage() {
                 className="text-center glass-card p-6 glow-hover"
                 data-testid={`metric-${metric.label.toLowerCase().replace(/[^a-z]/g, '-')}`}
               >
-                <div className="text-4xl md:text-5xl font-display font-bold text-lime mb-2">
+                <div className="text-4xl md:text-5xl font-display font-bold text-amber mb-2">
                   <Counter target={metric.target} suffix={metric.suffix} />
                 </div>
                 <div className="text-muted font-medium">{metric.label}</div>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Capabilities Snapshot */}
+      <section className="py-20 md:py-28">
+        <div className="max-w-7xl mx-auto px-6 md:px-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6 tracking-tight">
+              Manufacturing <span className="gradient-text">Capabilities</span>
+            </h2>
+            <p className="text-xl text-muted max-w-3xl mx-auto leading-relaxed">
+              Complete machining, heat treatment, and QA capabilities under one roof.
+            </p>
+          </motion.div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0 }}
+              className="glass-card p-8 glow-hover group"
+              data-testid="capability-machining"
+            >
+              <Factory className="h-12 w-12 text-amber mb-6 group-hover:scale-110 transition-transform duration-300" />
+              <h3 className="text-xl font-display font-semibold text-primary mb-4">
+                CNC Machining
+              </h3>
+              <p className="text-muted leading-relaxed mb-4">30+ CNC machines including TRAUB multi-spindle automats for high-volume precision.</p>
+              <div className="text-amber font-medium">24 TRAUB • 6+ Grinders</div>
+            </motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="glass-card p-8 glow-hover group"
+              data-testid="capability-heat-treatment"
+            >
+              <Zap className="h-12 w-12 text-red mb-6 group-hover:scale-110 transition-transform duration-300" />
+              <h3 className="text-xl font-display font-semibold text-primary mb-4">
+                Heat Treatment
+              </h3>
+              <p className="text-muted leading-relaxed mb-4">In-house quenching and tempering with sealed furnaces and mesh belt systems.</p>
+              <div className="text-red font-medium">Sealed Quench • Mesh Belt</div>
+            </motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="glass-card p-8 glow-hover group"
+              data-testid="capability-qa"
+            >
+              <Award className="h-12 w-12 text-amber mb-6 group-hover:scale-110 transition-transform duration-300" />
+              <h3 className="text-xl font-display font-semibold text-primary mb-4">
+                Inspection & QA
+              </h3>
+              <p className="text-muted leading-relaxed mb-4">Complete metrology lab with Rockwell testers, surface roughness, and profile projectors.</p>
+              <div className="text-amber font-medium">ISO 9001:2015 • PPAP Ready</div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Process Timeline */}
+      <section className="py-20 md:py-28 bg-elevated">
+        <div className="max-w-7xl mx-auto px-6 md:px-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6 tracking-tight">
+              Our <span className="gradient-text">Process</span>
+            </h2>
+            <p className="text-xl text-muted max-w-3xl mx-auto leading-relaxed">
+              From concept to delivery, our streamlined process ensures quality and speed.
+            </p>
+          </motion.div>
+          
+          <div className="grid md:grid-cols-4 gap-8">
+            {[
+              { step: "01", title: "Requirements", description: "Technical drawing analysis and feasibility study", icon: Users },
+              { step: "02", title: "Prototyping", description: "Rapid prototyping and design validation", icon: Factory },
+              { step: "03", title: "Production", description: "High-volume manufacturing with quality control", icon: Zap },
+              { step: "04", title: "Delivery", description: "PPAP documentation and on-time shipment", icon: CheckCircle }
+            ].map((item, index) => {
+              const IconComponent = item.icon;
+              return (
+                <motion.div
+                  key={item.step}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="text-center glass-card p-6 glow-hover group"
+                  data-testid={`process-step-${item.step}`}
+                >
+                  <div className="text-amber font-display text-lg font-bold mb-4">{item.step}</div>
+                  <IconComponent className="h-12 w-12 text-primary mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
+                  <h3 className="text-lg font-display font-semibold text-primary mb-3">
+                    {item.title}
+                  </h3>
+                  <p className="text-muted text-sm leading-relaxed">{item.description}</p>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Case Teasers */}
+      <section className="py-20 md:py-28">
+        <div className="max-w-7xl mx-auto px-6 md:px-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6 tracking-tight">
+              Success <span className="gradient-text">Stories</span>
+            </h2>
+            <p className="text-xl text-muted max-w-3xl mx-auto leading-relaxed">
+              Real results from our partnerships with industry leaders.
+            </p>
+          </motion.div>
+          
+          <div className="grid md:grid-cols-2 gap-8">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="glass-card p-8 glow-hover group"
+              data-testid="case-automotive"
+            >
+              <div className="text-red font-medium mb-2">Automotive OEM</div>
+              <h3 className="text-xl font-display font-semibold text-primary mb-4">
+                50% Cost Reduction in Rocker Arms
+              </h3>
+              <p className="text-muted leading-relaxed mb-6">
+                Optimized manufacturing process reduced per-unit cost by 50% while maintaining ±0.005mm tolerance requirements for critical valve train components.
+              </p>
+              <div className="flex items-center justify-between">
+                <span className="text-amber font-medium">2M+ units delivered</span>
+                <ArrowRight className="h-5 w-5 text-amber group-hover:translate-x-1 transition-transform" />
+              </div>
+            </motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="glass-card p-8 glow-hover group"
+              data-testid="case-agriculture"
+            >
+              <div className="text-red font-medium mb-2">Agriculture Equipment</div>
+              <h3 className="text-xl font-display font-semibold text-primary mb-4">
+                30-Day Development Cycle
+              </h3>
+              <p className="text-muted leading-relaxed mb-6">
+                Rapid prototyping and PPAP approval achieved in record time for complex sprocket assemblies, enabling faster market entry.
+              </p>
+              <div className="flex items-center justify-between">
+                <span className="text-amber font-medium">15-day PPAP approval</span>
+                <ArrowRight className="h-5 w-5 text-amber group-hover:translate-x-1 transition-transform" />
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -310,17 +494,17 @@ export default function HomePage() {
                 className="glass-card p-6 glow-hover group"
                 data-testid={`featured-product-${product.name.toLowerCase().replace(/[^a-z]/g, '-')}`}
               >
-                <div className="aspect-square bg-gradient-to-br from-lime/10 to-violet/10 rounded-lg mb-6 flex items-center justify-center group-hover:from-lime/20 group-hover:to-violet/20 transition-colors duration-300">
-                  <Factory className="h-12 w-12 text-lime" />
+                <div className="aspect-square bg-gradient-to-br from-amber/10 to-red/10 rounded-lg mb-6 flex items-center justify-center group-hover:from-amber/20 group-hover:to-red/20 transition-colors duration-300">
+                  <Factory className="h-12 w-12 text-amber" />
                 </div>
-                <div className="text-sm text-violet font-medium mb-2">{product.category}</div>
+                <div className="text-sm text-red font-medium mb-2">{product.category}</div>
                 <h3 className="text-lg font-display font-semibold text-primary mb-3">
                   {product.name}
                 </h3>
                 <p className="text-muted mb-4 leading-relaxed">{product.description}</p>
                 <div className="flex items-center justify-between">
-                  <span className="text-lime font-medium">Tolerance: {product.tolerance}</span>
-                  <CheckCircle className="h-5 w-5 text-lime" />
+                  <span className="text-amber font-medium">Tolerance: {product.tolerance}</span>
+                  <CheckCircle className="h-5 w-5 text-amber" />
                 </div>
               </motion.div>
             ))}
