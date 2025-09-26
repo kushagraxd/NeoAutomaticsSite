@@ -13,7 +13,7 @@ const industries = [
       "Steering & Suspension Parts"
     ],
     applications: ["Passenger Vehicles", "Commercial Vehicles", "Electric Vehicles", "Hybrid Systems"],
-    color: "lime",
+    color: "amber",
     stats: { clients: "15+", parts: "500K+", precision: "±0.005mm" }
   },
   {
@@ -27,7 +27,7 @@ const industries = [
       "Engine Parts (Blocks, Heads, Manifolds)"
     ],
     applications: ["Tractors", "Harvesters", "Planters", "Irrigation Systems"],
-    color: "violet",
+    color: "red",
     stats: { clients: "12+", parts: "300K+", precision: "±0.01mm" }
   },
   {
@@ -41,8 +41,22 @@ const industries = [
       "Custom Manufacturing Fixtures"
     ],
     applications: ["CNC Machines", "Assembly Lines", "Process Equipment", "Material Handling"],
-    color: "lime",
+    color: "amber",
     stats: { clients: "20+", parts: "200K+", precision: "±0.02mm" }
+  },
+  {
+    icon: Users,
+    title: "Kitchen Tools",
+    description: "High-quality precision components for commercial and residential kitchen equipment",
+    features: [
+      "Cutting Mechanisms (Blades, Guides)",
+      "Handle Assemblies (Grips, Fasteners)",
+      "Mixing Components (Paddles, Shafts)",
+      "Safety Systems (Guards, Locks)"
+    ],
+    applications: ["Food Processors", "Commercial Mixers", "Slicing Equipment", "Blending Systems"],
+    color: "red",
+    stats: { clients: "8+", parts: "150K+", precision: "±0.05mm" }
   }
 ];
 
@@ -51,25 +65,25 @@ const industryBenefits = [
     icon: Target,
     title: "Precision Engineering",
     description: "Tight tolerances and superior surface finishes meeting the most demanding specifications",
-    color: "lime"
+    color: "amber"
   },
   {
     icon: Award,
     title: "Quality Assurance",
     description: "ISO 9001:2015 certified processes with comprehensive PPAP documentation",
-    color: "violet"
+    color: "red"
   },
   {
     icon: Users,
     title: "Technical Support",
     description: "Expert engineering team providing DFM analysis and cost optimization",
-    color: "lime"
+    color: "amber"
   },
   {
     icon: Zap,
     title: "Rapid Response",
     description: "Quick turnaround times from prototyping to full-scale production",
-    color: "violet"
+    color: "red"
   }
 ];
 
@@ -95,7 +109,7 @@ export default function IndustriesPage() {
             </h1>
             <p className="text-xl md:text-2xl text-muted max-w-4xl mx-auto leading-relaxed">
               Delivering precision manufacturing solutions across diverse industrial sectors
-              with <span className="text-lime font-semibold">specialized expertise</span> and proven quality standards.
+              with <span className="text-amber font-semibold">specialized expertise</span> and proven quality standards.
             </p>
           </motion.div>
 
@@ -103,7 +117,7 @@ export default function IndustriesPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
             {industryBenefits.map((benefit, index) => {
               const IconComponent = benefit.icon;
-              const iconColor = benefit.color === 'lime' ? 'text-lime' : 'text-violet';
+              const iconColor = benefit.color === 'amber' ? 'text-amber' : 'text-red';
               
               return (
                 <motion.div
@@ -112,6 +126,7 @@ export default function IndustriesPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   className="text-center glass-card p-6 glow-hover group"
+                  data-testid={`benefit-${benefit.title.toLowerCase().replace(/[^a-z]/g, '-')}`}
                 >
                   <IconComponent className={`h-10 w-10 ${iconColor} mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`} />
                   <h3 className="text-lg font-display font-semibold text-primary mb-3">{benefit.title}</h3>
@@ -129,7 +144,7 @@ export default function IndustriesPage() {
           <div className="space-y-20">
             {industries.map((industry, index) => {
               const IconComponent = industry.icon;
-              const iconColor = industry.color === 'lime' ? 'text-lime' : 'text-violet';
+              const iconColor = industry.color === 'amber' ? 'text-amber' : 'text-red';
               const isReverse = index % 2 === 1;
               
               return (
@@ -174,7 +189,7 @@ export default function IndustriesPage() {
                       <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         {industry.features.map((feature, featureIndex) => (
                           <li key={featureIndex} className="flex items-center text-muted">
-                            <CheckCircle className="h-4 w-4 text-lime mr-3 flex-shrink-0" />
+                            <CheckCircle className="h-4 w-4 text-amber mr-3 flex-shrink-0" />
                             <span className="text-sm">{feature}</span>
                           </li>
                         ))}
@@ -189,9 +204,9 @@ export default function IndustriesPage() {
                           <span
                             key={appIndex}
                             className={`px-3 py-1 text-sm rounded-full border ${
-                              industry.color === 'lime' 
-                                ? 'border-lime/30 bg-lime/10 text-lime' 
-                                : 'border-violet/30 bg-violet/10 text-violet'
+                              industry.color === 'amber' 
+                                ? 'border-amber/30 bg-amber/10 text-amber' 
+                                : 'border-red/30 bg-red/10 text-red'
                             }`}
                           >
                             {app}
@@ -204,7 +219,7 @@ export default function IndustriesPage() {
                   {/* Visual */}
                   <div className={`${isReverse ? 'lg:col-start-1' : ''}`}>
                     <div className="glass-card p-12 glow-hover group">
-                      <div className="aspect-square bg-gradient-to-br from-lime/10 to-violet/10 rounded-2xl flex items-center justify-center group-hover:from-lime/20 group-hover:to-violet/20 transition-colors duration-300">
+                      <div className="aspect-square bg-gradient-to-br from-amber/10 to-red/10 rounded-2xl flex items-center justify-center group-hover:from-amber/20 group-hover:to-red/20 transition-colors duration-300">
                         <IconComponent className={`h-24 w-24 ${iconColor} group-hover:scale-110 transition-transform duration-300`} />
                       </div>
                     </div>
