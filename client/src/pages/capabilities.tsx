@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Cog, Wrench, Settings, CheckCircle, Factory, Zap, Award, Clock, Users, Target } from 'lucide-react';
+import companyData from '../../../data/company.json';
 
 const capabilities = [
   {
@@ -7,42 +8,42 @@ const capabilities = [
     title: "CNC Machining",
     description: "Precision 3, 4, and 5-axis CNC machining with 30+ advanced machines",
     features: ["3-Axis to 5-Axis CNC", "VMC & HMC", "Swiss-Type Turning", "Micro Machining"],
-    color: "lime"
+    color: "amber"
   },
   {
     icon: Wrench,
     title: "Heat Treatment",
     description: "In-house heat treatment facilities for enhanced material properties",
     features: ["Hardening & Tempering", "Annealing", "Stress Relieving", "Case Hardening"],
-    color: "violet"
+    color: "red"
   },
   {
     icon: Settings,
     title: "Quality Control",
     description: "Advanced inspection systems ensuring ISO 9001:2015 compliance",
     features: ["CMM Inspection", "Surface Testing", "Dimensional Analysis", "PPAP Ready"],
-    color: "lime"
+    color: "amber"
   },
   {
     icon: Factory,
     title: "Manufacturing",
     description: "End-to-end manufacturing solutions from prototyping to volume production",
     features: ["NPD Support", "Rapid Prototyping", "Volume Production", "JIT Delivery"],
-    color: "violet"
+    color: "red"
   },
   {
     icon: Award,
     title: "Quality Systems",
     description: "Certified quality management systems with continuous improvement",
     features: ["ISO 9001:2015", "PPAP Level 3", "SPC Implementation", "Lean Manufacturing"],
-    color: "lime"
+    color: "amber"
   },
   {
     icon: Users,
     title: "Engineering Support",
     description: "Technical expertise supporting design optimization and manufacturability",
     features: ["DFM Analysis", "Cost Optimization", "Material Selection", "Process Engineering"],
-    color: "violet"
+    color: "red"
   }
 ];
 
@@ -75,7 +76,7 @@ export default function CapabilitiesPage() {
             </h1>
             <p className="text-xl md:text-2xl text-muted max-w-4xl mx-auto leading-relaxed">
               Advanced precision manufacturing capabilities serving OEMs and Tier-1 suppliers
-              with <span className="text-lime font-semibold">30+ CNC machines</span> and comprehensive quality systems.
+              with <span className="text-amber font-semibold">30+ CNC machines</span> and comprehensive quality systems.
             </p>
           </motion.div>
 
@@ -89,9 +90,13 @@ export default function CapabilitiesPage() {
             {stats.map((stat, index) => {
               const IconComponent = stat.icon;
               return (
-                <div key={stat.label} className="text-center glass-card p-6 glow-hover">
-                  <IconComponent className="h-8 w-8 text-lime mx-auto mb-4" />
-                  <div className="text-3xl font-display font-bold text-lime mb-2">{stat.value}</div>
+                <div 
+                  key={stat.label} 
+                  className="text-center glass-card p-6 glow-hover"
+                  data-testid={`stat-${stat.label.toLowerCase().replace(/[^a-z]/g, '-')}`}
+                >
+                  <IconComponent className="h-8 w-8 text-amber mx-auto mb-4" />
+                  <div className="text-3xl font-display font-bold text-amber mb-2">{stat.value}</div>
                   <div className="text-muted font-medium">{stat.label}</div>
                 </div>
               );
@@ -120,7 +125,7 @@ export default function CapabilitiesPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {capabilities.map((capability, index) => {
               const IconComponent = capability.icon;
-              const iconColor = capability.color === 'lime' ? 'text-lime' : 'text-violet';
+              const iconColor = capability.color === 'amber' ? 'text-amber' : 'text-red';
               
               return (
                 <motion.div
@@ -141,7 +146,7 @@ export default function CapabilitiesPage() {
                   <ul className="space-y-2">
                     {capability.features.map((feature, featureIndex) => (
                       <li key={featureIndex} className="flex items-center text-sm text-muted">
-                        <CheckCircle className="h-4 w-4 text-lime mr-3 flex-shrink-0" />
+                        <CheckCircle className="h-4 w-4 text-amber mr-3 flex-shrink-0" />
                         {feature}
                       </li>
                     ))}
@@ -149,6 +154,129 @@ export default function CapabilitiesPage() {
                 </motion.div>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* Machine Inventory Table */}
+      <section className="py-20 md:py-28">
+        <div className="max-w-7xl mx-auto px-6 md:px-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6 tracking-tight">
+              Machine <span className="gradient-text">Inventory</span>
+            </h2>
+            <p className="text-xl text-muted max-w-3xl mx-auto leading-relaxed">
+              Our comprehensive machine inventory across 3 manufacturing units in Pune.
+            </p>
+          </motion.div>
+
+          <div className="glass-card overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-white/10">
+                    <th className="text-left py-4 px-6 text-amber font-semibold">Machine Type</th>
+                    <th className="text-right py-4 px-6 text-amber font-semibold">Count</th>
+                    <th className="text-left py-4 px-6 text-muted">Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <motion.tr
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    className="border-b border-white/5 hover:bg-white/5 transition-colors"
+                    data-testid="machine-cnc"
+                  >
+                    <td className="py-4 px-6 text-primary font-medium">CNC Machines</td>
+                    <td className="py-4 px-6 text-right text-2xl font-bold text-amber">{companyData.company.machines.CNC}</td>
+                    <td className="py-4 px-6 text-muted">Multi-axis CNC machining centers</td>
+                  </motion.tr>
+                  <motion.tr
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.1 }}
+                    className="border-b border-white/5 hover:bg-white/5 transition-colors"
+                    data-testid="machine-traub-a30-a25"
+                  >
+                    <td className="py-4 px-6 text-primary font-medium">TRAUB A30/A25</td>
+                    <td className="py-4 px-6 text-right text-2xl font-bold text-amber">{companyData.company.machines.TRAUB_A30_A25}</td>
+                    <td className="py-4 px-6 text-muted">Multi-spindle automatic lathes</td>
+                  </motion.tr>
+                  <motion.tr
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.2 }}
+                    className="border-b border-white/5 hover:bg-white/5 transition-colors"
+                    data-testid="machine-traub-a42-a60"
+                  >
+                    <td className="py-4 px-6 text-primary font-medium">TRAUB A42/A60</td>
+                    <td className="py-4 px-6 text-right text-2xl font-bold text-amber">{companyData.company.machines.TRAUB_A42_A60}</td>
+                    <td className="py-4 px-6 text-muted">Heavy-duty multi-spindle automats</td>
+                  </motion.tr>
+                  <motion.tr
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.3 }}
+                    className="border-b border-white/5 hover:bg-white/5 transition-colors"
+                    data-testid="machine-grinders"
+                  >
+                    <td className="py-4 px-6 text-primary font-medium">Centerless Grinders</td>
+                    <td className="py-4 px-6 text-right text-2xl font-bold text-amber">{companyData.company.machines.Centerless_Grinder}</td>
+                    <td className="py-4 px-6 text-muted">Precision grinding operations</td>
+                  </motion.tr>
+                  <motion.tr
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.4 }}
+                    className="border-b border-white/5 hover:bg-white/5 transition-colors"
+                    data-testid="machine-drill"
+                  >
+                    <td className="py-4 px-6 text-primary font-medium">Drill Machines</td>
+                    <td className="py-4 px-6 text-right text-2xl font-bold text-amber">{companyData.company.machines.Drill_Machines}</td>
+                    <td className="py-4 px-6 text-muted">High-precision drilling operations</td>
+                  </motion.tr>
+                  <motion.tr
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.5 }}
+                    className="hover:bg-white/5 transition-colors"
+                    data-testid="machine-milling"
+                  >
+                    <td className="py-4 px-6 text-primary font-medium">Milling Machines</td>
+                    <td className="py-4 px-6 text-right text-2xl font-bold text-amber">{companyData.company.machines.Milling}</td>
+                    <td className="py-4 px-6 text-muted">Conventional and CNC milling</td>
+                  </motion.tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <div className="p-6 border-t border-white/10 bg-white/5">
+              <div className="grid md:grid-cols-3 gap-6 text-center">
+                <div data-testid="summary-manufacturing-units">
+                  <div className="text-2xl font-bold text-amber mb-2">3</div>
+                  <div className="text-muted">Manufacturing Units</div>
+                </div>
+                <div data-testid="summary-total-machines">
+                  <div className="text-2xl font-bold text-amber mb-2">75+</div>
+                  <div className="text-muted">Total Machines</div>
+                </div>
+                <div data-testid="summary-production-capability">
+                  <div className="text-2xl font-bold text-amber mb-2">24/7</div>
+                  <div className="text-muted">Production Capability</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -184,6 +312,7 @@ export default function CapabilitiesPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className="text-center glass-card p-6 glow-hover"
+                data-testid={`process-${process.title.toLowerCase().replace(/[^a-z]/g, '-')}`}
               >
                 <div className="text-4xl font-display font-bold gradient-text mb-4">{process.step}</div>
                 <h3 className="text-lg font-display font-semibold text-primary mb-3">{process.title}</h3>
