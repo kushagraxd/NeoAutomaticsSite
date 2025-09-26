@@ -8,7 +8,7 @@ const qualityCertifications = [
     description: "Internationally recognized quality management system ensuring consistent product quality",
     year: "2015",
     scope: "Design & Manufacturing",
-    color: "lime"
+    color: "amber"
   },
   {
     icon: Award,
@@ -16,7 +16,7 @@ const qualityCertifications = [
     description: "Production Part Approval Process certification for automotive suppliers",
     year: "Ready",
     scope: "Automotive Components",
-    color: "violet"
+    color: "red"
   },
   {
     icon: Target,
@@ -24,7 +24,7 @@ const qualityCertifications = [
     description: "Continuous improvement methodologies for waste reduction and efficiency",
     year: "Ongoing",
     scope: "All Operations",
-    color: "lime"
+    color: "amber"
   }
 ];
 
@@ -93,7 +93,7 @@ export default function QualityPage() {
             </h1>
             <p className="text-xl md:text-2xl text-muted max-w-4xl mx-auto leading-relaxed">
               Committed to delivering the highest quality precision components through
-              <span className="text-lime font-semibold"> ISO 9001:2015 certified</span> processes and advanced inspection systems.
+              <span className="text-amber font-semibold"> ISO 9001:2015 certified</span> processes and advanced inspection systems.
             </p>
           </motion.div>
 
@@ -109,8 +109,8 @@ export default function QualityPage() {
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   className="text-center glass-card p-6 glow-hover group"
                 >
-                  <IconComponent className="h-8 w-8 text-lime mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
-                  <div className="text-3xl font-display font-bold text-lime mb-2">{item.metric}</div>
+                  <IconComponent className="h-8 w-8 text-amber mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
+                  <div className="text-3xl font-display font-bold text-amber mb-2">{item.metric}</div>
                   <div className="text-muted font-medium">{item.label}</div>
                 </motion.div>
               );
@@ -139,7 +139,7 @@ export default function QualityPage() {
           <div className="grid md:grid-cols-3 gap-8">
             {qualityCertifications.map((cert, index) => {
               const IconComponent = cert.icon;
-              const iconColor = cert.color === 'lime' ? 'text-lime' : 'text-violet';
+              const iconColor = cert.color === 'amber' ? 'text-amber' : 'text-red';
               
               return (
                 <motion.div
@@ -204,7 +204,8 @@ export default function QualityPage() {
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   className="glass-card p-8 glow-hover group"
                 >
-                  <IconComponent className="h-12 w-12 text-lime mb-6 group-hover:scale-110 transition-transform duration-300" />
+                  <IconComponent className="h-12 w-12 text-amber mb-6 group-hover:scale-110 transition-transform duration-300" />
+                  <div className="sr-only" data-testid={`process-${process.title.toLowerCase().replace(/[^a-z]/g, '-')}`}></div>
                   <h3 className="text-xl font-display font-semibold text-primary mb-4">
                     {process.title}
                   </h3>
@@ -213,7 +214,7 @@ export default function QualityPage() {
                   <ul className="space-y-2">
                     {process.steps.map((step, stepIndex) => (
                       <li key={stepIndex} className="flex items-center text-sm text-muted">
-                        <CheckCircle className="h-4 w-4 text-violet mr-3 flex-shrink-0" />
+                        <CheckCircle className="h-4 w-4 text-red mr-3 flex-shrink-0" />
                         {step}
                       </li>
                     ))}
@@ -251,20 +252,162 @@ export default function QualityPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className="glass-card p-6 glow-hover"
+                data-testid={`equipment-${equipment.name.toLowerCase().replace(/[^a-z\s]/g, '').replace(/\s+/g, '-')}`}
               >
                 <h3 className="font-display font-semibold text-primary mb-3">{equipment.name}</h3>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span className="text-muted">Capability:</span>
-                    <span className="text-lime font-medium">{equipment.capability}</span>
+                    <span className="text-amber font-medium">{equipment.capability}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted">Application:</span>
-                    <span className="text-violet">{equipment.applications}</span>
+                    <span className="text-red">{equipment.applications}</span>
                   </div>
                 </div>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Process Capability Histogram */}
+      <section className="py-20 md:py-28">
+        <div className="max-w-7xl mx-auto px-6 md:px-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6 tracking-tight">
+              Process <span className="gradient-text">Capability</span>
+            </h2>
+            <p className="text-xl text-muted max-w-3xl mx-auto leading-relaxed">
+              Statistical process control data demonstrating our manufacturing precision and consistency.
+            </p>
+          </motion.div>
+
+          <div className="grid lg:grid-cols-2 gap-12 mb-16">
+            {/* Cpk Chart */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="glass-card p-8"
+              data-testid="capability-cpk-chart"
+            >
+              <h3 className="text-xl font-display font-semibold text-primary mb-6">Process Capability (Cpk)</h3>
+              <div className="space-y-4">
+                {[
+                  { process: "CNC Turning", cpk: 1.67, color: "amber" },
+                  { process: "CNC Milling", cpk: 1.45, color: "amber" },
+                  { process: "Grinding", cpk: 1.83, color: "amber" },
+                  { process: "Heat Treatment", cpk: 1.52, color: "red" },
+                  { process: "Surface Finishing", cpk: 1.38, color: "red" }
+                ].map((item, index) => (
+                  <div key={item.process} className="flex items-center justify-between">
+                    <span className="text-muted text-sm">{item.process}</span>
+                    <div className="flex items-center gap-3">
+                      <div className="w-32 bg-elevated rounded-full h-2">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          whileInView={{ width: `${Math.min((item.cpk / 2) * 100, 100)}%` }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 1, delay: index * 0.1 }}
+                          className={`h-2 rounded-full ${
+                            item.color === 'amber' ? 'bg-amber' : 'bg-red'
+                          }`}
+                        />
+                      </div>
+                      <span className={`font-semibold text-sm ${
+                        item.color === 'amber' ? 'text-amber' : 'text-red'
+                      }`}>
+                        {item.cpk}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 p-4 bg-amber/10 border border-amber/20 rounded-lg">
+                <p className="text-xs text-muted">
+                  <strong className="text-amber">Cpk {'>'}  1.33</strong> indicates capable process. 
+                  All processes exceed automotive industry standards.
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Quality Histogram */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="glass-card p-8"
+              data-testid="capability-histogram"
+            >
+              <h3 className="text-xl font-display font-semibold text-primary mb-6">Dimensional Distribution</h3>
+              <div className="relative">
+                {/* Histogram bars */}
+                <div className="flex items-end justify-center gap-1 h-32 mb-4">
+                  {[
+                    { height: 20, freq: 1 },
+                    { height: 35, freq: 3 },
+                    { height: 55, freq: 8 },
+                    { height: 85, freq: 18 },
+                    { height: 100, freq: 25 },
+                    { height: 85, freq: 20 },
+                    { height: 55, freq: 12 },
+                    { height: 35, freq: 8 },
+                    { height: 20, freq: 3 }
+                  ].map((bar, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ height: 0 }}
+                      whileInView={{ height: `${bar.height}%` }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.8, delay: index * 0.1 }}
+                      className="w-8 bg-gradient-to-t from-amber/60 to-amber/20 rounded-t-sm"
+                      style={{ height: `${bar.height}%` }}
+                    />
+                  ))}
+                </div>
+                
+                {/* Normal curve overlay */}
+                <div className="absolute top-4 left-0 right-0 h-24 opacity-50">
+                  <svg className="w-full h-full" viewBox="0 0 200 100">
+                    <motion.path
+                      initial={{ pathLength: 0 }}
+                      whileInView={{ pathLength: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 2 }}
+                      d="M 20 80 Q 100 20 180 80"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      fill="none"
+                      className="text-red"
+                    />
+                  </svg>
+                </div>
+                
+                {/* Specification limits */}
+                <div className="flex justify-between text-xs text-muted mt-2">
+                  <span>LSL</span>
+                  <span className="text-primary">Target: ±0.005mm</span>
+                  <span>USL</span>
+                </div>
+              </div>
+              
+              <div className="mt-6 grid grid-cols-2 gap-4 text-center">
+                <div className="p-3 bg-red/10 border border-red/20 rounded-lg">
+                  <div className="text-lg font-semibold text-red">6σ</div>
+                  <div className="text-xs text-muted">Process Sigma</div>
+                </div>
+                <div className="p-3 bg-amber/10 border border-amber/20 rounded-lg">
+                  <div className="text-lg font-semibold text-amber">99.97%</div>
+                  <div className="text-xs text-muted">Within Spec</div>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
