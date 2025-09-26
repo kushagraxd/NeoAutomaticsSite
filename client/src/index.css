@@ -5,57 +5,57 @@
 @tailwind utilities;
 
 :root {
-  /* Futuristic Silicon Valley aesthetic - Lime & Violet theme */
-  --background: hsl(240 6% 4%); /* #0B0B0F - base */
-  --foreground: hsl(240 8% 93%); /* #ECECF3 - primary text */
-  --card: hsl(240 6% 7%); /* #111114 - elevated */
+  /* Industrial Amber-Red theme - Neo Automatics */
+  --background: hsl(240 5% 4%); /* #0A0A0B - base */
+  --foreground: hsl(240 8% 93%); /* #EDEDEF - primary text */
+  --card: hsl(240 4% 7%); /* #111112 - elevated */
   --card-foreground: hsl(240 8% 93%);
-  --popover: hsl(240 6% 7%);
+  --popover: hsl(240 4% 7%);
   --popover-foreground: hsl(240 8% 93%);
-  --primary: hsl(73 100% 54%); /* #A3FF12 - lime primary */
-  --primary-foreground: hsl(240 6% 4%);
-  --secondary: hsl(248 53% 58%); /* #8B5CF6 - violet secondary */
+  --primary: hsl(45 96% 48%); /* #F5B301 - amber primary */
+  --primary-foreground: hsl(240 5% 4%);
+  --secondary: hsl(0 100% 65%); /* #FF4D4D - red secondary */
   --secondary-foreground: hsl(240 8% 93%);
-  --muted: hsl(240 5% 18%);
-  --muted-foreground: hsl(240 5% 70%); /* #A6A6B3 - muted text */
-  --accent: hsl(73 100% 54%); /* #A3FF12 - lime accent */
-  --accent-foreground: hsl(240 6% 4%);
+  --muted: hsl(240 4% 16%);
+  --muted-foreground: hsl(240 4% 64%); /* #A2A2AD - muted text */
+  --accent: hsl(45 96% 48%); /* #F5B301 - amber accent */
+  --accent-foreground: hsl(240 5% 4%);
   --destructive: hsl(0 84.2% 60.2%);
   --destructive-foreground: hsl(240 8% 93%);
   --border: hsl(240 4% 16%);
   --input: hsl(240 4% 16%);
-  --ring: hsl(73 100% 54%);
+  --ring: hsl(45 96% 48%);
   --font-sans: Inter, system-ui, sans-serif;
   --font-display: 'Space Grotesk', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
   --radius: 1rem;
-  --chart-1: hsl(73 100% 54%);
-  --chart-2: hsl(248 53% 58%);
-  --chart-3: hsl(73 100% 44%);
-  --chart-4: hsl(248 53% 48%);
-  --chart-5: hsl(73 100% 64%);
+  --chart-1: hsl(45 96% 48%);
+  --chart-2: hsl(0 100% 65%);
+  --chart-3: hsl(45 96% 38%);
+  --chart-4: hsl(0 100% 55%);
+  --chart-5: hsl(45 96% 58%);
 }
 
 .dark {
-  --background: hsl(240 6% 4%); /* #0B0B0F */
-  --foreground: hsl(240 8% 93%); /* #ECECF3 */
-  --card: hsl(240 6% 7%); /* #111114 */
+  --background: hsl(240 5% 4%); /* #0A0A0B */
+  --foreground: hsl(240 8% 93%); /* #EDEDEF */
+  --card: hsl(240 4% 7%); /* #111112 */
   --card-foreground: hsl(240 8% 93%);
-  --popover: hsl(240 6% 7%);
+  --popover: hsl(240 4% 7%);
   --popover-foreground: hsl(240 8% 93%);
-  --primary: hsl(73 100% 54%); /* #A3FF12 */
-  --primary-foreground: hsl(240 6% 4%);
-  --secondary: hsl(248 53% 58%); /* #8B5CF6 */
+  --primary: hsl(45 96% 48%); /* #F5B301 */
+  --primary-foreground: hsl(240 5% 4%);
+  --secondary: hsl(0 100% 65%); /* #FF4D4D */
   --secondary-foreground: hsl(240 8% 93%);
-  --muted: hsl(240 5% 18%);
-  --muted-foreground: hsl(240 5% 70%); /* #A6A6B3 */
-  --accent: hsl(73 100% 54%);
-  --accent-foreground: hsl(240 6% 4%);
+  --muted: hsl(240 4% 16%);
+  --muted-foreground: hsl(240 4% 64%); /* #A2A2AD */
+  --accent: hsl(45 96% 48%);
+  --accent-foreground: hsl(240 5% 4%);
   --destructive: hsl(0 84.2% 60.2%);
   --destructive-foreground: hsl(240 8% 93%);
   --border: hsl(240 4% 16%);
   --input: hsl(240 4% 16%);
-  --ring: hsl(73 100% 54%);
+  --ring: hsl(45 96% 48%);
 }
 
 @layer base {
@@ -76,6 +76,15 @@
     letter-spacing: -0.025em;
   }
 
+  /* Hero heading styles */
+  h1 {
+    @apply text-6xl md:text-7xl tracking-tight;
+  }
+
+  h2 {
+    @apply text-2xl md:text-3xl;
+  }
+
   p, .body-text {
     line-height: 1.7;
   }
@@ -85,7 +94,12 @@
   }
 }
 
-/* Futuristic glassmorphism cards */
+/* Section wrapper utility */
+.section-wrapper {
+  @apply max-w-7xl mx-auto px-6 md:px-10 py-20 md:py-28;
+}
+
+/* Industrial glassmorphism cards */
 .glass-card {
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(24px);
@@ -98,15 +112,15 @@
 }
 
 .glass-card-strong {
-  background: rgba(148, 163, 184, 0.15);
+  background: rgba(245, 179, 1, 0.1);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(148, 163, 184, 0.3);
+  border: 1px solid rgba(245, 179, 1, 0.2);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
-/* Lime-Violet gradient text */
+/* Amber-Red gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, #A3FF12, #8B5CF6);
+  background: linear-gradient(135deg, #F5B301, #FF4D4D);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -119,15 +133,15 @@
   50% { background-position: 100% 50%; }
 }
 
-/* Lime gradient buttons */
+/* Amber gradient buttons */
 .gradient-button {
-  background: linear-gradient(135deg, #A3FF12, #7ED321);
+  background: linear-gradient(135deg, #F5B301, #E09900);
   border: none;
   position: relative;
   overflow: hidden;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 20px rgba(163, 255, 18, 0.3);
-  color: #0B0B0F;
+  box-shadow: 0 4px 20px rgba(245, 179, 1, 0.3);
+  color: #0A0A0B;
   font-weight: 600;
 }
 
@@ -138,7 +152,7 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
   transition: left 0.5s;
 }
 
@@ -148,8 +162,28 @@
 
 .gradient-button:hover {
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 15px 40px rgba(163, 255, 18, 0.4), 0 5px 15px rgba(163, 255, 18, 0.2);
-  background: linear-gradient(135deg, #B8FF3D, #A3FF12);
+  box-shadow: 0 15px 40px rgba(245, 179, 1, 0.4), 0 5px 15px rgba(245, 179, 1, 0.2);
+  background: linear-gradient(135deg, #FFD23F, #F5B301);
+}
+
+/* Red secondary button */
+.red-button {
+  background: transparent;
+  border: 2px solid #FF4D4D;
+  color: #FF4D4D;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.red-button:hover {
+  background: rgba(255, 77, 77, 0.1);
+  box-shadow: 0 0 20px rgba(255, 77, 77, 0.3);
+  transform: translateY(-2px);
+}
+
+.red-button:hover {
+  box-shadow: inset 0 0 30px rgba(255, 77, 77, 0.2);
 }
 
 /* Glowing hover effects */
@@ -159,20 +193,31 @@
 
 .glow-hover:hover {
   box-shadow: 
-    0 0 30px rgba(163, 255, 18, 0.4), 
-    0 0 60px rgba(163, 255, 18, 0.2),
-    0 0 90px rgba(139, 92, 246, 0.1);
+    0 0 30px rgba(245, 179, 1, 0.4), 
+    0 0 60px rgba(245, 179, 1, 0.2),
+    0 0 90px rgba(255, 77, 77, 0.1);
   transform: translateY(-3px) scale(1.02);
-  border-color: rgba(163, 255, 18, 0.3);
+  border-color: rgba(245, 179, 1, 0.3);
 }
 
-/* Futuristic hero background */
+/* Industrial hero background */
 .hero-bg {
   background: 
-    radial-gradient(ellipse at 50% 0%, rgba(163, 255, 18, 0.08) 0%, transparent 60%),
-    radial-gradient(ellipse at 100% 50%, rgba(139, 92, 246, 0.06) 0%, transparent 60%),
-    radial-gradient(ellipse at 0% 50%, rgba(163, 255, 18, 0.04) 0%, transparent 60%),
-    linear-gradient(135deg, rgba(163, 255, 18, 0.03) 0%, rgba(139, 92, 246, 0.03) 100%);
+    radial-gradient(ellipse at 50% 0%, rgba(245, 179, 1, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 100% 50%, rgba(255, 77, 77, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 0% 50%, rgba(245, 179, 1, 0.04) 0%, transparent 60%),
+    linear-gradient(135deg, rgba(245, 179, 1, 0.03) 0%, rgba(255, 77, 77, 0.03) 100%);
+}
+
+/* Video overlay */
+.video-overlay {
+  background: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
 }
 
 /* Floating animation */
@@ -185,10 +230,10 @@
   animation: float 6s ease-in-out infinite;
 }
 
-/* Lime pulse glow animation */
+/* Amber pulse glow animation */
 @keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 20px rgba(163, 255, 18, 0.3); }
-  50% { box-shadow: 0 0 30px rgba(163, 255, 18, 0.6), 0 0 50px rgba(163, 255, 18, 0.2); }
+  0%, 100% { box-shadow: 0 0 20px rgba(245, 179, 1, 0.3); }
+  50% { box-shadow: 0 0 30px rgba(245, 179, 1, 0.6), 0 0 50px rgba(245, 179, 1, 0.2); }
 }
 
 .animate-pulse-glow {
@@ -204,72 +249,80 @@
   transform: translateY(-3px) scale(1.05);
 }
 
-/* Geometric shapes */
-.geometric-shape {
-  position: absolute;
-  opacity: 0.1;
-  z-index: 0;
+/* Animated SVG nut/bolt fallback */
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-.geometric-shape-1 {
-  width: 200px;
-  height: 200px;
-  background: linear-gradient(45deg, #A3FF12, #8B5CF6);
-  border-radius: 50%;
-  top: 10%;
-  right: 10%;
-  animation: float 8s ease-in-out infinite;
+.rotating-nut {
+  animation: rotate 12s linear infinite;
 }
 
-.geometric-shape-2 {
-  width: 150px;
-  height: 150px;
-  background: linear-gradient(135deg, #8B5CF6, #A3FF12);
-  transform: rotate(45deg);
-  bottom: 20%;
-  left: 5%;
-  animation: float 6s ease-in-out infinite reverse;
-}
-
-.geometric-shape-3 {
-  width: 100px;
-  height: 100px;
-  background: linear-gradient(225deg, #A3FF12, #8B5CF6);
-  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-  top: 30%;
-  left: 20%;
-  animation: float 10s ease-in-out infinite;
-}
-
-/* Additional futuristic utility classes */
+/* Industrial utility classes */
 .btn-primary {
   @apply gradient-button px-6 py-3 rounded-lg font-semibold transition-all duration-300;
 }
 
 .btn-secondary {
-  @apply bg-transparent border border-violet-500 text-violet-300 hover:bg-violet-500 hover:text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300;
+  @apply red-button px-6 py-3 rounded-lg font-semibold transition-all duration-300;
 }
 
-.text-lime {
-  color: #A3FF12;
+.text-amber {
+  color: #F5B301;
 }
 
-.text-violet {
-  color: #8B5CF6;
+.text-red {
+  color: #FF4D4D;
 }
 
 .bg-base {
-  background-color: #0B0B0F;
+  background-color: #0A0A0B;
 }
 
 .bg-elevated {
-  background-color: #111114;
+  background-color: #111112;
 }
 
 .text-primary {
-  color: #ECECF3;
+  color: #EDEDEF;
 }
 
 .text-muted {
-  color: #A6A6B3;
+  color: #A2A2AD;
+}
+
+/* Active nav link styling */
+.nav-link-active {
+  color: #F5B301;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  box-shadow: 0 0 10px rgba(245, 179, 1, 0.3);
+}
+
+/* Responsive utilities */
+@media (prefers-reduced-motion: reduce) {
+  .animate-float,
+  .animate-pulse-glow,
+  .rotating-nut,
+  .gradient-text,
+  .gradient-button::before {
+    animation: none;
+  }
+  
+  .magnetic-btn:hover,
+  .glow-hover:hover {
+    transform: none;
+  }
+}
+
+/* Trust bar logo styling */
+.trust-logo {
+  filter: grayscale(100%) opacity(0.6);
+  transition: all 0.3s ease;
+}
+
+.trust-logo:hover {
+  filter: grayscale(0%) opacity(1);
+  transform: scale(1.05);
 }
