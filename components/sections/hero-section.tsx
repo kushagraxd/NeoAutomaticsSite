@@ -20,8 +20,8 @@ const valuePills = [
 
 export default function HeroSection() {
   return (
-    <section className="hero-gradient relative overflow-hidden min-h-screen flex items-center">
-      <div className="absolute inset-0 bg-gradient-to-r from-sky-500/20 to-cyan-400/20 animate-gradient" />
+    <section className="hero-bg relative overflow-hidden min-h-screen flex items-center bg-slate-950">
+      <div className="absolute inset-0 bg-gradient-to-br from-sky-500/10 via-cyan-400/10 to-blue-500/10" />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -31,14 +31,14 @@ export default function HeroSection() {
             transition={{ duration: 0.8 }}
             className="text-white"
           >
-            <h1 className="text-5xl lg:text-6xl font-display font-bold leading-tight mb-6">
+            <h1 className="text-6xl lg:text-8xl font-display font-black leading-tight mb-8">
               Precision Machined Components for{' '}
-              <span className="gradient-text">OEMs & Tier-1s</span>
+              <span className="gradient-text animate-pulse-glow">OEMs & Tier-1s</span>
             </h1>
             
-            <p className="text-xl text-slate-300 mb-8 leading-relaxed">
+            <p className="text-2xl lg:text-3xl text-slate-200 mb-10 leading-relaxed font-medium">
               End-to-end machining, heat treatment & QA—delivered at scale with
-              20+ years of manufacturing excellence.
+              <span className="text-cyan-400 font-semibold"> 20+ years</span> of manufacturing excellence.
             </p>
 
             {/* Value Pills */}
@@ -67,9 +67,9 @@ export default function HeroSection() {
               <Link href="/contact">
                 <Button
                   size="lg"
-                  className="magnetic-btn bg-sky-500 hover:bg-sky-600 text-white px-8 py-4 text-lg"
+                  className="gradient-button magnetic-btn text-white px-10 py-6 text-xl"
                 >
-                  <ArrowRight className="mr-2 h-5 w-5" />
+                  <ArrowRight className="mr-3 h-6 w-6" />
                   Request a Quote
                 </Button>
               </Link>

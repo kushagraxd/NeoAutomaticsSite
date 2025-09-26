@@ -32,14 +32,14 @@ export default function Navigation() {
     <nav
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-        isScrolled ? 'glass-nav' : 'bg-transparent'
+        isScrolled ? 'glass-card' : 'bg-transparent'
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-8">
             <div className="flex-shrink-0">
-              <Link href="/" className="text-2xl font-display font-bold text-slate-900">
+              <Link href="/" className="text-2xl font-display font-bold text-slate-100">
                 Neo <span className="gradient-text">Automatics</span>
               </Link>
             </div>
@@ -52,8 +52,8 @@ export default function Navigation() {
                     className={cn(
                       'px-3 py-2 text-sm font-medium transition-colors',
                       pathname === item.href
-                        ? 'text-slate-900 hover:text-sky-600'
-                        : 'text-slate-600 hover:text-slate-900'
+                        ? 'text-cyan-400 hover:text-cyan-300'
+                        : 'text-slate-300 hover:text-slate-100'
                     )}
                   >
                     {item.label}
@@ -64,7 +64,7 @@ export default function Navigation() {
           </div>
           <div className="hidden md:block">
             <Link href="/contact">
-              <Button className="magnetic-btn bg-sky-500 hover:bg-sky-600 text-white">
+              <Button className="gradient-button magnetic-btn text-white">
                 Request Quote
               </Button>
             </Link>
@@ -74,7 +74,7 @@ export default function Navigation() {
               variant="ghost"
               size="icon"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-slate-600 hover:text-slate-900"
+              className="text-slate-300 hover:text-slate-100"
             >
               {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
@@ -84,17 +84,17 @@ export default function Navigation() {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-200">
+        <div className="md:hidden glass-card border-t border-slate-700/50">
           <div className="px-2 pt-2 pb-3 space-y-1">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  'block px-3 py-2 text-base font-medium transition-colors',
+                  'block px-3 py-2 text-base font-medium transition-colors rounded-lg',
                   pathname === item.href
-                    ? 'text-slate-900 bg-slate-50'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                    ? 'text-cyan-400 bg-slate-800/50'
+                    : 'text-slate-300 hover:text-slate-100 hover:bg-slate-800/30'
                 )}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -104,7 +104,7 @@ export default function Navigation() {
             <div className="px-3 py-2">
               <Link href="/contact">
                 <Button 
-                  className="w-full magnetic-btn bg-sky-500 hover:bg-sky-600 text-white"
+                  className="w-full gradient-button magnetic-btn text-white"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Request Quote
