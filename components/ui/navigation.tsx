@@ -48,7 +48,7 @@ export default function Navigation() {
                 className="flex items-center space-x-2 text-2xl font-display font-bold text-primary hover:opacity-80 transition-opacity"
                 data-testid="link-logo"
               >
-                <Zap className="h-8 w-8 text-lime" />
+                <Zap className="h-8 w-8 text-amber" />
                 <span>Neo <span className="gradient-text">Automatics</span></span>
               </Link>
             </div>
@@ -63,14 +63,14 @@ export default function Navigation() {
                     className={cn(
                       'px-4 py-2 text-sm font-medium transition-all duration-200 rounded-lg relative group',
                       pathname === item.href
-                        ? 'text-lime bg-lime/10 shadow-lg shadow-lime/20'
+                        ? 'text-amber bg-amber/10 shadow-lg shadow-amber/20'
                         : 'text-muted hover:text-primary hover:bg-white/5'
                     )}
                     data-testid={`link-nav-${item.label.toLowerCase()}`}
                   >
                     {item.label}
                     <div className={cn(
-                      'absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-lime to-violet rounded-full transition-opacity duration-200',
+                      'absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-amber to-red rounded-full transition-opacity duration-200',
                       pathname === item.href ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
                     )} />
                   </Link>
@@ -119,7 +119,7 @@ export default function Navigation() {
               className={cn(
                 'block px-4 py-3 text-base font-medium transition-all duration-200 rounded-lg',
                 pathname === item.href
-                  ? 'text-lime bg-lime/10 shadow-lg shadow-lime/20'
+                  ? 'text-amber bg-amber/10 shadow-lg shadow-amber/20'
                   : 'text-muted hover:text-primary hover:bg-white/5'
               )}
               onClick={() => setIsMobileMenuOpen(false)}

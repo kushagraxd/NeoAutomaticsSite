@@ -28,7 +28,7 @@ export default function Footer() {
   return (
     <footer className="bg-base/50 backdrop-blur-xl border-t border-white/10 py-20 relative overflow-hidden" data-testid="footer-main">
       {/* Glassmorphic background overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-lime/5 via-transparent to-violet/5" />
+      <div className="absolute inset-0 bg-gradient-to-br from-amber/5 via-transparent to-red/5" />
       <div className="absolute inset-0 aurora-bg opacity-5" />
       
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-10">
@@ -36,7 +36,7 @@ export default function Footer() {
           {/* Company Info */}
           <div data-testid="footer-company-info">
             <div className="flex items-center space-x-2 text-2xl font-display font-bold mb-6">
-              <Zap className="h-8 w-8 text-lime" />
+              <Zap className="h-8 w-8 text-amber" />
               <span className="text-primary">
                 Neo <span className="gradient-text">Automatics</span>
               </span>
@@ -46,19 +46,19 @@ export default function Footer() {
             </p>
             <div className="space-y-3 text-sm">
               <div className="flex items-center group">
-                <Mail className="h-4 w-4 mr-3 text-lime group-hover:scale-110 transition-transform" />
+                <Mail className="h-4 w-4 mr-3 text-amber group-hover:scale-110 transition-transform" />
                 <span className="text-muted hover:text-primary transition-colors" data-testid="text-email">
                   {company.email}
                 </span>
               </div>
               <div className="flex items-center group">
-                <Phone className="h-4 w-4 mr-3 text-violet group-hover:scale-110 transition-transform" />
+                <Phone className="h-4 w-4 mr-3 text-red group-hover:scale-110 transition-transform" />
                 <span className="text-muted hover:text-primary transition-colors" data-testid="text-phone">
                   {company.phone}
                 </span>
               </div>
               <div className="flex items-start group">
-                <MapPin className="h-4 w-4 mr-3 mt-1 flex-shrink-0 text-lime group-hover:scale-110 transition-transform" />
+                <MapPin className="h-4 w-4 mr-3 mt-1 flex-shrink-0 text-amber group-hover:scale-110 transition-transform" />
                 <span className="text-muted hover:text-primary transition-colors leading-relaxed" data-testid="text-address">
                   {company.hq}
                 </span>
@@ -74,7 +74,7 @@ export default function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-muted hover:text-lime transition-all duration-200 hover:translate-x-1 inline-block"
+                    className="text-muted hover:text-amber transition-all duration-200 hover:translate-x-1 inline-block"
                     data-testid={`link-footer-${link.label.toLowerCase()}`}
                   >
                     {link.label}
@@ -87,7 +87,7 @@ export default function Footer() {
           {/* Services */}
           <div data-testid="footer-services">
             <h4 className="font-display font-semibold text-primary mb-6 text-lg flex items-center">
-              <Factory className="h-5 w-5 mr-2 text-violet" />
+              <Factory className="h-5 w-5 mr-2 text-red" />
               Services
             </h4>
             <ul className="space-y-3 text-sm">
@@ -121,14 +121,14 @@ export default function Footer() {
             <div className="flex space-x-8 text-sm">
               <Link 
                 href="/privacy" 
-                className="text-muted hover:text-lime transition-colors"
+                className="text-muted hover:text-amber transition-colors"
                 data-testid="link-privacy"
               >
                 Privacy Policy
               </Link>
               <Link 
                 href="/terms" 
-                className="text-muted hover:text-violet transition-colors"
+                className="text-muted hover:text-red transition-colors"
                 data-testid="link-terms"
               >
                 Terms of Service
