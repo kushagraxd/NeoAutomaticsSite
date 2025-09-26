@@ -120,25 +120,25 @@ export function RFQForm() {
   return (
     <div className="glass-card p-8 rounded-2xl" data-testid="form-rfq">
       <div className="mb-6">
-        <h3 className="text-2xl font-display font-bold text-slate-900 mb-2">
+        <h3 className="text-2xl font-display font-bold text-primary mb-2">
           Request for Quotation
         </h3>
-        <p className="text-slate-600">
+        <p className="text-muted">
           Send us your requirements and we'll get back to you within 24 hours.
         </p>
       </div>
 
       {submitStatus === "success" && (
-        <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg" data-testid="alert-success">
-          <p className="text-green-800">
+        <div className="mb-6 p-4 bg-amber/10 border border-amber/30 rounded-lg" data-testid="alert-success">
+          <p className="text-amber">
             Thank you! Your RFQ has been submitted successfully. We'll contact you soon.
           </p>
         </div>
       )}
 
       {submitStatus === "error" && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg" data-testid="alert-error">
-          <p className="text-red-800">
+        <div className="mb-6 p-4 bg-red/10 border border-red/30 rounded-lg" data-testid="alert-error">
+          <p className="text-red">
             There was an error submitting your RFQ. Please try again or contact us directly.
           </p>
         </div>
@@ -248,7 +248,7 @@ export function RFQForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Annual Volume *</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger data-testid="select-volume">
                         <SelectValue placeholder="Select expected volume" />
@@ -287,16 +287,16 @@ export function RFQForm() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
+            <label className="block text-sm font-medium text-primary mb-2">
               Drawing Upload (PDF/DWG, max 10MB)
             </label>
-            <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-slate-300 border-dashed rounded-lg hover:border-slate-400 transition-colors">
+            <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-muted border-dashed rounded-lg hover:border-amber transition-colors">
               <div className="space-y-1 text-center">
-                <Upload className="mx-auto h-12 w-12 text-slate-400" />
-                <div className="flex text-sm text-slate-600">
+                <Upload className="mx-auto h-12 w-12 text-muted" />
+                <div className="flex text-sm text-muted">
                   <label
                     htmlFor="drawing-upload"
-                    className="relative cursor-pointer bg-white rounded-md font-medium text-sky-600 hover:text-sky-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-sky-500"
+                    className="relative cursor-pointer bg-white rounded-md font-medium text-amber hover:text-amber/80 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-amber"
                   >
                     <span data-testid="text-upload">Upload a file</span>
                     <input
@@ -311,9 +311,9 @@ export function RFQForm() {
                   </label>
                   <p className="pl-1">or drag and drop</p>
                 </div>
-                <p className="text-xs text-slate-500">PDF, DWG up to 10MB</p>
+                <p className="text-xs text-muted">PDF, DWG up to 10MB</p>
                 {file && (
-                  <p className="text-sm text-sky-600 font-medium" data-testid="text-selected-file">
+                  <p className="text-sm text-amber font-medium" data-testid="text-selected-file">
                     Selected: {file.name}
                   </p>
                 )}
@@ -344,7 +344,7 @@ export function RFQForm() {
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full magnetic-btn bg-sky-500 hover:bg-sky-600 text-white py-3 text-lg"
+            className="w-full btn-primary py-3 text-lg"
             data-testid="button-submit-rfq"
           >
             <Send className="w-5 h-5 mr-2" />
