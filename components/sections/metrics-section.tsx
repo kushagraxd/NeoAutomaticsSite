@@ -6,7 +6,7 @@ import companyData from '../../data/company.json';
 
 const metrics = [
   {
-    target: 22,
+    target: 30,
     label: 'CNC Machines',
     suffix: '',
   },
