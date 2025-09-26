@@ -10,7 +10,7 @@ const valuePills = [
   },
   {
     icon: Factory,
-    text: '22+ CNC Machines',
+    text: '30+ CNC Machines',
   },
   {
     icon: Clock,

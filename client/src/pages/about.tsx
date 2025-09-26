@@ -39,7 +39,7 @@ export default function AboutPage() {
           <p className="text-lg text-slate-300 max-w-4xl mx-auto">
             With over 20 years of manufacturing excellence, Neo Automatics has established
             itself as a trusted partner for OEMs and Tier-1 suppliers. Our state-of-the-art
-            facility houses 22+ CNC machines and maintains ISO 9001:2015 certification.
+            facility houses 30+ CNC machines and maintains ISO 9001:2015 certification.
           </p>
         </motion.div>
 

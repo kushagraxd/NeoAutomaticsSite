@@ -7,7 +7,7 @@ const capabilities = [
   {
     icon: Settings,
     title: 'CNC Turning & VMC',
-    description: '22+ CNC machines with TRAUB A30/A25/A42/A60 series for high-precision turning operations',
+    description: '30+ CNC machines with TRAUB A30/A25/A42/A60 series for high-precision turning operations',
     badge: 'PPAP Ready',
     color: 'sky',
   },

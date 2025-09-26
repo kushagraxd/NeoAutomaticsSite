@@ -5,7 +5,7 @@ import { Settings, Flame, Microscope, Award } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Capabilities - CNC Machining, Heat Treatment & Quality Assurance",
-  description: "Comprehensive manufacturing capabilities including 22+ CNC machines, in-house heat treatment, and advanced metrology for precision components.",
+  description: "Comprehensive manufacturing capabilities including 30+ CNC machines, in-house heat treatment, and advanced metrology for precision components.",
 };
 
 export default function CapabilitiesPage() {
@@ -35,7 +35,7 @@ export default function CapabilitiesPage() {
               CNC Machining
             </h3>
             <p className="text-slate-600">
-              22+ CNC machines including TRAUB A30/A25/A42/A60 series for high-precision turning,
+              30+ CNC machines including TRAUB A30/A25/A42/A60 series for high-precision turning,
               milling, and drilling operations with PPAP readiness.
             </p>
           </div>

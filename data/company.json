@@ -29,7 +29,7 @@
       "Preferred source to OEMs & Tier-1s"
     ],
     "machines": {
-      "CNC": 22,
+      "CNC": 30,
       "TRAUB_A30_A25": 15,
       "TRAUB_A42_A60": 9,
       "Centerless_Grinder": 2,

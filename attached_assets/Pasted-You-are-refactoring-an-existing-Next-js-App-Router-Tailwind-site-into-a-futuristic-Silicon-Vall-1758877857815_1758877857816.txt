@@ -1,0 +1,120 @@
+You are refactoring an existing Next.js (App Router) + Tailwind site into a futuristic, Silicon-Valley style marketing site for Neo Automatics that convinces purchasing managers to send RFQs. Follow these specs exactly.
+Design goals (no blue)
+Aesthetic: sleek, futuristic, minimal; “VC-backed hardware startup” vibes.
+Theme: dark neutral base (charcoal/graphite) with neon-lime + violet accents. Absolutely no blue.
+Typography: Space Grotesk (heads) + Inter (body). Tight letter-spacing on H1/H2. Generous line-height for body.
+Layout: 12-column grid, big negative space, consistent section paddings (py-20 md:py-28), rounded-2xl cards with glassmorphism.
+Motion: Framer Motion micro-interactions (fade/slide), parallax hero gradient, magnetic hover on primary CTAs.
+Graphics: abstract industrial SVG motifs (geometric isometrics, subtle wireframes, dotted grids), no stock blue photos. Use neutral metal textures or generated SVGs.
+Color system (Tailwind custom tokens)
+Backgrounds: #0B0B0F (base), #111114 (elevated)
+Text: #ECECF3 (primary), #A6A6B3 (muted)
+Accents: Lime #A3FF12 (primary accent), Violet #8B5CF6 (secondary accent)
+Surfaces (glass): bg-white/5 with backdrop-blur-xl + ring-1 ring-white/10
+Gradients: lime→violet diagonals (no blues)
+Tech & perf
+Next.js 14 App Router + TypeScript + Tailwind + Framer Motion + lucide-react
+Lighthouse targets: Perf ≥ 95, A11y ≥ 95, Best Practices ≥ 95, SEO ≥ 95
+Image optimization with next/image; defer heavy comps; prefetch primary routes
+Fixes & routing (no 404s)
+Ensure these routes exist and render: / /capabilities /industries /quality /products /about /contact /privacy /terms.
+Update navbar to these paths; remove any dead links. No 404 allowed.
+Content (buyer-focused)
+Use concise copy that speaks to quality, cost, reliability, delivery. Integrate the data below.
+{
+  "company": {
+    "name": "Neo Automatics",
+    "tagline": "Precision. Reliability. Performance.",
+    "owner": "Kushagra Dhingra",
+    "email": "neo.automatics@gmail.com",
+    "phone": "+91 88130 79855",
+    "hq": "Plot 101 & 102, Sainik Colony, Hissar Road, Rohtak, Haryana 124001, India",
+    "units": [
+      {"name":"Unit I – Neo Automatics","address":"Plot 101 & 102, Sainik Colony, Hissar Road, Rohtak 124001"},
+      {"name":"Unit II – Kitchen Tools","address":"Dobh, Bhiwani Road, Rohtak"},
+      {"name":"Unit III – Neo Turner","address":"Plot 10, Sector 31B, IMT, Rohtak"}
+    ],
+    "certifications": ["ISO 9001:2015", "PPAP Ready"],
+    "machines": {
+      "CNC": 30,
+      "TRAUB_A30_A25": 15,
+      "TRAUB_A42_A60": 9,
+      "Centerless_Grinder": 2,
+      "Drill_Machines": 6,
+      "Straightening": 1,
+      "Serration_Rolling": 2,
+      "Surface_Grinding": 1,
+      "Tapping_Drill": 2,
+      "Milling": 2,
+      "Lathe": 2,
+      "Air_Compressor": 2,
+      "Diesel_Genset": "150kVA + 85kVA + 45kVA"
+    },
+    "heat_treatment": ["Sealed Quench Furnace", "Mesh Belt Furnace"],
+    "inspection": [
+      "Rockwell Hardness Tester",
+      "Surface Roughness Tester",
+      "Profile Projector",
+      "Digital Micrometers & Verniers",
+      "Air Ring/Plug Gauges",
+      "Metallurgical Microscope",
+      "Height Gauges"
+    ],
+    "products": [
+      "Collars (RR Panel, RR Wheel Side)",
+      "Ratchet Starter & Pinion Assemblies",
+      "Rocker Arms",
+      "Engine Bushes (incl. 20x9)",
+      "Sprockets",
+      "Gear Blanks"
+    ],
+    "industries": [
+      "Automotive (2W/4W/Commercial)",
+      "Agriculture Machinery",
+      "Industrial Equipment",
+      "Kitchen Tools"
+    ]
+  }
+}
+Page specs
+Home /
+Hero: H1 “Precision Machined Components for OEMs & Tier-1s”; sub “End-to-end machining, heat treatment & QA—delivered at scale.”
+Background: animated lime→violet gradient field with subtle noise/particles (canvas or CSS only—no heavy libs).
+Trust bar: “Trusted by leading OEMs & Tier-1s” with neutral placeholder logos.
+Value Pills (3): Cost Leadership • Reliability • Speed/Agility
+Metrics: 30 CNC, 3 Units, ISO 9001:2015, PPAP Ready (animated counters)
+Featured products (cards with industrial SVG overlays).
+CTA band: Request a Quote (primary), Download Capability Profile (secondary).
+Capabilities /capabilities
+Three sections: Machining, Heat Treatment, Inspection & QA.
+Machines table pulled from company.machines.
+Sidebar CTA “Book a Plant Tour”.
+Industries /industries
+Cards per industry with pain-point→solution copy and mini diagrams (SVG).
+Quality /quality
+ISO + PPAP process, instruments gallery, capability histogram (SVG).
+Products /products
+Grid of product cards; modal with notes/specs; “Request a quote for this part” button.
+About /about
+Founder note from Kushagra (short), timeline, map of units (simplified SVG).
+Contact /contact
+RFQ form (Name, Company, Email, Phone, Part, Annual Volume, Material, Drawing Upload PDF/DWG up to 10MB, Message).
+Server route /api/rfq with Nodemailer (env: SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, TO_EMAIL=neo.automatics@gmail.com).
+Fallback to Formspree via FORMSPREE_ID if SMTP not set. Show success/failure banners.
+Privacy/Terms minimal, on-brand.
+Components & polish
+Navbar sticky, translucent, blur, active link underline in lime.
+Button variants: primary (lime glow), secondary (violet outline), ghost.
+Card with glass surface, soft shadow, hover lift + glow.
+Section wrapper: max-w-7xl mx-auto px-6 md:px-10
+LogoMarquee, MetricsCounter, MachinesTable, RFQForm.
+Cleanup & consistency
+Remove any remaining blue styles.
+Unify spacing scale; use leading-relaxed body text; H1 text-5xl md:text-7xl with tracking-tight.
+Ensure all nav buttons work (no 404). If content missing, create polished placeholders.
+Deliverables
+Updated repo with the new theme, pages, components, and content integrated from JSON above.
+/public/ assets: og.jpg, favicon.svg, 3–5 abstract industrial SVGs (lime/violet on dark).
+.env.example showing SMTP + FORMSPREE_ID.
+README with setup/run instructions.
+Now implement all of the above.

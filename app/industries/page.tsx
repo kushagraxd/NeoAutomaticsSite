@@ -14,7 +14,7 @@ const industries = [
     description: "Precision components for two-wheelers, four-wheelers, and commercial vehicles including engine parts, transmission components, and chassis elements.",
     products: ["Collars", "Rocker Arms", "Engine Bushes", "Ratchet Starter & Pinion"],
     challenges: ["Tight tolerances", "High volume production", "Cost optimization", "PPAP compliance"],
-    solutions: ["22+ CNC machines", "In-house heat treatment", "Statistical process control", "Dedicated automotive lines"],
+    solutions: ["30+ CNC machines", "In-house heat treatment", "Statistical process control", "Dedicated automotive lines"],
     color: "sky"
   },
   {

@@ -124,7 +124,7 @@ export default function AboutPage() {
                 </h3>
                 <p className="text-slate-600">
                   Recognized as a preferred supplier to leading OEMs with
-                  22+ CNC machines and advanced quality systems.
+                  30+ CNC machines and advanced quality systems.
                 </p>
               </div>
             </div>
