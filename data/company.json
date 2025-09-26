@@ -5,22 +5,22 @@
     "email": "neo.automatics@gmail.com",
     "phone": "+91 88130 79855",
     "owner": "Kushagra Dhingra",
-    "hq": "Plot 101 & 102, Sainik Colony, Hissar Road, Rohtak, Haryana 124001, India",
+    "hq": "Pune, Maharashtra, India",
     "units": [
       {
         "name": "Unit I – Neo Automatics",
-        "address": "Plot 101 & 102, Sainik Colony, Hissar Road, Rohtak 124001"
+        "address": "Pune, Maharashtra, India"
       },
       {
-        "name": "Unit II – Kitchen Tools",
-        "address": "Dobh, Bhiwani Road, Rohtak"
+        "name": "Unit II – Kitchen Tools", 
+        "address": "Pune, Maharashtra, India"
       },
       {
         "name": "Unit III – Neo Turner",
-        "address": "Plot 10, Sector 31B, IMT, Rohtak"
+        "address": "Pune, Maharashtra, India"
       }
     ],
-    "certifications": ["ISO 9001:2015"],
+    "certifications": ["ISO 9001:2015", "PPAP Ready"],
     "strengths": [
       "High volume, low cost supplier",
       "End-to-end in-house: machining, heat treatment, QA",

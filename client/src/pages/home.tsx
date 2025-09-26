@@ -18,19 +18,19 @@ const valuePills = [
     title: "Cost Leadership",
     description: "Competitive pricing through process optimization",
     icon: DollarSign,
-    color: "text-lime"
+    color: "text-amber"
   },
   {
     title: "Reliability", 
     description: "ISO 9001:2015 certified quality systems",
     icon: Award,
-    color: "text-violet"
+    color: "text-red"
   },
   {
     title: "Speed & Agility",
     description: "Rapid prototyping and quick turnaround",
     icon: Zap,
-    color: "text-lime"
+    color: "text-amber"
   }
 ];
 
@@ -69,14 +69,59 @@ export default function HomePage() {
     <div className="min-h-screen bg-base">
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Animated Background */}
-        <div className="absolute inset-0 aurora-bg opacity-20" />
-        <div className="absolute inset-0 hero-bg" />
+        {/* Background Video or Animated SVG Fallback */}
+        <div className="absolute inset-0 bg-base">
+          {/* Video element - will fallback to animated SVG if video unavailable */}
+          <video
+            className="absolute inset-0 w-full h-full object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+            poster="/assets/nut-bolt-poster.jpg"
+            onError={(e) => {
+              // Hide video on error and show SVG fallback
+              e.currentTarget.style.display = 'none';
+            }}
+          >
+            <source src="/assets/nut-bolt.mp4" type="video/mp4" />
+          </video>
+          
+          {/* Animated SVG Fallback */}
+          <div className="absolute inset-0 flex items-center justify-center opacity-20">
+            <svg
+              width="400"
+              height="400"
+              viewBox="0 0 400 400"
+              className="rotating-nut"
+              style={{ animationDuration: '12s' }}
+            >
+              <defs>
+                <linearGradient id="nutGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#F5B301" stopOpacity="0.3" />
+                  <stop offset="100%" stopColor="#FF4D4D" stopOpacity="0.2" />
+                </linearGradient>
+              </defs>
+              {/* Nut/bolt industrial SVG */}
+              <circle cx="200" cy="200" r="80" fill="none" stroke="url(#nutGradient)" strokeWidth="4" />
+              <polygon
+                points="200,120 280,200 200,280 120,200"
+                fill="none"
+                stroke="url(#nutGradient)"
+                strokeWidth="3"
+              />
+              <circle cx="200" cy="200" r="20" fill="url(#nutGradient)" />
+              <line x1="170" y1="200" x2="230" y2="200" stroke="url(#nutGradient)" strokeWidth="2" />
+              <line x1="200" y1="170" x2="200" y2="230" stroke="url(#nutGradient)" strokeWidth="2" />
+            </svg>
+          </div>
+          
+          {/* Dark overlay for contrast */}
+          <div className="video-overlay"></div>
+        </div>
         
-        {/* Geometric Shapes */}
-        <div className="geometric-shape geometric-shape-1" />
-        <div className="geometric-shape geometric-shape-2" />
-        <div className="geometric-shape geometric-shape-3" />
+        {/* Industrial hero background gradient */}
+        <div className="absolute inset-0 hero-bg opacity-40" />
         
         <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-10 text-center">
           <motion.div
@@ -84,11 +129,13 @@ export default function HomePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-5xl md:text-7xl font-display font-bold text-primary mb-8 tracking-tight leading-tight">
-              Precision Machined Components
-              <br />
-              for <span className="gradient-text animate-pulse-glow">OEMs & Tier-1s</span>
+            <h1 className="text-6xl md:text-7xl font-display font-bold text-primary mb-6 tracking-tight leading-tight">
+              Neo <span className="gradient-text">Automatics</span>
             </h1>
+            
+            <h2 className="text-2xl md:text-3xl font-display font-semibold text-muted mb-8">
+              Precision Machined Components for OEMs & Tier-1s
+            </h2>
             
             <motion.p
               initial={{ opacity: 0 }}
@@ -96,8 +143,7 @@ export default function HomePage() {
               transition={{ duration: 0.8, delay: 0.3 }}
               className="text-xl md:text-2xl text-muted mb-12 max-w-4xl mx-auto leading-relaxed"
             >
-              End-to-end machining, heat treatment & QA—delivered at scale with 
-              <span className="text-lime font-semibold"> 20+ years</span> of manufacturing excellence.
+              End-to-end machining, heat treatment & QA—delivered at scale.
             </motion.p>
             
             <motion.div
@@ -113,12 +159,14 @@ export default function HomePage() {
                 </Button>
               </Link>
               
-              <Link href="/neo-capability-profile.pdf" download>
-                <Button className="btn-secondary magnetic-btn group">
-                  <Download className="mr-2 h-5 w-5 group-hover:translate-y-0.5 transition-transform" />
-                  Download Capability Profile
-                </Button>
-              </Link>
+              <a 
+                href="/neo-capability-profile.pdf" 
+                download
+                className="btn-secondary magnetic-btn group inline-flex items-center"
+              >
+                <Download className="mr-2 h-5 w-5 group-hover:translate-y-0.5 transition-transform" />
+                Download Capability Profile
+              </a>
             </motion.div>
           </motion.div>
         </div>
