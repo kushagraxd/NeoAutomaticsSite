@@ -1,6 +1,36 @@
 import express, { type Request, Response, NextFunction } from "express";
+import multer from "multer";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+
+// Configure multer for handling multipart/form-data (file uploads)
+const upload = multer({
+  dest: 'uploads/', // temporary storage directory
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10MB limit to match frontend
+  },
+  fileFilter: (req, file, cb) => {
+    // Allow file types that match the frontend validation
+    const allowedTypes = [
+      'application/pdf',
+      'application/vnd.ms-excel',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'image/jpeg',
+      'image/png',
+    ];
+    
+    const allowedExtensions = ['.dwg', '.dxf'];
+    const hasAllowedExtension = allowedExtensions.some(ext => 
+      file.originalname.toLowerCase().endsWith(ext)
+    );
+    
+    if (allowedTypes.includes(file.mimetype) || hasAllowedExtension) {
+      cb(null, true);
+    } else {
+      cb(new Error('Invalid file type'), false);
+    }
+  }
+});
 
 const app = express();
 app.use(express.json());
