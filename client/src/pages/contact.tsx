@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Clock, Users, Zap, Factory, Award } from 'lucide-react';
 import { RFQForm } from '../../../components/ui/rfq-form';
-import { getCompanyInfo, getManufacturingCapabilities } from '../../../shared/company';
+import { getCompanyInfo, getManufacturingCapabilities, getCompanyUnits, formatPhoneForTel } from '../../../shared/company';
 import { usePageTitle } from '../lib/usePageTitle';
 
 const createContactInfo = (companyInfo: any, capabilities: any) => [
@@ -116,6 +116,76 @@ export default function ContactPage() {
               );
             })}
           </div>
+
+          {/* Our Locations Panel */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="glass-card p-8 mb-12"
+          >
+            <h2 className="text-2xl md:text-3xl font-display font-bold text-primary mb-8 text-center">
+              Our <span className="gradient-text">Locations</span>
+            </h2>
+            
+            <div className="grid md:grid-cols-3 gap-6">
+              {getCompanyUnits().map((unit, index) => (
+                <motion.div
+                  key={unit.name}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="glass-card p-6 border border-accent-secondary/20"
+                  data-testid={`location-${index + 1}`}
+                >
+                  <div className={`w-8 h-8 rounded-full ${index % 2 === 0 ? 'bg-accent-primary' : 'bg-accent-secondary'} flex items-center justify-center text-base font-bold text-bg-base mb-4`}>
+                    {index + 1}
+                  </div>
+                  
+                  <h3 className="text-lg font-display font-semibold text-primary mb-3">{unit.name}</h3>
+                  
+                  <div className="space-y-2 text-sm">
+                    <div>
+                      <span className="text-accent-primary font-medium">Address:</span>
+                      <p className="text-muted mt-1">{unit.address}</p>
+                    </div>
+                    
+                    <div>
+                      <span className="text-accent-primary font-medium">Phone:</span>
+                      <div className="mt-1">
+                        {unit.phones.map((phone, phoneIndex) => (
+                          <a 
+                            key={phoneIndex}
+                            href={`tel:${formatPhoneForTel(phone)}`}
+                            className="block text-accent-primary hover:underline hover:text-text-primary transition-colors"
+                            data-testid={`phone-${index + 1}-${phoneIndex + 1}`}
+                          >
+                            +91 {phone}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <span className="text-accent-primary font-medium">Email:</span>
+                      <div className="mt-1">
+                        {unit.emails.map((email, emailIndex) => (
+                          <a 
+                            key={emailIndex}
+                            href={`mailto:${email}`}
+                            className="block text-accent-primary hover:underline hover:text-text-primary transition-colors"
+                            data-testid={`email-${index + 1}-${emailIndex + 1}`}
+                          >
+                            {email}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
         </div>
       </section>
 

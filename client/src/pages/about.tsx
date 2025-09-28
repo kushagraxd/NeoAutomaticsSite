@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { usePageTitle } from '../lib/usePageTitle';
 import { Users, Target, Lightbulb, Award, Factory, Clock, Shield, Zap, CheckCircle } from 'lucide-react';
+import { getCompanyUnits, formatPhoneForTel } from '../../../shared/company';
 
 const companyValues = [
   {
@@ -406,48 +407,46 @@ export default function AboutPage() {
               viewport={{ once: true }}
               className="space-y-6"
             >
-              {[
-                {
-                  unit: "Unit 1",
-                  area: "Pimpri-Chinchwad",
-                  specialization: "CNC Machining & Turning",
-                  machines: "12 CNC Machines",
-                  focus: "Automotive Components"
-                },
-                {
-                  unit: "Unit 2", 
-                  area: "Hadapsar",
-                  specialization: "Precision Grinding & Finishing",
-                  machines: "8 CNC Machines",
-                  focus: "Agricultural Parts"
-                },
-                {
-                  unit: "Unit 3",
-                  area: "Chakan",
-                  specialization: "Assembly & Quality Control",
-                  machines: "10+ CNC Machines",
-                  focus: "Industrial Components"
-                }
-              ].map((unit, index) => (
+              {getCompanyUnits().map((unit, index) => (
                 <motion.div
-                  key={unit.unit}
+                  key={unit.name}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                   className="glass-card p-6 glow-hover group"
-                  data-testid={`unit-${unit.unit.toLowerCase().replace(' ', '-')}`}
+                  data-testid={`unit-${index + 1}`}
                 >
                   <div className="flex items-start gap-4">
                     <div className={`w-8 h-8 rounded-full ${index % 2 === 0 ? 'bg-amber' : 'bg-red'} flex items-center justify-center text-base font-bold text-black`}>
                       {index + 1}
                     </div>
                     <div className="flex-1">
-                      <h4 className="text-lg font-display font-semibold text-primary mb-2">{unit.unit} - {unit.area}</h4>
-                      <div className="space-y-1 text-sm text-muted">
-                        <div><span className="text-amber font-medium">Specialization:</span> {unit.specialization}</div>
-                        <div><span className="text-red font-medium">Capacity:</span> {unit.machines}</div>
-                        <div><span className="text-amber font-medium">Primary Focus:</span> {unit.focus}</div>
+                      <h4 className="text-lg font-display font-semibold text-primary mb-2">{unit.name}</h4>
+                      <div className="space-y-2 text-sm text-muted">
+                        <div><span className="text-amber font-medium">Address:</span> {unit.address}</div>
+                        <div className="flex flex-wrap gap-2">
+                          <span className="text-amber font-medium">Phone:</span>
+                          {unit.phones.map((phone: string, i: number) => (
+                            <span key={i}>
+                              <a href={`tel:${formatPhoneForTel(phone)}`} className="text-accent-primary hover:underline">
+                                +91 {phone}
+                              </a>
+                              {i < unit.phones.length - 1 && ', '}
+                            </span>
+                          ))}
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          <span className="text-amber font-medium">Email:</span>
+                          {unit.emails.map((email: string, i: number) => (
+                            <span key={i}>
+                              <a href={`mailto:${email}`} className="text-accent-primary hover:underline">
+                                {email}
+                              </a>
+                              {i < unit.emails.length - 1 && ', '}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>

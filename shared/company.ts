@@ -7,23 +7,26 @@ export interface CompanyMachine {
 export interface CompanyUnit {
   name: string;
   address: string;
+  phones: string[];
+  emails: string[];
 }
 
 export interface CompanyData {
   name: string;
-  tagline: string;
   email: string;
   phone: string;
   owner: string;
-  hq: string;
   units: CompanyUnit[];
-  certifications: string[];
-  strengths: string[];
-  machines: CompanyMachine;
-  heat_treatment: string[];
-  inspection: string[];
-  products: string[];
-  industries: string[];
+  // Legacy fields for compatibility
+  tagline?: string;
+  hq?: string;
+  certifications?: string[];
+  strengths?: string[];
+  machines?: CompanyMachine;
+  heat_treatment?: string[];
+  inspection?: string[];
+  products?: string[];
+  industries?: string[];
 }
 
 export const getCompanyData = (): CompanyData => {
@@ -35,11 +38,13 @@ export const getCompanyInfo = () => {
   const data = getCompanyData();
   return {
     name: data.name,
-    tagline: data.tagline,
     email: data.email,
     phone: data.phone,
     owner: data.owner,
-    hq: data.hq,
+    units: data.units,
+    // Legacy compatibility
+    tagline: data.tagline || 'End-to-end machining, heat treatment & QA—delivered at scale',
+    hq: data.hq || 'Rohtak, Haryana, India',
   };
 };
 
@@ -73,6 +78,23 @@ export const getContactInfo = () => {
   return {
     email: data.email,
     phone: data.phone,
-    hq: data.hq,
+    units: data.units,
+    hq: data.hq || 'Rohtak, Haryana, India',
   };
+};
+
+// Helper to get all company units with contact info
+export const getCompanyUnits = () => {
+  const data = getCompanyData();
+  return data.units;
+};
+
+// Helper to format phone numbers for tel: links
+export const formatPhoneForTel = (phone: string) => {
+  // Remove any spaces, dashes, or parentheses and ensure it starts with +91
+  const cleaned = phone.replace(/[\s\-\(\)]/g, '');
+  if (cleaned.startsWith('+91')) {
+    return cleaned;
+  }
+  return `+91${cleaned}`;
 };
