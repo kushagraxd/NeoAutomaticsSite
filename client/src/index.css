@@ -247,7 +247,36 @@
   transform: translateY(-3px) scale(1.05);
 }
 
-/* Animated SVG nut/bolt fallback */
+/* AutoParts Backdrop animations */
+@keyframes gear-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes gear-counter {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+@keyframes drift-slow {
+  0%, 100% { transform: translateY(0px) translateX(0px); }
+  25% { transform: translateY(-15px) translateX(10px); }
+  50% { transform: translateY(-8px) translateX(-5px); }
+  75% { transform: translateY(-20px) translateX(8px); }
+}
+
+@keyframes drift-gentle {
+  0%, 100% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+  33% { transform: translateY(-10px) translateX(15px) rotate(2deg); }
+  66% { transform: translateY(-5px) translateX(-10px) rotate(-1deg); }
+}
+
+@keyframes drift-reverse {
+  0%, 100% { transform: translateY(0px) translateX(0px); }
+  50% { transform: translateY(12px) translateX(-8px); }
+}
+
+/* Legacy animations */
 @keyframes rotate {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

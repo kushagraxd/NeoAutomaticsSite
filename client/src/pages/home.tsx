@@ -3,6 +3,7 @@ import { ArrowRight, Download, CheckCircle, Factory, Users, Award, Zap, DollarSi
 import { Link } from 'wouter';
 import { Button } from '../components/ui/button';
 import Counter from '../../../components/ui/counter';
+import AutoPartsBackdrop from '../../../components/AutoPartsBackdrop';
 
 // Trust logos placeholder data
 const trustLogos = [
@@ -69,56 +70,8 @@ export default function HomePage() {
     <div className="min-h-screen bg-base">
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Background Video or Animated SVG Fallback */}
-        <div className="absolute inset-0 bg-base">
-          {/* Video element - will fallback to animated SVG if video unavailable */}
-          <video
-            className="absolute inset-0 w-full h-full object-cover"
-            autoPlay
-            muted
-            loop
-            playsInline
-            poster="/assets/nut-bolt-poster.jpg"
-            onError={(e) => {
-              // Hide video on error and show SVG fallback
-              e.currentTarget.style.display = 'none';
-            }}
-          >
-            <source src="/assets/nut-bolt.mp4" type="video/mp4" />
-          </video>
-          
-          {/* Animated SVG Fallback */}
-          <div className="absolute inset-0 flex items-center justify-center opacity-20">
-            <svg
-              width="400"
-              height="400"
-              viewBox="0 0 400 400"
-              className="rotating-nut"
-              style={{ animationDuration: '12s' }}
-            >
-              <defs>
-                <linearGradient id="nutGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#F5B301" stopOpacity="0.3" />
-                  <stop offset="100%" stopColor="#FF4D4D" stopOpacity="0.2" />
-                </linearGradient>
-              </defs>
-              {/* Nut/bolt industrial SVG */}
-              <circle cx="200" cy="200" r="80" fill="none" stroke="url(#nutGradient)" strokeWidth="4" />
-              <polygon
-                points="200,120 280,200 200,280 120,200"
-                fill="none"
-                stroke="url(#nutGradient)"
-                strokeWidth="3"
-              />
-              <circle cx="200" cy="200" r="20" fill="url(#nutGradient)" />
-              <line x1="170" y1="200" x2="230" y2="200" stroke="url(#nutGradient)" strokeWidth="2" />
-              <line x1="200" y1="170" x2="200" y2="230" stroke="url(#nutGradient)" strokeWidth="2" />
-            </svg>
-          </div>
-          
-          {/* Dark overlay for contrast */}
-          <div className="video-overlay"></div>
-        </div>
+        {/* Professional AutoParts Backdrop */}
+        <AutoPartsBackdrop />
         
         {/* Industrial hero background gradient */}
         <div className="absolute inset-0 hero-bg opacity-40" />
