@@ -44,9 +44,9 @@ export default function Navigation() {
       aria-label="Main navigation"
     >
       <div className="max-w-7xl mx-auto px-6 md:px-10">
-        <div className="flex justify-between items-center h-20">
+        <div className="flex justify-between items-center h-20 gap-4">
           {/* Logo */}
-          <div className="flex items-center space-x-8">
+          <div className="flex items-center space-x-8 flex-shrink-0">
             <div className="flex-shrink-0">
               <Link 
                 href="/" 
@@ -60,7 +60,7 @@ export default function Navigation() {
             
             {/* Desktop Navigation */}
             <div className="hidden lg:block">
-              <div className="ml-10 flex items-baseline space-x-8">
+              <div className="ml-6 flex items-baseline space-x-6">
                 {navItems.map((item) => (
                   <Link
                     key={item.href}
@@ -85,9 +85,9 @@ export default function Navigation() {
           </div>
 
           {/* Desktop CTA Button */}
-          <div className="hidden lg:block">
+          <div className="hidden lg:flex lg:items-center lg:flex-shrink-0">
             <Link href="/contact">
-              <Button className="btn-primary magnetic-btn group" data-testid="button-quote">
+              <Button className="btn-primary magnetic-btn group whitespace-nowrap" data-testid="button-quote">
                 <Zap className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
                 Request Quote
               </Button>
