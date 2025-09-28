@@ -1,13 +1,39 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Package, Car, Tractor, Factory, Zap, CheckCircle, Download, Target, Award, X, Mail } from 'lucide-react';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/hooks/use-toast';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'wouter';
+import { Package, Car, Tractor, Factory, Zap, CheckCircle, Download, Target, Award } from 'lucide-react';
+import ProductQuoteModal from '../../../components/ProductQuoteModal';
+
+// Type definitions
+interface Product {
+  name: string;
+  description: string;
+  specs: string[];
+  applications: string[];
+}
+
+interface ProductCategory {
+  id: string;
+  icon: any;
+  title: string;
+  description: string;
+  color: string;
+  stats: {
+    parts: string;
+    volume: string;
+    tolerance: string;
+  };
+  products: Product[];
+}
+
+interface SelectedProductType {
+  name: string;
+  category: string;
+  image?: string;
+  description?: string;
+  specs?: string[];
+  applications?: string[];
+}
 
 const productCategories = [
   {
@@ -141,64 +167,60 @@ const productBenefits = [
   }
 ];
 
-const quoteRequestSchema = z.object({
-  quantity: z.string().min(1, 'Quantity is required'),
-  material: z.string().min(1, 'Material preference is required'),
-  timeline: z.string().min(1, 'Timeline is required'),
-  company: z.string().min(1, 'Company name is required'),
-  email: z.string().email('Valid email address is required'),
-  requirements: z.string().optional()
-});
-
-type QuoteRequest = z.infer<typeof quoteRequestSchema>;
-
 export default function ProductsPage() {
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const { toast } = useToast();
+  const [selectedProduct, setSelectedProduct] = useState<SelectedProductType | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [location] = useLocation();
 
-  const form = useForm<QuoteRequest>({
-    resolver: zodResolver(quoteRequestSchema),
-    defaultValues: {
-      quantity: '',
-      material: '',
-      timeline: '',
-      company: '',
-      email: '',
-      requirements: ''
+  // Parse query parameters and auto-open product modal
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const productParam = params.get('product');
+    
+    if (productParam) {
+      // Find the product by name (case-insensitive, handle URL encoding)
+      const productName = decodeURIComponent(productParam).toLowerCase();
+      
+      for (const category of productCategories) {
+        const foundProduct = category.products.find(p => 
+          p.name.toLowerCase().includes(productName) || 
+          productName.includes(p.name.toLowerCase())
+        );
+        
+        if (foundProduct) {
+          const productWithImage: SelectedProductType = {
+            ...foundProduct,
+            category: category.title,
+            image: undefined // Add actual product images if available
+          };
+          setSelectedProduct(productWithImage);
+          setIsModalOpen(true);
+          break;
+        }
+      }
     }
-  });
+  }, [location]);
 
-  const openModal = (product, category) => {
-    setSelectedProduct(product);
-    setSelectedCategory(category);
-    form.reset(); // Reset form when opening modal
+  const openModal = (product: Product, category: ProductCategory) => {
+    const productWithImage: SelectedProductType = {
+      ...product,
+      category: category.title,
+      image: undefined // Add actual product images if available
+    };
+    setSelectedProduct(productWithImage);
+    setIsModalOpen(true);
+    
+    // Update URL with product parameter for deep linking
+    const productParam = encodeURIComponent(product.name);
+    window.history.pushState(null, '', `?product=${productParam}`);
   };
 
   const closeModal = () => {
     setSelectedProduct(null);
-    setSelectedCategory(null);
-    form.reset();
-  };
-
-  const onSubmitQuote = async (data: QuoteRequest) => {
-    try {
-      // Simulate API call - replace with actual API integration later
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      toast({
-        title: "Quote Request Submitted",
-        description: `We've received your request for ${selectedProduct?.name}. Our team will respond within 24 hours.`
-      });
-      
-      closeModal();
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to submit quote request. Please try again.",
-        variant: "destructive"
-      });
-    }
+    setIsModalOpen(false);
+    
+    // Clear query parameter when closing modal
+    window.history.pushState(null, '', window.location.pathname);
   };
 
   return (
@@ -408,221 +430,12 @@ export default function ProductsPage() {
         </div>
       </section>
 
-      {/* Product Details Modal */}
-      <AnimatePresence>
-        {selectedProduct && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm" data-testid="product-modal-overlay">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="relative w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto glass-card-dark"
-            data-testid="product-modal"
-          >
-            {/* Modal Header */}
-            <div className="sticky top-0 z-10 flex items-center justify-between p-6 border-b border-white/10 bg-elevated/90 backdrop-blur-md">
-              <div>
-                <h3 className="text-2xl font-display font-bold text-primary">{selectedProduct.name}</h3>
-                <p className="text-muted">{selectedCategory.title}</p>
-              </div>
-              <button
-                onClick={closeModal}
-                className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-                data-testid="button-close-modal"
-              >
-                <X className="h-6 w-6 text-muted hover:text-primary" />
-              </button>
-            </div>
-
-            {/* Modal Content */}
-            <div className="p-6 space-y-8">
-              {/* Product Description */}
-              <div>
-                <h4 className="text-lg font-display font-semibold text-primary mb-3">Product Description</h4>
-                <p className="text-muted leading-relaxed">{selectedProduct.description}</p>
-              </div>
-
-              {/* Technical Specifications */}
-              <div>
-                <h4 className="text-lg font-display font-semibold text-primary mb-4">Technical Specifications</h4>
-                <div className="grid md:grid-cols-2 gap-4">
-                  {selectedProduct.specs.map((spec, index) => (
-                    <div key={index} className="flex items-start gap-3 p-3 bg-elevated/50 rounded-lg">
-                      <CheckCircle className={`h-4 w-4 ${selectedCategory.color === 'amber' ? 'text-amber' : 'text-red'} mt-0.5 flex-shrink-0`} />
-                      <span className="text-muted text-sm">{spec}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Applications */}
-              <div>
-                <h4 className="text-lg font-display font-semibold text-primary mb-4">Applications</h4>
-                <div className="flex flex-wrap gap-3">
-                  {selectedProduct.applications.map((app, index) => (
-                    <span
-                      key={index}
-                      className={`px-4 py-2 text-sm rounded-full border ${
-                        selectedCategory.color === 'amber'
-                          ? 'border-amber/30 bg-amber/10 text-amber'
-                          : 'border-red/30 bg-red/10 text-red'
-                      }`}
-                    >
-                      {app}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Quote Request Form */}
-              <div className="border-t border-white/10 pt-8">
-                <h4 className="text-lg font-display font-semibold text-primary mb-4">Request Quote for {selectedProduct.name}</h4>
-                <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmitQuote)} className="space-y-6">
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div className="space-y-4">
-                        <FormField
-                          control={form.control}
-                          name="quantity"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel className="text-primary">Quantity Required</FormLabel>
-                              <FormControl>
-                                <Input 
-                                  placeholder="e.g. 1000" 
-                                  {...field} 
-                                  data-testid="input-quote-quantity"
-                                  className="bg-elevated border-white/10 text-primary placeholder-muted focus:border-amber/50"
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={form.control}
-                          name="material"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel className="text-primary">Material Preference</FormLabel>
-                              <FormControl>
-                                <Input 
-                                  placeholder="e.g. High-carbon steel" 
-                                  {...field} 
-                                  data-testid="input-quote-material"
-                                  className="bg-elevated border-white/10 text-primary placeholder-muted focus:border-amber/50"
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={form.control}
-                          name="timeline"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel className="text-primary">Timeline Required</FormLabel>
-                              <FormControl>
-                                <Input 
-                                  placeholder="e.g. 4-6 weeks" 
-                                  {...field} 
-                                  data-testid="input-quote-timeline"
-                                  className="bg-elevated border-white/10 text-primary placeholder-muted focus:border-amber/50"
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                      <div className="space-y-4">
-                        <FormField
-                          control={form.control}
-                          name="company"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel className="text-primary">Company Name</FormLabel>
-                              <FormControl>
-                                <Input 
-                                  placeholder="Your company name" 
-                                  {...field} 
-                                  data-testid="input-quote-company"
-                                  className="bg-elevated border-white/10 text-primary placeholder-muted focus:border-amber/50"
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={form.control}
-                          name="email"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel className="text-primary">Contact Email</FormLabel>
-                              <FormControl>
-                                <Input 
-                                  type="email"
-                                  placeholder="engineering@yourcompany.com" 
-                                  {...field} 
-                                  data-testid="input-quote-email"
-                                  className="bg-elevated border-white/10 text-primary placeholder-muted focus:border-amber/50"
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={form.control}
-                          name="requirements"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel className="text-primary">Additional Requirements</FormLabel>
-                              <FormControl>
-                                <Textarea 
-                                  placeholder="Special tolerances, certifications, or other requirements..." 
-                                  {...field} 
-                                  data-testid="textarea-quote-requirements"
-                                  className="bg-elevated border-white/10 text-primary placeholder-muted focus:border-amber/50 resize-none"
-                                  rows={3}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                    </div>
-                    
-                    <div className="flex flex-col sm:flex-row gap-4 mt-6">
-                      <button
-                        type="submit"
-                        disabled={form.formState.isSubmitting}
-                        className="btn-primary magnetic-btn group inline-flex items-center justify-center disabled:opacity-50"
-                        data-testid="button-submit-quote"
-                      >
-                        <Mail className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
-                        {form.formState.isSubmitting ? 'Submitting...' : 'Submit Quote Request'}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={closeModal}
-                        className="btn-secondary magnetic-btn inline-flex items-center justify-center"
-                        data-testid="button-cancel-quote"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </form>
-                </Form>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-        )}
-      </AnimatePresence>
+      {/* Product Quote Modal */}
+      <ProductQuoteModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        product={selectedProduct || undefined}
+      />
     </div>
   );
 }
