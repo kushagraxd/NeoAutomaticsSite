@@ -1,0 +1,69 @@
+You are updating a Next.js 14 (App Router) + Tailwind + TypeScript + Framer Motion site for Neo Automatics. Apply ALL changes exactly.
+A) New professional color theme (industrial, understated)
+Replace the current palette with this Professional Industrial theme. No gradients, no neon.
+In tailwind.config (CSS variables or theme extend), define and use these tokens across components:
+--bg-base: #0A0B0C (charcoal)
+--bg-elevated: #121416
+--text-primary: #ECEFF3
+--text-muted: #A7AEB8
+--accent-primary: #D8A332 (subtle industrial amber; use sparingly for CTAs/underlines)
+--accent-secondary: #6F757D (steel grey for outlines/dividers)
+--border: #262B31
+Cards = bg-white/5 backdrop-blur-xl ring-1 ring-[color:var(--border)] rounded-2xl
+Buttons:
+Primary: bg-[color:var(--accent-primary)] text-black hover:brightness-110 focus:ring-2 ring-[color:var(--accent-primary)]/50
+Secondary: border border-[color:var(--accent-secondary)] text-[color:var(--text-primary)] hover:bg-white/5
+Remove leftover colors from the previous theme and replace with these tokens. Re-check contrast ≥ 4.5:1.
+B) Update all company locations / units (single source of truth)
+Create or update /data/company.json exactly as below, then consume it everywhere (About, Contact, footer, map pins, schema):
+{
+  "company": {
+    "name": "Neo Automatics",
+    "email": "neo.automatics@gmail.com",
+    "phone": "+91 88130 79855",
+    "owner": "Kushagra Dhingra",
+    "units": [
+      {
+        "name": "Unit - I · Neo Automatics",
+        "address": "Plot No.101 & 102, Sainik Colony, Hissar Road, Rohtak – 124001 (Haryana), India",
+        "phones": ["9896251170", "9896277161"],
+        "emails": ["neo.automatics@gmail.com"]
+      },
+      {
+        "name": "Unit - II · Kitchen Tools",
+        "address": "Dobh, Bhiwani Road, Rohtak (Haryana)",
+        "phones": ["9416050367"],
+        "emails": ["rkmal123@gmail.com"]
+      },
+      {
+        "name": "Unit - III · Neo Turner",
+        "address": "Plot No.-10, Sector 31, B, IMT, Rohtak (Haryana)",
+        "phones": ["9896251170"],
+        "emails": ["neo.automatics@gmail.com"]
+      }
+    ]
+  }
+}
+Implementations:
+About page: “Our Locations / Units” section → render cards from company.units.
+Contact page: show a Locations panel with tel: and mailto: links for each number/email.
+Footer: add a condensed “Units” list with first phone/email for each.
+Map/pins: if a units map exists, generate pins from company.units (no hardcoded addresses).
+Schema: update JSON-LD (Organization + LocalBusiness) for each unit (address + phone).
+Ensure all phones are clickable (tel:+919896251170 etc.) and emails are clickable (mailto:).
+C) Fix “View Details & Quote” UX on /products
+Ensure each product card button opens a clean, high-contrast modal (ProductQuoteModal) with: Product (prefilled, read-only), Name*, Company*, Work Email*, Phone, Annual Volume*, Material, Surface Finish, Target Price, Drawing Upload (PDF/DWG ≤10MB), Message.
+Validate required fields; disable submit until valid.
+On submit → /api/rfq (Nodemailer via SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, TO_EMAIL=neo.automatics@gmail.com). Fallback to Formspree (FORMSPREE_ID) when SMTP absent.
+Success: show confirmation, “Upload another drawing”, and “Back to Products” buttons.
+Make buttons consistent (no overlap), lock page scroll while modal open, z-50, and responsive (max-w-2xl).
+Support deep link ?product=NAME to open modal directly.
+D) QA & acceptance checklist
+Theme uses only the Professional Industrial palette above; no old colors remain.
+About, Contact, footer, map pins, and schema all read from company.units (addresses/phones/emails exactly as provided).
+All tel: and mailto: links work.
+On /products, “View Details & Quote” opens the improved modal and successfully posts.
+No 404s on /, /capabilities, /industries, /quality, /products, /about, /contact, /privacy, /terms.
+Lighthouse on Home (production build) ≥ 95 across Perf/A11y/Best/SEO.
+TypeScript/ESLint clean; no console errors.
+Now implement all changes.

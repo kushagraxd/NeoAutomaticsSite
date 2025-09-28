@@ -10,6 +10,15 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Professional Industrial theme tokens
+        "bg-base": "var(--bg-base)",
+        "bg-elevated": "var(--bg-elevated)",
+        "text-primary": "var(--text-primary)",
+        "text-muted": "var(--text-muted)",
+        "accent-primary": "var(--accent-primary)",
+        "accent-secondary": "var(--accent-secondary)",
+        
+        // Shadcn compatibility
         background: "var(--background)",
         foreground: "var(--foreground)",
         card: {
@@ -43,19 +52,6 @@ export default {
         border: "var(--border)",
         input: "var(--input)",
         ring: "var(--ring)",
-        slate: {
-          50: "#f8fafc",
-          600: "#475569",
-          800: "#1e293b",
-          900: "#0f172a",
-          950: "#020617",
-        },
-        sky: {
-          500: "#0ea5e9",
-        },
-        cyan: {
-          400: "#22d3ee",
-        },
       },
       borderRadius: {
         lg: "var(--radius)",

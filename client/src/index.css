@@ -5,57 +5,76 @@
 @tailwind utilities;
 
 :root {
-  /* Steel & Graphite professional theme - Neo Automatics */
-  --background: hsl(220 11% 5%); /* #0B0C0E - charcoal base */
-  --foreground: hsl(220 15% 90%); /* #E8EAF0 - primary text */
-  --card: hsl(220 15% 8%); /* #111316 - elevated surfaces */
-  --card-foreground: hsl(220 15% 90%);
-  --popover: hsl(220 15% 8%);
-  --popover-foreground: hsl(220 15% 90%);
-  --primary: hsl(45 92% 56%); /* #F0B429 - industrial amber */
-  --primary-foreground: hsl(220 11% 5%);
-  --secondary: hsl(5 74% 55%); /* #D04A3A - oxide red */
-  --secondary-foreground: hsl(220 15% 90%);
-  --muted: hsl(220 11% 18%); /* #2A2F36 - surface dividers */
-  --muted-foreground: hsl(220 10% 67%); /* #A3A7B2 - muted text */
-  --accent: hsl(45 92% 56%); /* #F0B429 - amber accent */
-  --accent-foreground: hsl(220 11% 5%);
-  --destructive: hsl(5 74% 55%); /* #D04A3A - oxide red for errors */
-  --destructive-foreground: hsl(220 15% 90%);
-  --border: hsl(220 11% 18%); /* #2A2F36 */
-  --input: hsl(220 11% 18%);
-  --ring: hsl(45 92% 56%);
+  /* Professional Industrial theme - Neo Automatics */
+  --bg-base: #0A0B0C; /* charcoal */
+  --bg-elevated: #121416;
+  --text-primary: #ECEFF3;
+  --text-muted: #A7AEB8;
+  --accent-primary: #D8A332; /* subtle industrial amber */
+  --accent-secondary: #6F757D; /* steel grey */
+  --border: #262B31;
+  
+  /* Shadcn compatibility mapping */
+  --background: #0A0B0C; /* charcoal base */
+  --foreground: #ECEFF3; /* primary text */
+  --card: #121416; /* elevated surfaces */
+  --card-foreground: #ECEFF3;
+  --popover: #121416;
+  --popover-foreground: #ECEFF3;
+  --primary: #D8A332; /* subtle industrial amber */
+  --primary-foreground: #0A0B0C;
+  --secondary: #6F757D; /* steel grey */
+  --secondary-foreground: #ECEFF3;
+  --muted: #262B31; /* border color for muted areas */
+  --muted-foreground: #A7AEB8; /* muted text */
+  --accent: #D8A332; /* amber accent */
+  --accent-foreground: #0A0B0C;
+  --destructive: #DC2626; /* standard red for errors */
+  --destructive-foreground: #ECEFF3;
+  --border: #262B31;
+  --input: #262B31;
+  --ring: #D8A332;
   --font-sans: Inter, system-ui, sans-serif;
   --font-display: 'Space Grotesk', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
   --radius: 1rem;
-  --chart-1: hsl(45 92% 56%);
-  --chart-2: hsl(5 74% 55%);
-  --chart-3: hsl(45 92% 46%);
-  --chart-4: hsl(5 74% 45%);
-  --chart-5: hsl(45 92% 66%);
+  --chart-1: #D8A332;
+  --chart-2: #6F757D;
+  --chart-3: #B8941F;
+  --chart-4: #5A6068;
+  --chart-5: #E4B646;
 }
 
 .dark {
-  --background: hsl(220 11% 5%); /* #0B0C0E - charcoal base */
-  --foreground: hsl(220 15% 90%); /* #E8EAF0 - primary text */
-  --card: hsl(220 15% 8%); /* #111316 - elevated surfaces */
-  --card-foreground: hsl(220 15% 90%);
-  --popover: hsl(220 15% 8%);
-  --popover-foreground: hsl(220 15% 90%);
-  --primary: hsl(45 92% 56%); /* #F0B429 - industrial amber */
-  --primary-foreground: hsl(220 11% 5%);
-  --secondary: hsl(5 74% 55%); /* #D04A3A - oxide red */
-  --secondary-foreground: hsl(220 15% 90%);
-  --muted: hsl(220 11% 18%); /* #2A2F36 - surface dividers */
-  --muted-foreground: hsl(220 10% 67%); /* #A3A7B2 - muted text */
-  --accent: hsl(45 92% 56%); /* #F0B429 - amber accent */
-  --accent-foreground: hsl(220 11% 5%);
-  --destructive: hsl(5 74% 55%); /* #D04A3A - oxide red for errors */
-  --destructive-foreground: hsl(220 15% 90%);
-  --border: hsl(220 11% 18%); /* #2A2F36 */
-  --input: hsl(220 11% 18%);
-  --ring: hsl(45 92% 56%);
+  /* Professional Industrial theme - Neo Automatics */
+  --bg-base: #0A0B0C; /* charcoal */
+  --bg-elevated: #121416;
+  --text-primary: #ECEFF3;
+  --text-muted: #A7AEB8;
+  --accent-primary: #D8A332; /* subtle industrial amber */
+  --accent-secondary: #6F757D; /* steel grey */
+  --border: #262B31;
+  
+  /* Shadcn compatibility mapping */
+  --background: #0A0B0C; /* charcoal base */
+  --foreground: #ECEFF3; /* primary text */
+  --card: #121416; /* elevated surfaces */
+  --card-foreground: #ECEFF3;
+  --popover: #121416;
+  --popover-foreground: #ECEFF3;
+  --primary: #D8A332; /* subtle industrial amber */
+  --primary-foreground: #0A0B0C;
+  --secondary: #6F757D; /* steel grey */
+  --secondary-foreground: #ECEFF3;
+  --muted: #262B31; /* border color for muted areas */
+  --muted-foreground: #A7AEB8; /* muted text */
+  --accent: #D8A332; /* amber accent */
+  --accent-foreground: #0A0B0C;
+  --destructive: #DC2626; /* standard red for errors */
+  --destructive-foreground: #ECEFF3;
+  --border: #262B31;
+  --input: #262B31;
+  --ring: #D8A332;
 }
 
 @layer base {
@@ -99,31 +118,25 @@
   @apply max-w-7xl mx-auto px-6 md:px-10 py-20 md:py-28;
 }
 
-/* Industrial glassmorphism cards */
+/* Professional Industrial glassmorphism cards */
 .glass-card {
   background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.3),
-    0 0 0 1px rgba(255, 255, 255, 0.05),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
-  border-radius: 1rem; /* Consistent with rounded-2xl */
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  /* No shadows for clean industrial look */
 }
 
 .glass-card-strong {
-  background: rgba(240, 180, 41, 0.1);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(240, 180, 41, 0.2);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  background: rgba(216, 163, 50, 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--accent-primary);
+  border-radius: 1rem;
 }
 
-/* Professional gradient text - subtle amber to oxide */
+/* Professional gradient text - removed gradients for clean industrial look */
 .gradient-text {
-  background: linear-gradient(135deg, #F0B429, #D04A3A);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--accent-primary);
 }
 
 @keyframes gradient-shift {
@@ -131,57 +144,43 @@
   50% { background-position: 100% 50%; }
 }
 
-/* Industrial amber buttons - solid fill */
+/* Professional Industrial buttons - clean and understated */
 .gradient-button {
-  background: #F0B429;
+  background: var(--accent-primary);
+  color: var(--bg-base);
   border: none;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 20px rgba(240, 180, 41, 0.3);
-  color: #0B0C0E;
   font-weight: 600;
-}
-
-.gradient-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.5s;
-}
-
-.gradient-button:hover::before {
-  left: 100%;
+  transition: all 0.2s ease;
 }
 
 .gradient-button:hover {
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 15px 40px rgba(240, 180, 41, 0.4), 0 5px 15px rgba(240, 180, 41, 0.2);
-  background: #FFD23F;
+  filter: brightness(1.1);
+  transform: translateY(-1px);
 }
 
-/* Oxide red secondary button */
+.gradient-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--accent-primary);
+  opacity: 0.5;
+}
+
+/* Professional secondary button - steel grey outline */
 .red-button {
   background: transparent;
-  border: 2px solid #D04A3A;
-  color: #D04A3A;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s ease;
+  border: 1px solid var(--accent-secondary);
+  color: var(--text-primary);
+  transition: all 0.2s ease;
 }
 
 .red-button:hover {
-  background: rgba(208, 74, 58, 0.1);
-  box-shadow: 0 0 20px rgba(208, 74, 58, 0.3);
-  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--text-primary);
 }
 
-.red-button:active {
-  box-shadow: inset 0 0 30px rgba(208, 74, 58, 0.2);
+.red-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--accent-secondary);
+  opacity: 0.5;
 }
 
 /* Glowing hover effects */
@@ -296,35 +295,34 @@
 }
 
 .text-amber {
-  color: #F0B429;
+  color: var(--accent-primary);
 }
 
 .text-red {
-  color: #D04A3A;
+  color: var(--accent-secondary);
 }
 
 .bg-base {
-  background-color: #0B0C0E;
+  background-color: var(--bg-base);
 }
 
 .bg-elevated {
-  background-color: #111316;
+  background-color: var(--bg-elevated);
 }
 
 .text-primary {
-  color: #E8EAF0;
+  color: var(--text-primary);
 }
 
 .text-muted {
-  color: #A3A7B2;
+  color: var(--text-muted);
 }
 
-/* Active nav link styling */
+/* Active nav link styling - clean underline */
 .nav-link-active {
-  color: #F0B429;
+  color: var(--accent-primary);
   text-decoration: underline;
   text-underline-offset: 4px;
-  box-shadow: 0 0 10px rgba(240, 180, 41, 0.3);
 }
 
 /* Responsive utilities */
