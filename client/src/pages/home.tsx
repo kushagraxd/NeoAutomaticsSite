@@ -4,6 +4,7 @@ import { Link } from 'wouter';
 import { Button } from '../components/ui/button';
 import Counter from '../../../components/ui/counter';
 import AutoPartsBackdrop from '../../../components/AutoPartsBackdrop';
+import { getCompanyInfo, getManufacturingCapabilities, formatCompanyName } from '../../../shared/company';
 
 // Trust logos placeholder data
 const trustLogos = [
@@ -35,10 +36,10 @@ const valuePills = [
   }
 ];
 
-// Metrics data
-const metrics = [
-  { target: 30, label: "CNC Machines", suffix: "+" },
-  { target: 3, label: "Manufacturing Units", suffix: "" },
+// Metrics data - now using company data
+const getMetrics = (capabilities: any) => [
+  { target: capabilities.machines.CNC, label: "CNC Machines", suffix: "+" },
+  { target: capabilities.units.length, label: "Manufacturing Units", suffix: "" },
   { target: 2015, label: "ISO 9001 Certified", suffix: "" },
   { target: 100, label: "PPAP Ready", suffix: "%" }
 ];
@@ -66,6 +67,10 @@ const featuredProducts = [
 ];
 
 export default function HomePage() {
+  const companyInfo = getCompanyInfo();
+  const capabilities = getManufacturingCapabilities();
+  const { firstWord, restOfName } = formatCompanyName(companyInfo.name);
+  
   return (
     <div className="min-h-screen bg-base">
       {/* Hero Section */}
@@ -83,7 +88,7 @@ export default function HomePage() {
             transition={{ duration: 0.8 }}
           >
             <h1 className="text-6xl md:text-7xl font-display font-bold text-primary mb-6 tracking-tight leading-tight">
-              Neo <span className="gradient-text">Automatics</span>
+              {firstWord} <span className="gradient-text">{restOfName}</span>
             </h1>
             
             <h2 className="text-2xl md:text-3xl font-display font-semibold text-muted mb-8">
@@ -221,7 +226,7 @@ export default function HomePage() {
           </motion.div>
           
           <div className="grid md:grid-cols-4 gap-8">
-            {metrics.map((metric, index) => (
+            {getMetrics(capabilities).map((metric, index) => (
               <motion.div
                 key={metric.label}
                 initial={{ opacity: 0, y: 30 }}
@@ -271,8 +276,8 @@ export default function HomePage() {
               <h3 className="text-xl font-display font-semibold text-primary mb-4">
                 CNC Machining
               </h3>
-              <p className="text-muted leading-relaxed mb-4">30+ CNC machines including TRAUB multi-spindle automats for high-volume precision.</p>
-              <div className="text-amber font-medium">24 TRAUB • 6+ Grinders</div>
+              <p className="text-muted leading-relaxed mb-4">{capabilities.machines.CNC}+ CNC machines including TRAUB multi-spindle automats for high-volume precision.</p>
+              <div className="text-amber font-medium">{capabilities.machines.TRAUB_A30_A25 + capabilities.machines.TRAUB_A42_A60} TRAUB • {capabilities.machines.Centerless_Grinder}+ Grinders</div>
             </motion.div>
             
             <motion.div
@@ -304,7 +309,7 @@ export default function HomePage() {
                 Inspection & QA
               </h3>
               <p className="text-muted leading-relaxed mb-4">Complete metrology lab with Rockwell testers, surface roughness, and profile projectors.</p>
-              <div className="text-amber font-medium">ISO 9001:2015 • PPAP Ready</div>
+              <div className="text-amber font-medium">{capabilities.certifications.join(' • ')}</div>
             </motion.div>
           </div>
         </div>

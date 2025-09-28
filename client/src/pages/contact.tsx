@@ -1,24 +1,25 @@
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Clock, Users, Zap, Factory, Award } from 'lucide-react';
 import { RFQForm } from '../../../components/ui/rfq-form';
+import { getCompanyInfo, getManufacturingCapabilities } from '../../../shared/company';
 
-const contactInfo = [
+const createContactInfo = (companyInfo: any, capabilities: any) => [
   {
     icon: Phone,
     title: "Phone",
-    details: ["+91-XXX-XXXX-XXX", "Mon-Fri: 8AM-6PM IST"],
+    details: [companyInfo.phone, "Mon-Fri: 8AM-6PM IST"],
     color: "amber"
   },
   {
     icon: Mail,
     title: "Email",
-    details: ["info@neoautomatics.com", "quotes@neoautomatics.com"],
+    details: [companyInfo.email, "quotes@neoautomatics.com"],
     color: "red"
   },
   {
     icon: MapPin,
     title: "Location",
-    details: ["Pune, Maharashtra, India", "3 Manufacturing Units"],
+    details: [companyInfo.hq, `${capabilities.units.length} Manufacturing Units`],
     color: "amber"
   },
   {
@@ -57,6 +58,9 @@ const contactReasons = [
 ];
 
 export default function ContactPage() {
+  const companyInfo = getCompanyInfo();
+  const capabilities = getManufacturingCapabilities();
+  const contactDetails = createContactInfo(companyInfo, capabilities);
   return (
     <div className="min-h-screen bg-base">
       {/* Hero Section */}
@@ -85,7 +89,7 @@ export default function ContactPage() {
 
           {/* Contact Info Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
-            {contactInfo.map((info, index) => {
+            {contactDetails.map((info: any, index: number) => {
               const IconComponent = info.icon;
               const iconColor = info.color === 'amber' ? 'text-amber' : 'text-red';
               
@@ -100,7 +104,7 @@ export default function ContactPage() {
                 >
                   <IconComponent className={`h-8 w-8 ${iconColor} mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`} />
                   <h3 className="font-display font-semibold text-primary mb-3">{info.title}</h3>
-                  {info.details.map((detail, detailIndex) => (
+                  {info.details.map((detail: string, detailIndex: number) => (
                     <div key={detailIndex} className="text-muted text-sm mb-1">
                       {detail}
                     </div>

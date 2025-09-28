@@ -3,6 +3,7 @@ import { Link, useLocation } from 'wouter';
 import { Menu, X, Zap } from 'lucide-react';
 import { Button } from '../../client/src/components/ui/button';
 import { cn } from '../../client/src/lib/utils';
+import { getCompanyInfo, formatCompanyName } from '../../shared/company';
 
 const navItems = [
   { href: '/', label: 'Home' },
@@ -18,6 +19,8 @@ export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [pathname] = useLocation();
+  const companyInfo = getCompanyInfo();
+  const { firstWord, restOfName } = formatCompanyName(companyInfo.name);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,7 +54,7 @@ export default function Navigation() {
                 data-testid="link-logo"
               >
                 <Zap className="h-8 w-8 text-amber" />
-                <span>Neo <span className="gradient-text">Automatics</span></span>
+                <span>{firstWord} <span className="gradient-text">{restOfName}</span></span>
               </Link>
             </div>
             
