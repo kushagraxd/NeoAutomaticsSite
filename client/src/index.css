@@ -5,76 +5,80 @@
 @tailwind utilities;
 
 :root {
-  /* Professional Industrial theme - Neo Automatics */
-  --bg-base: #0A0B0C; /* charcoal */
-  --bg-elevated: #121416;
-  --text-primary: #ECEFF3;
-  --text-muted: #A7AEB8;
-  --accent-primary: #D8A332; /* subtle industrial amber */
-  --accent-secondary: #6F757D; /* steel grey */
-  --border: #262B31;
+  /* Silicon Valley Graphite + Electric-Teal theme */
+  --bg-base: #0B0C0F; /* page background charcoal */
+  --bg-elevated: #111317; /* cards/nav */
+  --text-primary: #E8ECF2; /* main text */
+  --text-muted: #A6AABC; /* secondary text */
+  --text-subtle: #7E8496;
+  --accent-primary: #13E3B3; /* electric-teal primary */
+  --accent-soft: #22BFA2; /* softer teal for hovers */
+  --border: #262B33; /* dividers/rings */
+  --overlay: rgba(0,0,0,0.5); /* hero/video overlay */
   
   /* Shadcn compatibility mapping */
-  --background: #0A0B0C; /* charcoal base */
-  --foreground: #ECEFF3; /* primary text */
-  --card: #121416; /* elevated surfaces */
-  --card-foreground: #ECEFF3;
-  --popover: #121416;
-  --popover-foreground: #ECEFF3;
-  --primary: #D8A332; /* subtle industrial amber */
-  --primary-foreground: #0A0B0C;
-  --secondary: #6F757D; /* steel grey */
-  --secondary-foreground: #ECEFF3;
-  --muted: #262B31; /* border color for muted areas */
-  --muted-foreground: #A7AEB8; /* muted text */
-  --accent: #D8A332; /* amber accent */
-  --accent-foreground: #0A0B0C;
-  --destructive: #6F757D; /* muted steel grey for errors */
-  --destructive-foreground: #ECEFF3;
-  --border: #262B31;
-  --input: #262B31;
-  --ring: #D8A332;
+  --background: #0B0C0F; /* charcoal base */
+  --foreground: #E8ECF2; /* primary text */
+  --card: #111317; /* elevated surfaces */
+  --card-foreground: #E8ECF2;
+  --popover: #111317;
+  --popover-foreground: #E8ECF2;
+  --primary: #13E3B3; /* electric-teal */
+  --primary-foreground: #000000;
+  --secondary: #22BFA2; /* softer teal */
+  --secondary-foreground: #000000;
+  --muted: #262B33; /* border color for muted areas */
+  --muted-foreground: #A6AABC; /* muted text */
+  --accent: #13E3B3; /* electric-teal accent */
+  --accent-foreground: #000000;
+  --destructive: #EF4444; /* red for errors */
+  --destructive-foreground: #FECACA;
+  --border: #262B33;
+  --input: #262B33;
+  --ring: #13E3B3;
   --font-sans: Inter, system-ui, sans-serif;
   --font-display: 'Space Grotesk', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
   --radius: 1rem;
-  --chart-1: #D8A332;
-  --chart-2: #6F757D;
-  --chart-3: #B8941F;
-  --chart-4: #5A6068;
-  --chart-5: #E4B646;
+  --chart-1: #13E3B3;
+  --chart-2: #22BFA2;
+  --chart-3: #0E9F6E;
+  --chart-4: #047857;
+  --chart-5: #065F46;
 }
 
 .dark {
-  /* Professional Industrial theme - Neo Automatics */
-  --bg-base: #0A0B0C; /* charcoal */
-  --bg-elevated: #121416;
-  --text-primary: #ECEFF3;
-  --text-muted: #A7AEB8;
-  --accent-primary: #D8A332; /* subtle industrial amber */
-  --accent-secondary: #6F757D; /* steel grey */
-  --border: #262B31;
+  /* Silicon Valley Graphite + Electric-Teal theme */
+  --bg-base: #0B0C0F; /* page background charcoal */
+  --bg-elevated: #111317; /* cards/nav */
+  --text-primary: #E8ECF2; /* main text */
+  --text-muted: #A6AABC; /* secondary text */
+  --text-subtle: #7E8496;
+  --accent-primary: #13E3B3; /* electric-teal primary */
+  --accent-soft: #22BFA2; /* softer teal for hovers */
+  --border: #262B33; /* dividers/rings */
+  --overlay: rgba(0,0,0,0.5); /* hero/video overlay */
   
   /* Shadcn compatibility mapping */
-  --background: #0A0B0C; /* charcoal base */
-  --foreground: #ECEFF3; /* primary text */
-  --card: #121416; /* elevated surfaces */
-  --card-foreground: #ECEFF3;
-  --popover: #121416;
-  --popover-foreground: #ECEFF3;
-  --primary: #D8A332; /* subtle industrial amber */
-  --primary-foreground: #0A0B0C;
-  --secondary: #6F757D; /* steel grey */
-  --secondary-foreground: #ECEFF3;
-  --muted: #262B31; /* border color for muted areas */
-  --muted-foreground: #A7AEB8; /* muted text */
-  --accent: #D8A332; /* amber accent */
-  --accent-foreground: #0A0B0C;
-  --destructive: #6F757D; /* muted steel grey for errors */
-  --destructive-foreground: #ECEFF3;
-  --border: #262B31;
-  --input: #262B31;
-  --ring: #D8A332;
+  --background: #0B0C0F; /* charcoal base */
+  --foreground: #E8ECF2; /* primary text */
+  --card: #111317; /* elevated surfaces */
+  --card-foreground: #E8ECF2;
+  --popover: #111317;
+  --popover-foreground: #E8ECF2;
+  --primary: #13E3B3; /* electric-teal */
+  --primary-foreground: #000000;
+  --secondary: #22BFA2; /* softer teal */
+  --secondary-foreground: #000000;
+  --muted: #262B33; /* border color for muted areas */
+  --muted-foreground: #A6AABC; /* muted text */
+  --accent: #13E3B3; /* electric-teal accent */
+  --accent-foreground: #000000;
+  --destructive: #EF4444; /* red for errors */
+  --destructive-foreground: #FECACA;
+  --border: #262B33;
+  --input: #262B33;
+  --ring: #13E3B3;
 }
 
 @layer base {
@@ -118,22 +122,15 @@
   @apply max-w-7xl mx-auto px-6 md:px-10 py-20 md:py-28;
 }
 
-
-
-/* Professional gradient text - removed gradients for clean industrial look */
+/* Silicon Valley teal accent text */
 .gradient-text {
   color: var(--accent-primary);
 }
 
-@keyframes gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-/* Professional Industrial buttons - clean and understated */
+/* Primary teal button with glow effect */
 .gradient-button {
   background: var(--accent-primary);
-  color: var(--bg-base);
+  color: #000000;
   border: none;
   font-weight: 600;
   transition: all 0.2s ease;
@@ -142,38 +139,37 @@
 .gradient-button:hover {
   filter: brightness(1.1);
   transform: translateY(-1px);
+  box-shadow: 0 0 24px rgba(19, 227, 179, 0.20);
 }
 
 .gradient-button:focus {
   outline: none;
   box-shadow: 0 0 0 2px var(--accent-primary);
-  opacity: 0.5;
+  opacity: 0.8;
 }
 
-/* Professional secondary button - steel grey outline */
+/* Secondary outline button */
 .red-button {
   background: transparent;
-  border: 1px solid var(--accent-secondary);
+  border: 1px solid var(--border);
   color: var(--text-primary);
   transition: all 0.2s ease;
 }
 
 .red-button:hover {
   background: rgba(255, 255, 255, 0.05);
-  border-color: var(--text-primary);
+  border-color: var(--accent-soft);
 }
 
 .red-button:focus {
   outline: none;
-  box-shadow: 0 0 0 2px var(--accent-secondary);
-  opacity: 0.5;
+  box-shadow: 0 0 0 2px var(--accent-soft);
+  opacity: 0.8;
 }
 
-
-
-/* Video overlay */
+/* Video overlay with proper contrast */
 .video-overlay {
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--overlay);
   position: absolute;
   top: 0;
   left: 0;
@@ -192,8 +188,7 @@
   animation: float 6s ease-in-out infinite;
 }
 
-
-/* Magnetic button effect */
+/* Premium magnetic button effect */
 .magnetic-btn {
   transition: all 0.3s ease;
 }
@@ -241,7 +236,7 @@
   animation: rotate 12s linear infinite;
 }
 
-/* Industrial utility classes */
+/* Silicon Valley button utilities */
 .btn-primary {
   @apply gradient-button px-6 py-3 rounded-lg font-semibold transition-all duration-300;
 }
@@ -250,12 +245,13 @@
   @apply red-button px-6 py-3 rounded-lg font-semibold transition-all duration-300;
 }
 
+/* Utility color classes */
 .text-amber {
   color: var(--accent-primary);
 }
 
 .text-red {
-  color: var(--accent-secondary);
+  color: var(--accent-soft);
 }
 
 .bg-base {
@@ -274,25 +270,24 @@
   color: var(--text-muted);
 }
 
-/* Active nav link styling - clean underline */
+/* Active nav link styling with teal underline */
 .nav-link-active {
   color: var(--accent-primary);
   text-decoration: underline;
+  text-decoration-color: var(--accent-soft);
   text-underline-offset: 4px;
 }
 
 /* Responsive utilities */
 @media (prefers-reduced-motion: reduce) {
   .animate-float,
-  .animate-pulse-glow,
   .rotating-nut,
   .gradient-text,
   .gradient-button::before {
     animation: none;
   }
   
-  .magnetic-btn:hover,
-  .glow-hover:hover {
+  .magnetic-btn:hover {
     transform: none;
   }
 }

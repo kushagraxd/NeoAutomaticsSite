@@ -6,17 +6,35 @@ export default {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./client/src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
       colors: {
-        // Professional Industrial theme tokens
+        // Silicon Valley Graphite + Electric-Teal theme
+        bg: {
+          base: "#0B0C0F", // page background (charcoal)
+          elevated: "#111317", // cards/nav
+        },
+        text: {
+          primary: "#E8ECF2", // main text
+          muted: "#A6AABC", // secondary text
+          subtle: "#7E8496",
+        },
+        accent: {
+          primary: "#13E3B3", // electric-teal (primary accent)
+          soft: "#22BFA2", // softer teal for hovers/badges
+        },
+        border: "#262B33", // dividers/rings
+        overlay: "rgba(0,0,0,0.5)", // hero/video overlay
+        
+        // Legacy utility classes for backward compatibility
         "bg-base": "var(--bg-base)",
         "bg-elevated": "var(--bg-elevated)",
         "text-primary": "var(--text-primary)",
         "text-muted": "var(--text-muted)",
         "accent-primary": "var(--accent-primary)",
-        "accent-secondary": "var(--accent-secondary)",
+        "accent-soft": "var(--accent-soft)",
         
         // Shadcn compatibility
         background: "var(--background)",
@@ -49,11 +67,15 @@ export default {
           DEFAULT: "var(--destructive)",
           foreground: "var(--destructive-foreground)",
         },
-        border: "var(--border)",
         input: "var(--input)",
         ring: "var(--ring)",
       },
+      boxShadow: {
+        card: "0 10px 30px rgba(0,0,0,0.35)",
+        glow: "0 0 24px rgba(19,227,179,0.20)", // teal glow
+      },
       borderRadius: {
+        card: "1rem",
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
