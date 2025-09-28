@@ -19,7 +19,7 @@ const upload = multer({
       'image/png',
     ];
     
-    const allowedExtensions = ['.dwg', '.dxf'];
+    const allowedExtensions = ['.dwg', '.dxf', '.step', '.stp'];
     const hasAllowedExtension = allowedExtensions.some(ext => 
       file.originalname.toLowerCase().endsWith(ext)
     );
@@ -27,7 +27,7 @@ const upload = multer({
     if (allowedTypes.includes(file.mimetype) || hasAllowedExtension) {
       cb(null, true);
     } else {
-      cb(new Error('Invalid file type'), false);
+      cb(new Error('Invalid file type'));
     }
   }
 });
