@@ -1,4 +1,4 @@
-import { Metadata } from "next/metadata";
+import { Metadata } from "next";
 import SectionWrapper from "@/components/ui/section-wrapper";
 import { FileText, Scale, AlertCircle, CheckCircle } from "lucide-react";
 import companyData from "@/data/company.json";

@@ -10,6 +10,9 @@ import IndustriesPage from "./pages/industries";
 import QualityPage from "./pages/quality";
 import ProductsPage from "./pages/products";
 import AboutPage from "./pages/about";
+import PrivacyPage from "./pages/privacy";
+import TermsPage from "./pages/terms";
+import CareersPage from "./pages/careers";
 import NotFound from "./pages/not-found";
 import Navigation from "../../components/ui/navigation";
 import Footer from "../../components/ui/footer";
@@ -24,6 +27,9 @@ function Router() {
       <Route path="/products" component={ProductsPage} />
       <Route path="/about" component={AboutPage} />
       <Route path="/contact" component={ContactPage} />
+      <Route path="/privacy" component={PrivacyPage} />
+      <Route path="/terms" component={TermsPage} />
+      <Route path="/careers" component={CareersPage} />
       {/* Fallback to 404 */}
       <Route component={NotFound} />
     </Switch>
