@@ -1,8 +1,11 @@
 import { motion } from 'framer-motion';
 import { FileText, Scale, AlertTriangle, Shield } from 'lucide-react';
 import { getCompanyInfo } from '../../../shared/company';
+import { usePageTitle } from '../lib/usePageTitle';
 
 export default function TermsPage() {
+  usePageTitle('Terms of Service - Website Terms & Conditions', 'Read the terms and conditions for using the Neo Automatics website and engaging our manufacturing services.');
+  
   const companyInfo = getCompanyInfo();
 
   return (

@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { usePageTitle } from '../lib/usePageTitle';
 import { Shield, Award, CheckCircle, Target, Users, Zap, Eye, FileText, Settings, BarChart3 } from 'lucide-react';
 
 const qualityCertifications = [
@@ -72,6 +73,7 @@ const qualityMetrics = [
 ];
 
 export default function QualityPage() {
+  usePageTitle('Quality - ISO 9001:2015 Certified Manufacturing', 'Neo Automatics maintains the highest quality standards with ISO 9001:2015 certification, advanced inspection equipment, and rigorous QA processes.');
   return (
     <div className="min-h-screen bg-base">
       {/* Hero Section */}

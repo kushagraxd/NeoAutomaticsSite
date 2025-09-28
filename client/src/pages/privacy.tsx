@@ -1,8 +1,11 @@
 import { motion } from 'framer-motion';
 import { Shield, Lock, Eye, FileText } from 'lucide-react';
 import { getCompanyInfo } from '../../../shared/company';
+import { usePageTitle } from '../lib/usePageTitle';
 
 export default function PrivacyPage() {
+  usePageTitle('Privacy Policy - Data Protection & Privacy', 'Learn how Neo Automatics protects your personal information and maintains privacy in accordance with applicable data protection laws.');
+  
   const companyInfo = getCompanyInfo();
 
   return (

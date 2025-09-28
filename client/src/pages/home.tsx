@@ -5,6 +5,7 @@ import { Button } from '../components/ui/button';
 import Counter from '../../../components/ui/counter';
 import AutoPartsBackdrop from '../../../components/AutoPartsBackdrop';
 import { getCompanyInfo, getManufacturingCapabilities, formatCompanyName } from '../../../shared/company';
+import { usePageTitle } from '../lib/usePageTitle';
 
 // Trust logos placeholder data
 const trustLogos = [
@@ -67,6 +68,8 @@ const featuredProducts = [
 ];
 
 export default function HomePage() {
+  usePageTitle('Neo Automatics - Precision Machined Components for OEMs & Tier-1s', 'End-to-end machining, heat treatment & QA—delivered at scale. ISO 9001:2015 certified manufacturer with 20+ years experience.', '%s');
+  
   const companyInfo = getCompanyInfo();
   const capabilities = getManufacturingCapabilities();
   const { firstWord, restOfName } = formatCompanyName(companyInfo.name);

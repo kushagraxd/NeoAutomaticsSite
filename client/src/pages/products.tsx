@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { Package, Car, Tractor, Factory, Zap, CheckCircle, Download, Target, Award } from 'lucide-react';
 import ProductQuoteModal from '../../../components/ProductQuoteModal';
+import { usePageTitle } from '../lib/usePageTitle';
 
 // Type definitions
 interface Product {
@@ -168,6 +169,7 @@ const productBenefits = [
 ];
 
 export default function ProductsPage() {
+  usePageTitle('Products - Precision Machined Components', 'Explore our range of precision machined components for automotive, agriculture, and industrial applications including collars, rocker arms, and more.');
   const [selectedProduct, setSelectedProduct] = useState<SelectedProductType | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [location] = useLocation();

@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Clock, Users, Zap, Factory, Award } from 'lucide-react';
 import { RFQForm } from '../../../components/ui/rfq-form';
 import { getCompanyInfo, getManufacturingCapabilities } from '../../../shared/company';
+import { usePageTitle } from '../lib/usePageTitle';
 
 const createContactInfo = (companyInfo: any, capabilities: any) => [
   {
@@ -58,6 +59,8 @@ const contactReasons = [
 ];
 
 export default function ContactPage() {
+  usePageTitle('Contact Us - Get a Quote', 'Get a personalized quote for your precision machining needs. Our expert team will provide a competitive proposal within 24 hours.');
+  
   const companyInfo = getCompanyInfo();
   const capabilities = getManufacturingCapabilities();
   const contactDetails = createContactInfo(companyInfo, capabilities);

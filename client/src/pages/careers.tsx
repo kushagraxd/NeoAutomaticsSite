@@ -2,8 +2,11 @@ import { motion } from 'framer-motion';
 import { Users, Target, Zap, Heart, GraduationCap, MapPin, Clock } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { getCompanyInfo } from '../../../shared/company';
+import { usePageTitle } from '../lib/usePageTitle';
 
 export default function CareersPage() {
+  usePageTitle('Careers - Join Our Team', 'Build your career with India\'s leading precision manufacturing company. Explore current job openings and opportunities.');
+  
   const companyInfo = getCompanyInfo();
 
   const values = [

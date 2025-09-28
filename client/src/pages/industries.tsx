@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { usePageTitle } from '../lib/usePageTitle';
 import { Car, Tractor, Factory, Zap, CheckCircle, Users, Award, Target } from 'lucide-react';
 
 const industries = [
@@ -88,6 +89,7 @@ const industryBenefits = [
 ];
 
 export default function IndustriesPage() {
+  usePageTitle('Industries - Automotive, Agriculture, Industrial Equipment', 'Neo Automatics serves diverse industries with precision machined components for automotive, agriculture machinery, industrial equipment, and kitchen tools.');
   return (
     <div className="min-h-screen bg-base">
       {/* Hero Section */}

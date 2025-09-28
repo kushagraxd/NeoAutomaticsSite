@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { usePageTitle } from '../lib/usePageTitle';
 import { Users, Target, Lightbulb, Award, Factory, Clock, Shield, Zap, CheckCircle } from 'lucide-react';
 
 const companyValues = [
@@ -90,6 +91,7 @@ const leadership = [
 ];
 
 export default function AboutPage() {
+  usePageTitle('About Us - 20+ Years of Manufacturing Excellence', 'Learn about Neo Automatics, a family-run ISO 9001:2015 certified manufacturer with 20+ years of experience in precision machined components.');
   return (
     <div className="min-h-screen bg-base">
       {/* Hero Section */}

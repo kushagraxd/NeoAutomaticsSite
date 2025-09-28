@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { usePageTitle } from '../lib/usePageTitle';
 import { Cog, Wrench, Settings, CheckCircle, Factory, Zap, Award, Clock, Users, Target } from 'lucide-react';
 import companyData from '../../../data/company.json';
 
@@ -55,6 +56,7 @@ const stats = [
 ];
 
 export default function CapabilitiesPage() {
+  usePageTitle('Capabilities - CNC Machining, Heat Treatment & Quality Assurance', 'Comprehensive manufacturing capabilities including 30+ CNC machines, in-house heat treatment, and advanced metrology for precision components.');
   return (
     <div className="min-h-screen bg-base">
       {/* Hero Section */}
