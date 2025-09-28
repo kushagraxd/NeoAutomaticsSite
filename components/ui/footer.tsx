@@ -1,6 +1,7 @@
 import { Link } from 'wouter';
 import { Mail, Phone, MapPin, Zap, Factory } from 'lucide-react';
 import companyData from '../../data/company.json';
+import { formatPhoneForTel } from '../../shared/company';
 
 const quickLinks = [
   { href: '/', label: 'Home' },
@@ -26,40 +27,38 @@ export default function Footer() {
   const { company } = companyData;
 
   return (
-    <footer className="bg-base/50 backdrop-blur-xl border-t border-white/10 py-20 relative overflow-hidden" data-testid="footer-main">
+    <footer className="bg-bg-base border-t border-border py-20 relative overflow-hidden" data-testid="footer-main">
       {/* Glassmorphic background overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-amber/5 via-transparent to-red/5" />
-      <div className="absolute inset-0 aurora-bg opacity-5" />
       
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-10">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div data-testid="footer-company-info">
             <div className="flex items-center space-x-2 text-2xl font-display font-bold mb-6">
-              <Zap className="h-8 w-8 text-amber" />
-              <span className="text-primary">
-                Neo <span className="gradient-text">Automatics</span>
+              <Zap className="h-8 w-8 text-accent-primary" />
+              <span className="text-text-primary">
+                Neo <span className="text-accent-primary">Automatics</span>
               </span>
             </div>
-            <p className="text-muted mb-6 leading-relaxed" data-testid="text-tagline">
+            <p className="text-text-muted mb-6 leading-relaxed" data-testid="text-tagline">
               {company.tagline}
             </p>
             <div className="space-y-3 text-sm">
               <div className="flex items-center group">
-                <Mail className="h-4 w-4 mr-3 text-amber group-hover:scale-110 transition-transform" />
-                <span className="text-muted hover:text-primary transition-colors" data-testid="text-email">
+                <Mail className="h-4 w-4 mr-3 text-accent-primary group-hover:scale-110 transition-transform" />
+                <span className="text-text-muted hover:text-text-primary transition-colors" data-testid="text-email">
                   {company.email}
                 </span>
               </div>
               <div className="flex items-center group">
-                <Phone className="h-4 w-4 mr-3 text-red group-hover:scale-110 transition-transform" />
-                <span className="text-muted hover:text-primary transition-colors" data-testid="text-phone">
+                <Phone className="h-4 w-4 mr-3 text-accent-secondary group-hover:scale-110 transition-transform" />
+                <span className="text-text-muted hover:text-text-primary transition-colors" data-testid="text-phone">
                   {company.phone}
                 </span>
               </div>
               <div className="flex items-start group">
-                <MapPin className="h-4 w-4 mr-3 mt-1 flex-shrink-0 text-amber group-hover:scale-110 transition-transform" />
-                <span className="text-muted hover:text-primary transition-colors leading-relaxed" data-testid="text-address">
+                <MapPin className="h-4 w-4 mr-3 mt-1 flex-shrink-0 text-accent-primary group-hover:scale-110 transition-transform" />
+                <span className="text-text-muted hover:text-text-primary transition-colors leading-relaxed" data-testid="text-address">
                   {company.hq}
                 </span>
               </div>
@@ -74,7 +73,7 @@ export default function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-muted hover:text-amber transition-all duration-200 hover:translate-x-1 inline-block"
+                    className="text-text-muted hover:text-accent-primary transition-all duration-200 hover:translate-x-1 inline-block"
                     data-testid={`link-footer-${link.label.toLowerCase()}`}
                   >
                     {link.label}
@@ -87,48 +86,68 @@ export default function Footer() {
           {/* Services */}
           <div data-testid="footer-services">
             <h4 className="font-display font-semibold text-primary mb-6 text-lg flex items-center">
-              <Factory className="h-5 w-5 mr-2 text-red" />
+              <Factory className="h-5 w-5 mr-2 text-accent-secondary" />
               Services
             </h4>
             <ul className="space-y-3 text-sm">
               {services.map((service) => (
-                <li key={service} className="text-muted hover:text-primary transition-colors cursor-default">
+                <li key={service} className="text-text-muted hover:text-text-primary transition-colors cursor-default">
                   {service}
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Industries */}
-          <div data-testid="footer-industries">
-            <h4 className="font-display font-semibold text-primary mb-6 text-lg">Industries</h4>
-            <ul className="space-y-3 text-sm">
-              {company.industries.map((industry) => (
-                <li key={industry} className="text-muted hover:text-primary transition-colors cursor-default">
-                  {industry}
-                </li>
+          {/* Units */}
+          <div data-testid="footer-units">
+            <h4 className="font-display font-semibold text-text-primary mb-6 text-lg flex items-center">
+              <MapPin className="h-5 w-5 mr-2 text-accent-secondary" />
+              Our Units
+            </h4>
+            <div className="space-y-4 text-sm">
+              {company.units.map((unit, index) => (
+                <div key={unit.name} className="border-l-2 border-accent-primary/20 pl-3">
+                  <div className="font-medium text-text-primary mb-1">{unit.name}</div>
+                  <div className="text-text-muted text-xs mb-1">{unit.address}</div>
+                  <div className="flex flex-col gap-1">
+                    <a 
+                      href={`tel:${formatPhoneForTel(unit.phones[0])}`}
+                      className="text-accent-primary hover:underline text-xs"
+                      data-testid={`footer-unit-phone-${index + 1}`}
+                    >
+                      +91 {unit.phones[0]}
+                    </a>
+                    <a 
+                      href={`mailto:${unit.emails[0]}`}
+                      className="text-accent-primary hover:underline text-xs"
+                      data-testid={`footer-unit-email-${index + 1}`}
+                    >
+                      {unit.emails[0]}
+                    </a>
+                  </div>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         </div>
 
         {/* Footer Bottom */}
-        <div className="glass-card glow-hover mt-16 pt-8 pb-4 border-t border-white/10">
+        <div className="mt-16 pt-8 pb-4 border-t border-border">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <div className="text-sm text-muted">
+            <div className="text-sm text-text-muted">
               © 2024 Neo Automatics. All rights reserved.
             </div>
             <div className="flex space-x-8 text-sm">
               <Link 
                 href="/privacy" 
-                className="text-muted hover:text-amber transition-colors"
+                className="text-text-muted hover:text-accent-primary transition-colors"
                 data-testid="link-privacy"
               >
                 Privacy Policy
               </Link>
               <Link 
                 href="/terms" 
-                className="text-muted hover:text-red transition-colors"
+                className="text-text-muted hover:text-accent-secondary transition-colors"
                 data-testid="link-terms"
               >
                 Terms of Service

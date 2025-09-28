@@ -57,7 +57,7 @@ const categoryColors = {
 
 export default function ProductsSection() {
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-bg-base">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -65,10 +65,10 @@ export default function ProductsSection() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl font-display font-bold text-slate-900 mb-4">
-            Precision <span className="gradient-text">Products</span>
+          <h2 className="text-4xl font-display font-bold text-text-primary mb-4">
+            Precision <span className="text-accent-primary">Products</span>
           </h2>
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+          <p className="text-xl text-text-muted max-w-3xl mx-auto">
             Specialized components for automotive, agriculture, and industrial applications
           </p>
         </motion.div>
@@ -81,7 +81,7 @@ export default function ProductsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="glass-card rounded-2xl overflow-hidden group hover:scale-105 transition-all duration-300"
+              className="bg-elevated rounded-2xl overflow-hidden group hover:scale-105 transition-all duration-300 border border-border"
             >
               <div className="relative h-48 overflow-hidden">
                 <img
@@ -116,7 +116,7 @@ export default function ProductsSection() {
           className="text-center mt-12"
         >
           <Link href="/products">
-            <Button className="magnetic-btn bg-sky-500 hover:bg-sky-600 text-white px-8 py-4">
+            <Button className="magnetic-btn bg-accent-primary hover:bg-accent-primary/80 text-bg-base px-8 py-4">
               View All Products
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>

@@ -36,7 +36,7 @@ export default function Navigation() {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
         isScrolled 
-          ? 'backdrop-blur-xl bg-elevated/80 border-b border-white/10' 
+          ? 'bg-elevated border-b border-border' 
           : 'bg-transparent'
       )}
       data-testid="nav-main"
@@ -53,8 +53,8 @@ export default function Navigation() {
                 className="flex items-center space-x-2 text-2xl font-display font-bold text-primary hover:opacity-80 transition-opacity"
                 data-testid="link-logo"
               >
-                <Zap className="h-8 w-8 text-amber" />
-                <span>{firstWord} <span className="gradient-text">{restOfName}</span></span>
+                <Zap className="h-8 w-8 text-accent-primary" />
+                <span>{firstWord} <span className="text-accent-primary">{restOfName}</span></span>
               </Link>
             </div>
             
@@ -68,14 +68,14 @@ export default function Navigation() {
                     className={cn(
                       'px-4 py-2 text-sm font-medium transition-all duration-200 rounded-lg relative group',
                       pathname === item.href
-                        ? 'text-amber bg-amber/10 shadow-lg shadow-amber/20'
-                        : 'text-muted hover:text-primary hover:bg-white/5'
+                        ? 'text-accent-primary bg-accent-primary/10'
+                        : 'text-text-muted hover:text-text-primary hover:bg-accent-primary/5'
                     )}
                     data-testid={`link-nav-${item.label.toLowerCase()}`}
                   >
                     {item.label}
                     <div className={cn(
-                      'absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-amber to-red rounded-full transition-opacity duration-200',
+                      'absolute bottom-0 left-0 right-0 h-0.5 bg-accent-primary rounded-full transition-opacity duration-200',
                       pathname === item.href ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
                     )} />
                   </Link>
@@ -98,7 +98,7 @@ export default function Navigation() {
           <div className="lg:hidden">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 text-muted hover:text-primary hover:bg-white/5 rounded-lg transition-colors"
+              className="p-2 text-text-muted hover:text-text-primary hover:bg-accent-primary/5 rounded-lg transition-colors"
               data-testid="button-mobile-menu"
               aria-label="Toggle mobile navigation menu"
               aria-expanded={isMobileMenuOpen}
@@ -114,9 +114,9 @@ export default function Navigation() {
       <div
         id="mobile-menu"
         className={cn(
-          'lg:hidden transition-all duration-300 ease-in-out backdrop-blur-xl border-b border-white/10',
+          'lg:hidden transition-all duration-300 ease-in-out bg-elevated border-b border-border',
           isMobileMenuOpen
-            ? 'max-h-96 opacity-100 bg-elevated/95'
+            ? 'max-h-96 opacity-100 bg-elevated'
             : 'max-h-0 opacity-0 overflow-hidden'
         )}
         aria-hidden={!isMobileMenuOpen}
@@ -129,8 +129,8 @@ export default function Navigation() {
               className={cn(
                 'block px-4 py-3 text-base font-medium transition-all duration-200 rounded-lg',
                 pathname === item.href
-                  ? 'text-amber bg-amber/10 shadow-lg shadow-amber/20'
-                  : 'text-muted hover:text-primary hover:bg-white/5'
+                  ? 'text-accent-primary bg-accent-primary/10'
+                  : 'text-text-muted hover:text-text-primary hover:bg-accent-primary/5'
               )}
               onClick={() => setIsMobileMenuOpen(false)}
               data-testid={`link-mobile-${item.label.toLowerCase()}`}
@@ -138,7 +138,7 @@ export default function Navigation() {
               {item.label}
             </Link>
           ))}
-          <div className="pt-4 border-t border-white/10">
+          <div className="pt-4 border-t border-border">
             <Link href="/contact">
               <Button 
                 className="btn-primary w-full magnetic-btn group" 

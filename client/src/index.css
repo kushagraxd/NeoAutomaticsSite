@@ -29,7 +29,7 @@
   --muted-foreground: #A7AEB8; /* muted text */
   --accent: #D8A332; /* amber accent */
   --accent-foreground: #0A0B0C;
-  --destructive: #DC2626; /* standard red for errors */
+  --destructive: #6F757D; /* muted steel grey for errors */
   --destructive-foreground: #ECEFF3;
   --border: #262B31;
   --input: #262B31;
@@ -70,7 +70,7 @@
   --muted-foreground: #A7AEB8; /* muted text */
   --accent: #D8A332; /* amber accent */
   --accent-foreground: #0A0B0C;
-  --destructive: #DC2626; /* standard red for errors */
+  --destructive: #6F757D; /* muted steel grey for errors */
   --destructive-foreground: #ECEFF3;
   --border: #262B31;
   --input: #262B31;
@@ -118,21 +118,7 @@
   @apply max-w-7xl mx-auto px-6 md:px-10 py-20 md:py-28;
 }
 
-/* Professional Industrial glassmorphism cards */
-.glass-card {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--border);
-  border-radius: 1rem;
-  /* No shadows for clean industrial look */
-}
 
-.glass-card-strong {
-  background: rgba(216, 163, 50, 0.05);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--accent-primary);
-  border-radius: 1rem;
-}
 
 /* Professional gradient text - removed gradients for clean industrial look */
 .gradient-text {
@@ -183,28 +169,7 @@
   opacity: 0.5;
 }
 
-/* Glowing hover effects */
-.glow-hover {
-  transition: all 0.3s ease;
-}
 
-.glow-hover:hover {
-  box-shadow: 
-    0 0 30px rgba(240, 180, 41, 0.4), 
-    0 0 60px rgba(240, 180, 41, 0.2),
-    0 0 90px rgba(208, 74, 58, 0.1);
-  transform: translateY(-3px) scale(1.02);
-  border-color: rgba(240, 180, 41, 0.3);
-}
-
-/* Industrial hero background */
-.hero-bg {
-  background: 
-    radial-gradient(ellipse at 50% 0%, rgba(240, 180, 41, 0.08) 0%, transparent 60%),
-    radial-gradient(ellipse at 100% 50%, rgba(208, 74, 58, 0.06) 0%, transparent 60%),
-    radial-gradient(ellipse at 0% 50%, rgba(240, 180, 41, 0.04) 0%, transparent 60%),
-    linear-gradient(135deg, rgba(240, 180, 41, 0.03) 0%, rgba(208, 74, 58, 0.03) 100%);
-}
 
 /* Video overlay */
 .video-overlay {
@@ -227,15 +192,6 @@
   animation: float 6s ease-in-out infinite;
 }
 
-/* Amber pulse glow animation */
-@keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 20px rgba(240, 180, 41, 0.3); }
-  50% { box-shadow: 0 0 30px rgba(240, 180, 41, 0.6), 0 0 50px rgba(240, 180, 41, 0.2); }
-}
-
-.animate-pulse-glow {
-  animation: pulseGlow 3s ease-in-out infinite;
-}
 
 /* Magnetic button effect */
 .magnetic-btn {

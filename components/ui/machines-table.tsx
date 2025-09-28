@@ -6,7 +6,7 @@ export default function MachinesTable() {
   const dieselGenset = company.machines.Diesel_Genset;
 
   return (
-    <div className="glass-card rounded-2xl overflow-hidden">
+    <div className="bg-elevated rounded-2xl overflow-hidden border border-border">
       <div className="px-6 py-4 bg-slate-50 border-b border-slate-200">
         <h3 className="text-lg font-display font-semibold text-slate-900">
           Manufacturing Equipment

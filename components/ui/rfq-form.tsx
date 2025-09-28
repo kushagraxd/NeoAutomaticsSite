@@ -29,9 +29,9 @@ const formSchema = z.object({
   company: z.string().min(2, "Company name is required"),
   email: z.string().email("Invalid email address"),
   phone: z.string().min(10, "Phone number must be at least 10 digits"),
-  component: z.string().min(2, "Component/Part description is required"),
+  product: z.string().min(2, "Product/Part description is required"),
   annualVolume: z.string().min(1, "Annual volume is required"),
-  material: z.string().min(2, "Material specification is required"),
+  material: z.string().optional(),
   message: z.string().optional(),
 });
 
@@ -49,7 +49,7 @@ export function RFQForm() {
       company: "",
       email: "",
       phone: "",
-      component: "",
+      product: "",
       annualVolume: "",
       material: "",
       message: "",
@@ -118,7 +118,7 @@ export function RFQForm() {
   };
 
   return (
-    <div className="glass-card p-8 rounded-2xl" data-testid="form-rfq">
+    <div className="bg-elevated p-8 rounded-2xl border border-border" data-testid="form-rfq">
       <div className="mb-6">
         <h3 className="text-2xl font-display font-bold text-primary mb-2">
           Request for Quotation
@@ -129,16 +129,16 @@ export function RFQForm() {
       </div>
 
       {submitStatus === "success" && (
-        <div className="mb-6 p-4 bg-amber/10 border border-amber/30 rounded-lg" data-testid="alert-success">
-          <p className="text-amber">
+        <div className="mb-6 p-4 bg-accent-primary/10 border border-accent-primary/30 rounded-lg" data-testid="alert-success">
+          <p className="text-accent-primary">
             Thank you! Your RFQ has been submitted successfully. We'll contact you soon.
           </p>
         </div>
       )}
 
       {submitStatus === "error" && (
-        <div className="mb-6 p-4 bg-red/10 border border-red/30 rounded-lg" data-testid="alert-error">
-          <p className="text-red">
+        <div className="mb-6 p-4 bg-destructive/10 border border-destructive/30 rounded-lg" data-testid="alert-error">
+          <p className="text-destructive">
             There was an error submitting your RFQ. Please try again or contact us directly.
           </p>
         </div>
@@ -225,15 +225,15 @@ export function RFQForm() {
 
           <FormField
             control={form.control}
-            name="component"
+            name="product"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Component/Part *</FormLabel>
+                <FormLabel>Product/Part *</FormLabel>
                 <FormControl>
                   <Input 
                     placeholder="Describe the component you need manufactured" 
                     {...field}
-                    data-testid="input-component"
+                    data-testid="input-product"
                   />
                 </FormControl>
                 <FormMessage />
@@ -272,10 +272,10 @@ export function RFQForm() {
               name="material"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Material *</FormLabel>
+                  <FormLabel>Material</FormLabel>
                   <FormControl>
                     <Input 
-                      placeholder="e.g., SS304, Mild Steel, Brass" 
+                      placeholder="e.g., SS304, Mild Steel, Brass (optional)" 
                       {...field}
                       data-testid="input-material"
                     />
@@ -290,13 +290,13 @@ export function RFQForm() {
             <label className="block text-sm font-medium text-primary mb-2">
               Drawing Upload (PDF/DWG, max 10MB)
             </label>
-            <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-muted border-dashed rounded-lg hover:border-amber transition-colors">
+            <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-border border-dashed rounded-lg hover:border-accent-primary transition-colors">
               <div className="space-y-1 text-center">
                 <Upload className="mx-auto h-12 w-12 text-muted" />
                 <div className="flex text-sm text-muted">
                   <label
                     htmlFor="drawing-upload"
-                    className="relative cursor-pointer bg-white rounded-md font-medium text-amber hover:text-amber/80 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-amber"
+                    className="relative cursor-pointer bg-bg-base rounded-md font-medium text-accent-primary hover:text-accent-primary/80 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-accent-primary"
                   >
                     <span data-testid="text-upload">Upload a file</span>
                     <input
@@ -313,7 +313,7 @@ export function RFQForm() {
                 </div>
                 <p className="text-xs text-muted">PDF, DWG up to 10MB</p>
                 {file && (
-                  <p className="text-sm text-amber font-medium" data-testid="text-selected-file">
+                  <p className="text-sm text-accent-primary font-medium" data-testid="text-selected-file">
                     Selected: {file.name}
                   </p>
                 )}

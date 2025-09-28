@@ -192,7 +192,7 @@ export default function ProductQuoteModal({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={handleClose}
-          className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+          className="absolute inset-0 bg-black/60"
           aria-hidden="true"
         />
 
@@ -201,16 +201,16 @@ export default function ProductQuoteModal({
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="relative w-full max-w-4xl max-h-[90vh] overflow-auto bg-elevated rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.35)] border border-white/10"
+          className="relative w-full max-w-2xl max-h-[90vh] overflow-auto bg-elevated rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.35)] border border-border"
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-title"
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-white/10">
+          <div className="flex items-center justify-between p-6 border-b border-border">
             <div className="flex items-center space-x-4">
               {product && (
-                <div className="w-16 h-16 bg-gradient-to-br from-amber/20 to-red/20 rounded-lg flex items-center justify-center overflow-hidden">
+                <div className="w-16 h-16 bg-accent-primary/10 rounded-lg flex items-center justify-center overflow-hidden border border-accent-primary/20">
                   {product.image ? (
                     <img
                       src={product.image}
@@ -219,16 +219,16 @@ export default function ProductQuoteModal({
                       data-testid="product-image"
                     />
                   ) : (
-                    <FileText className="w-8 h-8 text-amber" data-testid="product-icon" />
+                    <FileText className="w-8 h-8 text-accent-primary" data-testid="product-icon" />
                   )}
                 </div>
               )}
               <div>
-                <h2 id="modal-title" className="text-2xl font-display font-bold text-primary">
+                <h2 id="modal-title" className="text-2xl font-display font-bold text-text-primary">
                   Request Quote
                 </h2>
                 {product && (
-                  <p className="text-muted" data-testid="product-info">
+                  <p className="text-text-muted" data-testid="product-info">
                     {product.name} • {product.category}
                   </p>
                 )}
@@ -236,7 +236,7 @@ export default function ProductQuoteModal({
             </div>
             <button
               onClick={handleClose}
-              className="p-2 text-muted hover:text-primary hover:bg-white/5 rounded-lg transition-colors"
+              className="p-2 text-text-muted hover:text-text-primary hover:bg-accent-primary/10 rounded-lg transition-colors"
               aria-label="Close modal"
               data-testid="modal-close"
             >
@@ -253,18 +253,18 @@ export default function ProductQuoteModal({
                 animate={{ opacity: 1, y: 0 }}
                 className="text-center py-8"
               >
-                <CheckCircle className="w-16 h-16 text-amber mx-auto mb-4" />
-                <h3 className="text-xl font-display font-semibold text-primary mb-2">
+                <CheckCircle className="w-16 h-16 text-accent-primary mx-auto mb-4" />
+                <h3 className="text-xl font-display font-semibold text-text-primary mb-2">
                   Quote Request Submitted!
                 </h3>
-                <p className="text-muted mb-6">
+                <p className="text-text-muted mb-6">
                   We've received your request and will contact you within 24 hours with a detailed quote.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Button
                     onClick={handleUploadMore}
                     variant="outline"
-                    className="border-amber/30 text-amber hover:bg-amber/10"
+                    className="border-accent-primary/30 text-accent-primary hover:bg-accent-primary/10"
                     data-testid="button-upload-more"
                   >
                     <Upload className="w-4 h-4 mr-2" />
@@ -287,22 +287,22 @@ export default function ProductQuoteModal({
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="flex items-center space-x-2 p-4 bg-red/10 border border-red/20 rounded-lg"
+                    className="flex items-center space-x-2 p-4 bg-destructive/10 border border-destructive/20 rounded-lg"
                   >
-                    <AlertCircle className="w-5 h-5 text-red flex-shrink-0" />
-                    <p className="text-red text-sm">{errorMessage}</p>
+                    <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0" />
+                    <p className="text-destructive text-sm">{errorMessage}</p>
                   </motion.div>
                 )}
 
                 <div className="grid md:grid-cols-2 gap-6">
                   {/* Contact Information */}
                   <div className="space-y-4">
-                    <h3 className="text-lg font-display font-semibold text-primary">
+                    <h3 className="text-lg font-display font-semibold text-text-primary">
                       Contact Information
                     </h3>
                     
                     <div>
-                      <Label htmlFor="name" className="text-primary">
+                      <Label htmlFor="name" className="text-text-primary">
                         Full Name *
                       </Label>
                       <Input
@@ -316,14 +316,14 @@ export default function ProductQuoteModal({
                         aria-describedby={errors.name ? 'name-error' : undefined}
                       />
                       {errors.name && (
-                        <p id="name-error" className="text-red text-sm mt-1">
+                        <p id="name-error" className="text-destructive text-sm mt-1">
                           {errors.name.message}
                         </p>
                       )}
                     </div>
 
                     <div>
-                      <Label htmlFor="company" className="text-primary">
+                      <Label htmlFor="company" className="text-text-primary">
                         Company Name *
                       </Label>
                       <Input
@@ -337,14 +337,14 @@ export default function ProductQuoteModal({
                         aria-describedby={errors.company ? 'company-error' : undefined}
                       />
                       {errors.company && (
-                        <p id="company-error" className="text-red text-sm mt-1">
+                        <p id="company-error" className="text-destructive text-sm mt-1">
                           {errors.company.message}
                         </p>
                       )}
                     </div>
 
                     <div>
-                      <Label htmlFor="email" className="text-primary">
+                      <Label htmlFor="email" className="text-text-primary">
                         Work Email *
                       </Label>
                       <Input
@@ -358,14 +358,14 @@ export default function ProductQuoteModal({
                         aria-describedby={errors.email ? 'email-error' : undefined}
                       />
                       {errors.email && (
-                        <p id="email-error" className="text-red text-sm mt-1">
+                        <p id="email-error" className="text-destructive text-sm mt-1">
                           {errors.email.message}
                         </p>
                       )}
                     </div>
 
                     <div>
-                      <Label htmlFor="phone" className="text-primary">
+                      <Label htmlFor="phone" className="text-text-primary">
                         Phone Number *
                       </Label>
                       <Input
@@ -379,7 +379,7 @@ export default function ProductQuoteModal({
                         aria-describedby={errors.phone ? 'phone-error' : undefined}
                       />
                       {errors.phone && (
-                        <p id="phone-error" className="text-red text-sm mt-1">
+                        <p id="phone-error" className="text-destructive text-sm mt-1">
                           {errors.phone.message}
                         </p>
                       )}
@@ -388,12 +388,12 @@ export default function ProductQuoteModal({
 
                   {/* Product Information */}
                   <div className="space-y-4">
-                    <h3 className="text-lg font-display font-semibold text-primary">
+                    <h3 className="text-lg font-display font-semibold text-text-primary">
                       Product Requirements
                     </h3>
 
                     <div>
-                      <Label htmlFor="product" className="text-primary">
+                      <Label htmlFor="product" className="text-text-primary">
                         Product *
                       </Label>
                       <Input
@@ -407,7 +407,7 @@ export default function ProductQuoteModal({
                     </div>
 
                     <div>
-                      <Label htmlFor="annualVolume" className="text-primary">
+                      <Label htmlFor="annualVolume" className="text-text-primary">
                         Annual Volume *
                       </Label>
                       <Input
@@ -421,14 +421,14 @@ export default function ProductQuoteModal({
                         aria-describedby={errors.annualVolume ? 'volume-error' : undefined}
                       />
                       {errors.annualVolume && (
-                        <p id="volume-error" className="text-red text-sm mt-1">
+                        <p id="volume-error" className="text-destructive text-sm mt-1">
                           {errors.annualVolume.message}
                         </p>
                       )}
                     </div>
 
                     <div>
-                      <Label htmlFor="material" className="text-primary">
+                      <Label htmlFor="material" className="text-text-primary">
                         Material Specification
                       </Label>
                       <Input
@@ -442,7 +442,7 @@ export default function ProductQuoteModal({
                     </div>
 
                     <div>
-                      <Label htmlFor="surfaceFinish" className="text-primary">
+                      <Label htmlFor="surfaceFinish" className="text-text-primary">
                         Surface Finish
                       </Label>
                       <Input
@@ -456,7 +456,7 @@ export default function ProductQuoteModal({
                     </div>
 
                     <div>
-                      <Label htmlFor="targetPrice" className="text-primary">
+                      <Label htmlFor="targetPrice" className="text-text-primary">
                         Target Price (Optional)
                       </Label>
                       <Input
@@ -473,11 +473,11 @@ export default function ProductQuoteModal({
 
                 {/* File Upload */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-display font-semibold text-primary">
+                  <h3 className="text-lg font-display font-semibold text-text-primary">
                     Technical Drawings
                   </h3>
                   
-                  <div className="border-2 border-dashed border-white/20 rounded-lg p-6 text-center hover:border-amber/30 transition-colors">
+                  <div className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-accent-primary transition-colors">
                     <input
                       type="file"
                       id="drawing-upload"
@@ -490,11 +490,11 @@ export default function ProductQuoteModal({
                       htmlFor="drawing-upload"
                       className="cursor-pointer block"
                     >
-                      <Upload className="w-12 h-12 text-muted mx-auto mb-4" />
-                      <p className="text-primary font-medium mb-2">
+                      <Upload className="w-12 h-12 text-text-muted mx-auto mb-4" />
+                      <p className="text-text-primary font-medium mb-2">
                         Upload Technical Drawings
                       </p>
-                      <p className="text-muted text-sm">
+                      <p className="text-text-muted text-sm">
                         PDF, DWG, DXF, or STEP files (max 10MB)
                       </p>
                     </label>
@@ -502,8 +502,8 @@ export default function ProductQuoteModal({
                     {uploadedFile && (
                       <div className="mt-4 p-3 bg-amber/10 border border-amber/20 rounded-lg">
                         <div className="flex items-center justify-center space-x-2">
-                          <FileText className="w-4 h-4 text-amber" />
-                          <span className="text-amber font-medium">
+                          <FileText className="w-4 h-4 text-accent-primary" />
+                          <span className="text-accent-primary font-medium">
                             {uploadedFile.name}
                           </span>
                         </div>
@@ -514,7 +514,7 @@ export default function ProductQuoteModal({
 
                 {/* Message */}
                 <div>
-                  <Label htmlFor="message" className="text-primary">
+                  <Label htmlFor="message" className="text-text-primary">
                     Additional Requirements
                   </Label>
                   <Textarea
@@ -529,12 +529,12 @@ export default function ProductQuoteModal({
 
                 {/* Optional Download Link */}
                 <div className="text-center">
-                  <p className="text-muted text-sm mb-2">
+                  <p className="text-text-muted text-sm mb-2">
                     Need detailed specifications?
                   </p>
                   <button
                     type="button"
-                    className="text-amber hover:text-amber/80 font-medium text-sm inline-flex items-center"
+                    className="text-accent-primary hover:text-accent-primary/80 font-medium text-sm inline-flex items-center"
                     data-testid="link-spec-sheet"
                   >
                     <Download className="w-4 h-4 mr-1" />

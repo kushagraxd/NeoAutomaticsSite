@@ -7,9 +7,11 @@ const rfqSchema = z.object({
   company: z.string().min(2),
   email: z.string().email(),
   phone: z.string().min(10),
-  component: z.string().min(2),
+  product: z.string().min(1),
   annualVolume: z.string().min(1),
-  material: z.string().min(2),
+  material: z.string().optional(),
+  surfaceFinish: z.string().optional(),
+  targetPrice: z.string().optional(),
   message: z.string().optional(),
 });
 
@@ -23,9 +25,11 @@ export async function POST(request: NextRequest) {
       company: formData.get('company') as string,
       email: formData.get('email') as string,
       phone: formData.get('phone') as string,
-      component: formData.get('component') as string,
+      product: formData.get('product') as string,
       annualVolume: formData.get('annualVolume') as string,
-      material: formData.get('material') as string,
+      material: formData.get('material') as string || '',
+      surfaceFinish: formData.get('surfaceFinish') as string || '',
+      targetPrice: formData.get('targetPrice') as string || '',
       message: formData.get('message') as string || '',
     };
 
@@ -60,7 +64,7 @@ export async function POST(request: NextRequest) {
 
     if (smtpHost && smtpPort && smtpUser && smtpPass) {
       try {
-        const transporter = nodemailer.createTransporter({
+        const transporter = nodemailer.createTransport({
           host: smtpHost,
           port: parseInt(smtpPort),
           secure: parseInt(smtpPort) === 465,
@@ -77,9 +81,11 @@ Company: ${validatedData.company}
 Email: ${validatedData.email}
 Phone: ${validatedData.phone}
 
-Component/Part: ${validatedData.component}
+Product: ${validatedData.product}
 Annual Volume: ${validatedData.annualVolume}
-Material: ${validatedData.material}
+Material: ${validatedData.material || 'Not specified'}
+Surface Finish: ${validatedData.surfaceFinish || 'Not specified'}
+Target Price: ${validatedData.targetPrice || 'Not specified'}
 
 Additional Message:
 ${validatedData.message || 'No additional message'}

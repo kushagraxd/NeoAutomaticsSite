@@ -50,40 +50,40 @@ const capabilities = [
 
 const colorClasses = {
   sky: {
-    bg: 'bg-sky-100 group-hover:bg-sky-200',
-    icon: 'text-sky-500',
-    badge: 'text-sky-600',
+    bg: 'bg-accent-primary/10 group-hover:bg-accent-primary/20',
+    icon: 'text-accent-primary',
+    badge: 'text-accent-primary',
   },
   orange: {
-    bg: 'bg-orange-100 group-hover:bg-orange-200',
-    icon: 'text-orange-500',
-    badge: 'text-orange-600',
+    bg: 'bg-accent-secondary/10 group-hover:bg-accent-secondary/20',
+    icon: 'text-accent-secondary',
+    badge: 'text-accent-secondary',
   },
   green: {
-    bg: 'bg-green-100 group-hover:bg-green-200',
-    icon: 'text-green-500',
-    badge: 'text-green-600',
+    bg: 'bg-accent-primary/10 group-hover:bg-accent-primary/20',
+    icon: 'text-accent-primary',
+    badge: 'text-accent-primary',
   },
   purple: {
-    bg: 'bg-purple-100 group-hover:bg-purple-200',
-    icon: 'text-purple-500',
-    badge: 'text-purple-600',
+    bg: 'bg-accent-secondary/10 group-hover:bg-accent-secondary/20',
+    icon: 'text-accent-secondary',
+    badge: 'text-accent-secondary',
   },
   cyan: {
-    bg: 'bg-cyan-100 group-hover:bg-cyan-200',
-    icon: 'text-cyan-500',
-    badge: 'text-cyan-600',
+    bg: 'bg-accent-primary/10 group-hover:bg-accent-primary/20',
+    icon: 'text-accent-primary',
+    badge: 'text-accent-primary',
   },
   rose: {
-    bg: 'bg-rose-100 group-hover:bg-rose-200',
-    icon: 'text-rose-500',
-    badge: 'text-rose-600',
+    bg: 'bg-accent-secondary/10 group-hover:bg-accent-secondary/20',
+    icon: 'text-accent-secondary',
+    badge: 'text-accent-secondary',
   },
 };
 
 export default function CapabilitiesSection() {
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-bg-base">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -91,10 +91,10 @@ export default function CapabilitiesSection() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl font-display font-bold text-slate-900 mb-4">
-            End-to-End <span className="gradient-text">Manufacturing Capabilities</span>
+          <h2 className="text-4xl font-display font-bold text-text-primary mb-4">
+            End-to-End <span className="text-accent-primary">Manufacturing Capabilities</span>
           </h2>
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+          <p className="text-xl text-text-muted max-w-3xl mx-auto">
             From precision CNC turning to heat treatment and quality assurance,
             we deliver complete manufacturing solutions under one roof.
           </p>
@@ -108,7 +108,7 @@ export default function CapabilitiesSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="glass-card p-8 rounded-2xl hover:scale-105 transition-all duration-300 group"
+              className="bg-elevated p-8 rounded-2xl hover:scale-105 transition-all duration-300 group border border-border"
             >
               <div className={`w-16 h-16 ${colorClasses[capability.color].bg} rounded-2xl flex items-center justify-center mb-6 transition-colors`}>
                 <capability.icon className={`${colorClasses[capability.color].icon} text-2xl`} />
