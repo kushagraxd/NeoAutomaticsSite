@@ -1,5 +1,5 @@
 import React from 'react';
-import companyData from '@/data/company.json';
+import companyData from '../../data/company.json';
 
 export default function MachinesTable() {
   const { company } = companyData;
@@ -33,7 +33,7 @@ export default function MachinesTable() {
                   {machine.replace(/_/g, ' ')}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-text-muted">
-                  {count}
+                  {count as string}
                 </td>
               </tr>
             ))}
@@ -42,7 +42,7 @@ export default function MachinesTable() {
                 Diesel Generator
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-text-muted">
-                {dieselGenset}
+                {dieselGenset as string}
               </td>
             </tr>
           </tbody>
