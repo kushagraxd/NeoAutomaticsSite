@@ -6,79 +6,78 @@
 
 :root {
   /* Silicon Valley Graphite + Electric-Teal theme */
-  --bg-base: #0B0C0F; /* page background charcoal */
-  --bg-elevated: #111317; /* cards/nav */
-  --text-primary: #E8ECF2; /* main text */
-  --text-muted: #A6AABC; /* secondary text */
-  --text-subtle: #7E8496;
-  --accent-primary: #13E3B3; /* electric-teal primary */
-  --accent-soft: #22BFA2; /* softer teal for hovers */
-  --border: #262B33; /* dividers/rings */
+  --bg-base: 11 12 15; /* #0B0C0F (RGB values for compatibility) */
+  --bg-elevated: 17 19 23; /* #111317 */
+  --text-primary: 232 236 242; /* #E8ECF2 */
+  --text-muted: 166 170 188; /* #A6AABC */
+  --text-subtle: 126 132 150; /* #7E8496 */
+  --accent-primary: 19 227 179; /* #13E3B3 */
+  --accent-soft: 34 191 162; /* #22BFA2 */
+  --border: 38 43 51; /* #262B33 */
   --overlay: rgba(0,0,0,0.5); /* hero/video overlay */
   
-  /* Shadcn compatibility mapping */
-  --background: #0B0C0F; /* charcoal base */
-  --foreground: #E8ECF2; /* primary text */
-  --card: #111317; /* elevated surfaces */
-  --card-foreground: #E8ECF2;
-  --popover: #111317;
-  --popover-foreground: #E8ECF2;
-  --primary: #13E3B3; /* electric-teal */
-  --primary-foreground: #000000;
-  --secondary: #22BFA2; /* softer teal */
-  --secondary-foreground: #000000;
-  --muted: #262B33; /* border color for muted areas */
-  --muted-foreground: #A6AABC; /* muted text */
-  --accent: #13E3B3; /* electric-teal accent */
-  --accent-foreground: #000000;
-  --destructive: #EF4444; /* red for errors */
-  --destructive-foreground: #FECACA;
-  --border: #262B33;
-  --input: #262B33;
-  --ring: #13E3B3;
+  /* Shadcn compatibility mapping - RGB values for compatibility */
+  --background: 11 12 15; /* #0B0C0F */
+  --foreground: 232 236 242; /* #E8ECF2 */
+  --card: 17 19 23; /* #111317 */
+  --card-foreground: 232 236 242;
+  --popover: 17 19 23;
+  --popover-foreground: 232 236 242;
+  --primary: 19 227 179; /* #13E3B3 */
+  --primary-foreground: 0 0 0;
+  --secondary: 34 191 162; /* #22BFA2 */
+  --secondary-foreground: 0 0 0;
+  --muted: 38 43 51; /* #262B33 */
+  --muted-foreground: 166 170 188; /* #A6AABC */
+  --accent: 19 227 179; /* #13E3B3 */
+  --accent-foreground: 0 0 0;
+  --destructive: 239 68 68; /* #EF4444 */
+  --destructive-foreground: 254 202 202;
+  --border: 38 43 51;
+  --input: 38 43 51;
+  --ring: 19 227 179;
   --font-sans: Inter, system-ui, sans-serif;
   --font-display: 'Space Grotesk', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
   --radius: 1rem;
-  --chart-1: #13E3B3;
-  --chart-2: #22BFA2;
-  --chart-3: #0E9F6E;
-  --chart-4: #047857;
-  --chart-5: #065F46;
+  --chart-1: 19 227 179;
+  --chart-2: 34 191 162;
+  --chart-3: 14 159 110;
+  --chart-4: 4 120 87;
+  --chart-5: 6 95 70;
 }
 
 .dark {
-  /* Silicon Valley Graphite + Electric-Teal theme */
-  --bg-base: #0B0C0F; /* page background charcoal */
-  --bg-elevated: #111317; /* cards/nav */
-  --text-primary: #E8ECF2; /* main text */
-  --text-muted: #A6AABC; /* secondary text */
-  --text-subtle: #7E8496;
-  --accent-primary: #13E3B3; /* electric-teal primary */
-  --accent-soft: #22BFA2; /* softer teal for hovers */
-  --border: #262B33; /* dividers/rings */
-  --overlay: rgba(0,0,0,0.5); /* hero/video overlay */
+  /* Same values for dark mode */
+  --bg-base: 11 12 15;
+  --bg-elevated: 17 19 23;
+  --text-primary: 232 236 242;
+  --text-muted: 166 170 188;
+  --text-subtle: 126 132 150;
+  --accent-primary: 19 227 179;
+  --accent-soft: 34 191 162;
+  --border: 38 43 51;
+  --overlay: rgba(0,0,0,0.5);
   
-  /* Shadcn compatibility mapping */
-  --background: #0B0C0F; /* charcoal base */
-  --foreground: #E8ECF2; /* primary text */
-  --card: #111317; /* elevated surfaces */
-  --card-foreground: #E8ECF2;
-  --popover: #111317;
-  --popover-foreground: #E8ECF2;
-  --primary: #13E3B3; /* electric-teal */
-  --primary-foreground: #000000;
-  --secondary: #22BFA2; /* softer teal */
-  --secondary-foreground: #000000;
-  --muted: #262B33; /* border color for muted areas */
-  --muted-foreground: #A6AABC; /* muted text */
-  --accent: #13E3B3; /* electric-teal accent */
-  --accent-foreground: #000000;
-  --destructive: #EF4444; /* red for errors */
-  --destructive-foreground: #FECACA;
-  --border: #262B33;
-  --input: #262B33;
-  --ring: #13E3B3;
+  --background: 11 12 15;
+  --foreground: 232 236 242;
+  --card: 17 19 23;
+  --card-foreground: 232 236 242;
+  --popover: 17 19 23;
+  --popover-foreground: 232 236 242;
+  --primary: 19 227 179;
+  --primary-foreground: 0 0 0;
+  --secondary: 34 191 162;
+  --secondary-foreground: 0 0 0;
+  --muted: 38 43 51;
+  --muted-foreground: 166 170 188;
+  --accent: 19 227 179;
+  --accent-foreground: 0 0 0;
+  --destructive: 239 68 68;
+  --destructive-foreground: 254 202 202;
+  --border: 38 43 51;
+  --input: 38 43 51;
+  --ring: 19 227 179;
 }
 
 @layer base {
@@ -88,8 +87,8 @@
 
   body {
     @apply font-sans antialiased;
-    color: hsl(var(--foreground));
-    background: hsl(var(--background));
+    color: rgb(var(--foreground));
+    background: rgb(var(--background));
     font-feature-settings: "rlig" 1, "calt" 1;
     font-family: var(--font-sans);
   }
@@ -124,12 +123,12 @@
 
 /* Silicon Valley teal accent text */
 .gradient-text {
-  color: var(--accent-primary);
+  color: rgb(var(--accent-primary));
 }
 
 /* Primary teal button with glow effect */
 .gradient-button {
-  background: var(--accent-primary);
+  background: rgb(var(--accent-primary));
   color: #000000;
   border: none;
   font-weight: 600;
@@ -144,26 +143,26 @@
 
 .gradient-button:focus {
   outline: none;
-  box-shadow: 0 0 0 2px var(--accent-primary);
+  box-shadow: 0 0 0 2px rgb(var(--accent-primary));
   opacity: 0.8;
 }
 
 /* Secondary outline button */
 .red-button {
   background: transparent;
-  border: 1px solid var(--border);
-  color: var(--text-primary);
+  border: 1px solid rgb(var(--border));
+  color: rgb(var(--text-primary));
   transition: all 0.2s ease;
 }
 
 .red-button:hover {
   background: rgba(255, 255, 255, 0.05);
-  border-color: var(--accent-soft);
+  border-color: rgb(var(--accent-soft));
 }
 
 .red-button:focus {
   outline: none;
-  box-shadow: 0 0 0 2px var(--accent-soft);
+  box-shadow: 0 0 0 2px rgb(var(--accent-soft));
   opacity: 0.8;
 }
 
@@ -247,34 +246,34 @@
 
 /* Utility color classes */
 .text-amber {
-  color: var(--accent-primary);
+  color: rgb(var(--accent-primary));
 }
 
 .text-red {
-  color: var(--accent-soft);
+  color: rgb(var(--accent-soft));
 }
 
 .bg-base {
-  background-color: var(--bg-base);
+  background-color: rgb(var(--bg-base));
 }
 
 .bg-elevated {
-  background-color: var(--bg-elevated);
+  background-color: rgb(var(--bg-elevated));
 }
 
 .text-primary {
-  color: var(--text-primary);
+  color: rgb(var(--text-primary));
 }
 
 .text-muted {
-  color: var(--text-muted);
+  color: rgb(var(--text-muted));
 }
 
 /* Active nav link styling with teal underline */
 .nav-link-active {
-  color: var(--accent-primary);
+  color: rgb(var(--accent-primary));
   text-decoration: underline;
-  text-decoration-color: var(--accent-soft);
+  text-decoration-color: rgb(var(--accent-soft));
   text-underline-offset: 4px;
 }
 

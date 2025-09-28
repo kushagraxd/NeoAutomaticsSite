@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Upload, FileText, CheckCircle, AlertCircle, Download } from 'lucide-react';
 import { useForm } from 'react-hook-form';
@@ -201,7 +201,7 @@ export default function ProductQuoteModal({
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="relative w-full max-w-2xl max-h-[90vh] overflow-auto bg-elevated rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.35)] border border-border"
+          className="relative w-full max-w-2xl max-h-[90vh] overflow-auto bg-bg-elevated rounded-2xl shadow-card border border-border"
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-title"
@@ -500,7 +500,7 @@ export default function ProductQuoteModal({
                     </label>
                     
                     {uploadedFile && (
-                      <div className="mt-4 p-3 bg-amber/10 border border-amber/20 rounded-lg">
+                      <div className="mt-4 p-3 bg-accent-primary/10 border border-accent-primary/20 rounded-lg">
                         <div className="flex items-center justify-center space-x-2">
                           <FileText className="w-4 h-4 text-accent-primary" />
                           <span className="text-accent-primary font-medium">

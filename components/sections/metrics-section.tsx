@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { motion } from 'framer-motion';
 import Counter from '../ui/counter';
 import companyData from '../../data/company.json';
@@ -29,7 +30,7 @@ const metrics = [
 
 export default function MetricsSection() {
   return (
-    <section className="py-20 bg-slate-900 text-white">
+    <section className="py-20 bg-bg-elevated text-text-primary">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -40,7 +41,7 @@ export default function MetricsSection() {
           <h2 className="text-4xl font-display font-bold mb-4">
             Manufacturing <span className="gradient-text">Excellence</span>
           </h2>
-          <p className="text-xl text-slate-300">
+          <p className="text-xl text-text-muted">
             Numbers that speak to our scale and capability
           </p>
         </motion.div>
@@ -58,7 +59,7 @@ export default function MetricsSection() {
               <div className="text-5xl font-display font-bold mb-2 counter">
                 <Counter target={metric.target} suffix={metric.suffix} />
               </div>
-              <div className="text-slate-300 text-lg">{metric.label}</div>
+              <div className="text-text-muted text-lg">{metric.label}</div>
             </motion.div>
           ))}
         </div>

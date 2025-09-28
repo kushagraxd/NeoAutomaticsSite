@@ -93,7 +93,7 @@ export default function HeroSection() {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="relative animate-float"
           >
-            <div className="bg-elevated p-8 rounded-2xl border border-border">
+            <div className="bg-bg-elevated p-8 rounded-2xl border border-border">
               <img
                 src="https://images.unsplash.com/photo-1565008447742-97f6f38c985c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600"
                 alt="Modern CNC machining center in operation"

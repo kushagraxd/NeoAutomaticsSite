@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
 import { Menu, X, Zap } from 'lucide-react';
 import { Button } from '../../client/src/components/ui/button';
@@ -36,7 +36,7 @@ export default function Navigation() {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
         isScrolled 
-          ? 'bg-elevated border-b border-border' 
+          ? 'bg-bg-elevated border-b border-border' 
           : 'bg-transparent'
       )}
       data-testid="nav-main"
@@ -114,9 +114,9 @@ export default function Navigation() {
       <div
         id="mobile-menu"
         className={cn(
-          'lg:hidden transition-all duration-300 ease-in-out bg-elevated border-b border-border',
+          'lg:hidden transition-all duration-300 ease-in-out bg-bg-elevated border-b border-border',
           isMobileMenuOpen
-            ? 'max-h-96 opacity-100 bg-elevated'
+            ? 'max-h-96 opacity-100 bg-bg-elevated'
             : 'max-h-0 opacity-0 overflow-hidden'
         )}
         aria-hidden={!isMobileMenuOpen}

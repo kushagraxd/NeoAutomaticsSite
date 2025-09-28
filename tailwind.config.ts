@@ -11,7 +11,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Silicon Valley Graphite + Electric-Teal theme
+        // Silicon Valley Graphite + Electric-Teal theme (hex values for opacity support)
         bg: {
           base: "#0B0C0F", // page background (charcoal)
           elevated: "#111317", // cards/nav
@@ -28,15 +28,15 @@ export default {
         border: "#262B33", // dividers/rings
         overlay: "rgba(0,0,0,0.5)", // hero/video overlay
         
-        // Legacy utility classes for backward compatibility
-        "bg-base": "var(--bg-base)",
-        "bg-elevated": "var(--bg-elevated)",
-        "text-primary": "var(--text-primary)",
-        "text-muted": "var(--text-muted)",
-        "accent-primary": "var(--accent-primary)",
-        "accent-soft": "var(--accent-soft)",
+        // Legacy utility classes for backward compatibility (CSS variables)
+        "bg-base": "#0B0C0F",
+        "bg-elevated": "#111317",
+        "text-primary": "#E8ECF2",
+        "text-muted": "#A6AABC",
+        "accent-primary": "#13E3B3",
+        "accent-soft": "#22BFA2",
         
-        // Shadcn compatibility
+        // Shadcn compatibility (separate from main accent)
         background: "var(--background)",
         foreground: "var(--foreground)",
         card: {
@@ -59,9 +59,11 @@ export default {
           DEFAULT: "var(--muted)",
           foreground: "var(--muted-foreground)",
         },
-        accent: {
-          DEFAULT: "var(--accent)",
-          foreground: "var(--accent-foreground)",
+        shadcn: {
+          accent: {
+            DEFAULT: "var(--accent)",
+            foreground: "var(--accent-foreground)",
+          },
         },
         destructive: {
           DEFAULT: "var(--destructive)",
