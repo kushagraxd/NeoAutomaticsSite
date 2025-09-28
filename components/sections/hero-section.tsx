@@ -1,3 +1,4 @@
+import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'wouter';
 import { ArrowRight, Download, Award, Factory, Clock } from 'lucide-react';
@@ -48,7 +49,7 @@ export default function HeroSection() {
               className="flex flex-wrap gap-4 mb-10"
             >
               {valuePills.map((pill, index) => (
-                <div key={index} className="bg-elevated px-4 py-2 rounded-full border border-border">
+                <div key={index} className="bg-bg-elevated px-4 py-2 rounded-full border border-border">
                   <span className="text-sm font-medium text-text-primary flex items-center">
                     <pill.icon className="h-4 w-4 text-accent-primary mr-2" />
                     {pill.text}

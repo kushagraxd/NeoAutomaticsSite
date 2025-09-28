@@ -1,3 +1,4 @@
+import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'wouter';
 import { ArrowRight, Calendar } from 'lucide-react';

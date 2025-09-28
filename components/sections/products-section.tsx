@@ -1,3 +1,4 @@
+import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'wouter';
 import { ArrowRight } from 'lucide-react';
@@ -50,9 +51,9 @@ const productDetails = [
 ];
 
 const categoryColors = {
-  sky: 'text-sky-600',
-  orange: 'text-orange-600',
-  green: 'text-green-600',
+  sky: 'text-accent-primary',
+  orange: 'text-accent-soft',
+  green: 'text-accent-primary',
 };
 
 export default function ProductsSection() {
@@ -81,7 +82,7 @@ export default function ProductsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-elevated rounded-2xl overflow-hidden group hover:scale-105 transition-all duration-300 border border-border"
+              className="bg-bg-elevated rounded-2xl overflow-hidden group hover:scale-105 transition-all duration-300 border border-border"
             >
               <div className="relative h-48 overflow-hidden">
                 <img
@@ -92,15 +93,15 @@ export default function ProductsSection() {
               </div>
               
               <div className="p-6">
-                <h3 className="text-xl font-display font-semibold text-slate-900 mb-2">
+                <h3 className="text-xl font-display font-semibold text-text-primary mb-2">
                   {product.name}
                 </h3>
-                <p className="text-slate-600 mb-4">{product.description}</p>
+                <p className="text-text-muted mb-4">{product.description}</p>
                 <div className="flex justify-between items-center">
                   <span className={`text-sm font-medium ${categoryColors[product.color]}`}>
                     {product.category}
                   </span>
-                  <button className="text-sky-500 hover:text-sky-600 transition-colors">
+                  <button className="text-accent-primary hover:text-accent-soft transition-colors">
                     <ArrowRight className="h-5 w-5" />
                   </button>
                 </div>

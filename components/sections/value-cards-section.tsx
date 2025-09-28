@@ -1,3 +1,4 @@
+import React from 'react';
 import { motion } from 'framer-motion';
 import { DollarSign, Shield, Zap } from 'lucide-react';
 
@@ -12,7 +13,7 @@ const valueCards = [
     icon: Shield,
     title: "Reliability", 
     description: "Consistent quality and on-time delivery backed by ISO 9001:2015 certification and rigorous testing",
-    color: "text-accent-secondary"
+    color: "text-accent-soft"
   },
   {
     icon: Zap,
@@ -51,11 +52,11 @@ export default function ValueCardsSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.2 }}
-                className="bg-elevated p-8 rounded-2xl text-center group border border-border"
+                className="bg-bg-elevated p-8 rounded-2xl text-center group border border-border"
                 data-testid={`value-card-${card.title.toLowerCase().replace(/[^a-z]/g, '-')}`}
               >
                 <div className="mb-6 flex justify-center">
-                  <div className="p-4 rounded-full bg-bg-elevated group-hover:bg-accent-primary/10 transition-colors">
+                  <div className="p-4 rounded-full bg-accent-primary/10 group-hover:bg-accent-primary/20 transition-colors">
                     <IconComponent className={`h-8 w-8 ${card.color}`} />
                   </div>
                 </div>

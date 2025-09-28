@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { motion } from 'framer-motion';
 import { Settings, Flame, Microscope, Building, Rocket, TrendingUp } from 'lucide-react';
 
@@ -55,9 +56,9 @@ const colorClasses = {
     badge: 'text-accent-primary',
   },
   orange: {
-    bg: 'bg-accent-secondary/10 group-hover:bg-accent-secondary/20',
-    icon: 'text-accent-secondary',
-    badge: 'text-accent-secondary',
+    bg: 'bg-accent-soft/10 group-hover:bg-accent-soft/20',
+    icon: 'text-accent-soft',
+    badge: 'text-accent-soft',
   },
   green: {
     bg: 'bg-accent-primary/10 group-hover:bg-accent-primary/20',
@@ -65,9 +66,9 @@ const colorClasses = {
     badge: 'text-accent-primary',
   },
   purple: {
-    bg: 'bg-accent-secondary/10 group-hover:bg-accent-secondary/20',
-    icon: 'text-accent-secondary',
-    badge: 'text-accent-secondary',
+    bg: 'bg-accent-soft/10 group-hover:bg-accent-soft/20',
+    icon: 'text-accent-soft',
+    badge: 'text-accent-soft',
   },
   cyan: {
     bg: 'bg-accent-primary/10 group-hover:bg-accent-primary/20',
@@ -75,9 +76,9 @@ const colorClasses = {
     badge: 'text-accent-primary',
   },
   rose: {
-    bg: 'bg-accent-secondary/10 group-hover:bg-accent-secondary/20',
-    icon: 'text-accent-secondary',
-    badge: 'text-accent-secondary',
+    bg: 'bg-accent-soft/10 group-hover:bg-accent-soft/20',
+    icon: 'text-accent-soft',
+    badge: 'text-accent-soft',
   },
 };
 
@@ -108,17 +109,17 @@ export default function CapabilitiesSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-elevated p-8 rounded-2xl hover:scale-105 transition-all duration-300 group border border-border"
+              className="bg-bg-elevated p-8 rounded-2xl hover:scale-105 transition-all duration-300 group border border-border"
             >
               <div className={`w-16 h-16 ${colorClasses[capability.color].bg} rounded-2xl flex items-center justify-center mb-6 transition-colors`}>
                 <capability.icon className={`${colorClasses[capability.color].icon} text-2xl`} />
               </div>
               
-              <h3 className="text-xl font-display font-semibold text-slate-900 mb-3">
+              <h3 className="text-xl font-display font-semibold text-text-primary mb-3">
                 {capability.title}
               </h3>
               
-              <p className="text-slate-600 mb-4">
+              <p className="text-text-muted mb-4">
                 {capability.description}
               </p>
               
