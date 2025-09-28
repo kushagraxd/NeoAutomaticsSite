@@ -37,6 +37,8 @@ export default function Navigation() {
           : 'bg-transparent'
       )}
       data-testid="nav-main"
+      role="navigation"
+      aria-label="Main navigation"
     >
       <div className="max-w-7xl mx-auto px-6 md:px-10">
         <div className="flex justify-between items-center h-20">
@@ -95,6 +97,9 @@ export default function Navigation() {
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="p-2 text-muted hover:text-primary hover:bg-white/5 rounded-lg transition-colors"
               data-testid="button-mobile-menu"
+              aria-label="Toggle mobile navigation menu"
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-menu"
             >
               {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
@@ -104,12 +109,14 @@ export default function Navigation() {
 
       {/* Mobile Menu */}
       <div
+        id="mobile-menu"
         className={cn(
           'lg:hidden transition-all duration-300 ease-in-out backdrop-blur-xl border-b border-white/10',
           isMobileMenuOpen
             ? 'max-h-96 opacity-100 bg-elevated/95'
             : 'max-h-0 opacity-0 overflow-hidden'
         )}
+        aria-hidden={!isMobileMenuOpen}
       >
         <div className="px-6 py-6 space-y-2">
           {navItems.map((item) => (

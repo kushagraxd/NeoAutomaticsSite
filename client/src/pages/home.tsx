@@ -109,6 +109,7 @@ export default function HomePage() {
                 <Button 
                   className="btn-primary magnetic-btn group" 
                   data-testid="hero-request-quote"
+                  aria-label="Request a quote for precision machining services"
                 >
                   <ArrowRight className="mr-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   Request a Quote
@@ -120,6 +121,7 @@ export default function HomePage() {
                 download
                 className="btn-secondary magnetic-btn group inline-flex items-center"
                 data-testid="hero-download-capability"
+                aria-label="Download Neo Automatics capability profile PDF"
               >
                 <Download className="mr-2 h-5 w-5 group-hover:translate-y-0.5 transition-transform" />
                 Download Capability Profile
@@ -149,7 +151,7 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="glass-card px-6 py-3 rounded-lg"
+                className="glass-card rounded-2xl px-6 py-3"
                 style={{ width: logo.width }}
               >
                 <div className="text-muted font-medium text-sm">{logo.name}</div>
@@ -186,7 +188,7 @@ export default function HomePage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="glass-card p-8 glow-hover group"
+                  className="glass-card rounded-2xl p-8 glow-hover group"
                   data-testid={`value-pill-${pill.title.toLowerCase().replace(/[^a-z]/g, '-')}`}
                 >
                   <IconComponent className={`h-12 w-12 ${pill.color} mb-6 group-hover:scale-110 transition-transform duration-300`} />
@@ -226,7 +228,7 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="text-center glass-card p-6 glow-hover"
+                className="text-center glass-card rounded-2xl p-6 glow-hover"
                 data-testid={`metric-${metric.label.toLowerCase().replace(/[^a-z]/g, '-')}`}
               >
                 <div className="text-4xl md:text-5xl font-display font-bold text-amber mb-2">
@@ -262,7 +264,7 @@ export default function HomePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0 }}
-              className="glass-card p-8 glow-hover group"
+              className="glass-card rounded-2xl p-8 glow-hover group"
               data-testid="capability-machining"
             >
               <Factory className="h-12 w-12 text-amber mb-6 group-hover:scale-110 transition-transform duration-300" />
@@ -278,7 +280,7 @@ export default function HomePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="glass-card p-8 glow-hover group"
+              className="glass-card rounded-2xl p-8 glow-hover group"
               data-testid="capability-heat-treatment"
             >
               <Zap className="h-12 w-12 text-red mb-6 group-hover:scale-110 transition-transform duration-300" />
@@ -294,7 +296,7 @@ export default function HomePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="glass-card p-8 glow-hover group"
+              className="glass-card rounded-2xl p-8 glow-hover group"
               data-testid="capability-qa"
             >
               <Award className="h-12 w-12 text-amber mb-6 group-hover:scale-110 transition-transform duration-300" />
@@ -340,7 +342,7 @@ export default function HomePage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="text-center glass-card p-6 glow-hover group"
+                  className="text-center glass-card rounded-2xl p-6 glow-hover group"
                   data-testid={`process-step-${item.step}`}
                 >
                   <div className="text-amber font-display text-lg font-bold mb-4">{item.step}</div>
@@ -379,7 +381,7 @@ export default function HomePage() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="glass-card p-8 glow-hover group"
+              className="glass-card rounded-2xl p-8 glow-hover group"
               data-testid="case-automotive"
             >
               <div className="text-red font-medium mb-2">Automotive OEM</div>
@@ -400,7 +402,7 @@ export default function HomePage() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="glass-card p-8 glow-hover group"
+              className="glass-card rounded-2xl p-8 glow-hover group"
               data-testid="case-agriculture"
             >
               <div className="text-red font-medium mb-2">Agriculture Equipment</div>
@@ -444,7 +446,7 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="glass-card p-6 glow-hover group"
+                className="glass-card rounded-2xl p-6 glow-hover group"
                 data-testid={`featured-product-${product.name.toLowerCase().replace(/[^a-z]/g, '-')}`}
               >
                 <div className="aspect-square bg-gradient-to-br from-amber/10 to-red/10 rounded-lg mb-6 flex items-center justify-center group-hover:from-amber/20 group-hover:to-red/20 transition-colors duration-300">
@@ -483,14 +485,22 @@ export default function HomePage() {
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <Link href="/contact">
-                <Button className="btn-primary magnetic-btn group" data-testid="cta-request-quote">
+                <Button 
+                  className="btn-primary magnetic-btn group" 
+                  data-testid="cta-request-quote"
+                  aria-label="Get started with your precision machining project"
+                >
                   <ArrowRight className="mr-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   Request a Quote
                 </Button>
               </Link>
               
               <Link href="/capabilities">
-                <Button className="btn-secondary magnetic-btn" data-testid="cta-view-capabilities">
+                <Button 
+                  className="btn-secondary magnetic-btn" 
+                  data-testid="cta-view-capabilities"
+                  aria-label="Learn more about our manufacturing capabilities"
+                >
                   View Our Capabilities
                 </Button>
               </Link>
