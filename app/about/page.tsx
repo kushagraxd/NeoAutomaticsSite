@@ -55,7 +55,7 @@ export default function AboutPage() {
           </h2>
           <div className="space-y-8">
             <div className="flex items-start gap-6">
-              <div className="w-12 h-12 bg-sky-500 rounded-full flex items-center justify-center text-white font-bold">
+              <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
                 2004
               </div>
               <div>
@@ -70,7 +70,7 @@ export default function AboutPage() {
             </div>
 
             <div className="flex items-start gap-6">
-              <div className="w-12 h-12 bg-sky-500 rounded-full flex items-center justify-center text-white font-bold">
+              <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
                 2010
               </div>
               <div>
@@ -85,7 +85,7 @@ export default function AboutPage() {
             </div>
 
             <div className="flex items-start gap-6">
-              <div className="w-12 h-12 bg-sky-500 rounded-full flex items-center justify-center text-white font-bold">
+              <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
                 2015
               </div>
               <div>
@@ -100,7 +100,7 @@ export default function AboutPage() {
             </div>
 
             <div className="flex items-start gap-6">
-              <div className="w-12 h-12 bg-sky-500 rounded-full flex items-center justify-center text-white font-bold">
+              <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
                 2020
               </div>
               <div>
@@ -115,7 +115,7 @@ export default function AboutPage() {
             </div>
 
             <div className="flex items-start gap-6">
-              <div className="w-12 h-12 bg-gradient-to-r from-sky-500 to-cyan-400 rounded-full flex items-center justify-center text-white font-bold">
+              <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-400 rounded-full flex items-center justify-center text-white font-bold">
                 2024
               </div>
               <div>

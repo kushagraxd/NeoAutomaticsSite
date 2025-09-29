@@ -36,7 +36,7 @@ export default function AboutSection() {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   className="flex items-center"
                 >
-                  <CheckCircle className="text-sky-500 mr-3 h-5 w-5 flex-shrink-0" />
+                  <CheckCircle className="text-blue-500 mr-3 h-5 w-5 flex-shrink-0" />
                   <span className="text-slate-700">{strength}</span>
                 </motion.div>
               ))}
@@ -49,7 +49,7 @@ export default function AboutSection() {
               transition={{ duration: 0.5, delay: 0.6 }}
             >
               <Link href="/about">
-                <Button className="magnetic-btn bg-sky-500 hover:bg-sky-600 text-white">
+                <Button className="magnetic-btn bg-blue-500 hover:bg-blue-600 text-white">
                   Learn More About Us
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
@@ -69,7 +69,7 @@ export default function AboutSection() {
                 alt="Modern manufacturing facility showcasing precision CNC equipment and quality control"
                 className="rounded-2xl shadow-xl w-full h-auto"
               />
-              <div className="absolute inset-0 bg-gradient-to-tr from-sky-500/20 to-transparent rounded-2xl" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/20 to-transparent rounded-2xl" />
             </div>
           </motion.div>
         </div>
