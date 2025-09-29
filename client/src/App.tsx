@@ -16,6 +16,7 @@ import CareersPage from "./pages/careers";
 import NotFound from "./pages/not-found";
 import Navigation from "../../components/ui/navigation";
 import Footer from "../../components/ui/footer";
+import { AskNeoWidget } from "../../components/AskNeoWidget";
 
 function Router() {
   return (
@@ -46,6 +47,7 @@ function App() {
             <Router />
           </main>
           <Footer />
+          <AskNeoWidget />
           <Toaster />
         </div>
       </TooltipProvider>

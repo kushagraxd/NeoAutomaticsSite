@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { Package, Car, Tractor, Factory, Zap, CheckCircle, Download, Target, Award } from 'lucide-react';
 import ProductQuoteModal from '../../../components/ProductQuoteModal';
+import { SemanticSearch } from '../../../components/SemanticSearch';
 import { usePageTitle } from '../lib/usePageTitle';
 
 // Type definitions
@@ -248,6 +249,38 @@ export default function ProductsPage() {
               Comprehensive range of precision-manufactured components serving
               <span className="text-amber font-semibold"> automotive, agricultural, and industrial</span> sectors worldwide.
             </p>
+            
+            {/* AI-Powered Search */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="max-w-2xl mx-auto mt-8"
+            >
+              <SemanticSearch
+                placeholder="Search for precision components (e.g., 'rocker arms for engine')"
+                onProductSelect={(product) => {
+                  // Find and open the product modal
+                  for (const category of productCategories) {
+                    const foundProduct = category.products.find(p => p.name === product);
+                    if (foundProduct) {
+                      openModal(foundProduct, category);
+                      break;
+                    }
+                  }
+                }}
+                onQuoteRequest={(product) => {
+                  // Find and open the product modal for quoting
+                  for (const category of productCategories) {
+                    const foundProduct = category.products.find(p => p.name === product);
+                    if (foundProduct) {
+                      openModal(foundProduct, category);
+                      break;
+                    }
+                  }
+                }}
+              />
+            </motion.div>
           </motion.div>
 
           {/* Product Benefits */}

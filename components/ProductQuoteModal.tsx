@@ -8,6 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { RFQSmartHints } from './RFQSmartHints';
+import { PDFParseButton } from './PDFParseButton';
 
 // Validation schema for the quote form
 const quoteFormSchema = z.object({
@@ -45,6 +47,7 @@ export default function ProductQuoteModal({
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [showAIFeatures, setShowAIFeatures] = useState(true);
 
   const {
     register,
@@ -52,6 +55,7 @@ export default function ProductQuoteModal({
     formState: { errors },
     reset,
     setValue,
+    watch,
   } = useForm<QuoteFormData>({
     resolver: zodResolver(quoteFormSchema),
     defaultValues: {
@@ -67,6 +71,9 @@ export default function ProductQuoteModal({
       message: '',
     },
   });
+
+  // Watch form values for AI integration
+  const watchedValues = watch();
 
   // Set product name when product prop changes
   useEffect(() => {
@@ -118,6 +125,24 @@ export default function ProductQuoteModal({
     setErrorMessage('');
 
     try {
+      // Generate AI summary for sales team
+      let aiSummary = '';
+      try {
+        const summaryResponse = await fetch('/api/ai/summary', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        
+        if (summaryResponse.ok) {
+          const summaryData = await summaryResponse.json();
+          aiSummary = summaryData.summary;
+        }
+      } catch (error) {
+        console.warn('Failed to generate AI summary:', error);
+        // Continue with submission even if AI summary fails
+      }
+
       const formData = new FormData();
       
       // Add form fields
@@ -128,6 +153,11 @@ export default function ProductQuoteModal({
       // Add file if uploaded
       if (uploadedFile) {
         formData.append('drawing', uploadedFile);
+      }
+
+      // Add AI summary if generated
+      if (aiSummary) {
+        formData.append('aiSummary', aiSummary);
       }
 
       // Add product details if available
@@ -168,6 +198,30 @@ export default function ProductQuoteModal({
     setSubmitStatus('idle');
     setErrorMessage('');
     onClose();
+  };
+
+  // Handle AI suggestions application
+  const handleAISuggestions = (suggestions: Partial<QuoteFormData>) => {
+    Object.entries(suggestions).forEach(([key, value]) => {
+      if (value && key in watchedValues) {
+        setValue(key as keyof QuoteFormData, value, { shouldValidate: true });
+      }
+    });
+  };
+
+  // Handle PDF parsing results
+  const handlePDFFields = (fields: Record<string, string>) => {
+    Object.entries(fields).forEach(([key, value]) => {
+      if (value && key in watchedValues) {
+        if (key === 'message') {
+          // Append to existing message
+          const currentMessage = watchedValues.message || '';
+          setValue('message', currentMessage + (currentMessage ? '\n' : '') + value, { shouldValidate: true });
+        } else {
+          setValue(key as keyof QuoteFormData, value, { shouldValidate: true });
+        }
+      }
+    });
   };
 
   // Handle success actions
@@ -470,6 +524,30 @@ export default function ProductQuoteModal({
                     </div>
                   </div>
                 </div>
+
+                {/* AI Features */}
+                {showAIFeatures && (
+                  <div className="space-y-6">
+                    {/* AI Suggestions */}
+                    <RFQSmartHints
+                      rfqData={{
+                        product: watchedValues.product || '',
+                        annualVolume: watchedValues.annualVolume,
+                        material: watchedValues.material,
+                        surfaceFinish: watchedValues.surfaceFinish,
+                        message: watchedValues.message,
+                      }}
+                      onApplySuggestions={handleAISuggestions}
+                      className="w-full"
+                    />
+                    
+                    {/* PDF Upload and Parsing */}
+                    <PDFParseButton 
+                      onFieldsExtracted={handlePDFFields}
+                      className="w-full"
+                    />
+                  </div>
+                )}
 
                 {/* File Upload */}
                 <div className="space-y-4">

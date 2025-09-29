@@ -6,6 +6,13 @@ import nodemailer from "nodemailer";
 import { z } from "zod";
 import fs from "fs";
 import path from "path";
+import { v4 as uuidv4 } from 'uuid';
+import pdfParse from 'pdf-parse';
+import { getClient, moderate, trimTokens, estimateTokens } from '../lib/openai';
+import { limitOrThrow } from '../lib/ratelimit';
+import { logger, createRequestLogger, logAiUsage } from '../lib/logger';
+import { formatCapabilitiesForAI } from '../lib/company';
+import { nearestProducts } from '../lib/embeddings';
 
 // RFQ form validation schema - updated to match ProductQuoteModal fields
 const rfqSchema = z.object({
@@ -22,6 +29,8 @@ const rfqSchema = z.object({
   // Additional fields from modal
   productCategory: z.string().optional(),
   productDescription: z.string().optional(),
+  // AI-generated summary
+  aiSummary: z.string().optional(),
 });
 
 // Configure multer for RFQ form with strict security
@@ -84,6 +93,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         message: req.body.message || '',
         productCategory: req.body.productCategory || '',
         productDescription: req.body.productDescription || '',
+        aiSummary: req.body.aiSummary || '',
       });
 
       // Handle file attachment
@@ -122,8 +132,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
             },
           });
 
-          const emailContent = `
-New RFQ Request from ${validatedData.name}
+          const emailContent = `${validatedData.aiSummary ? `
+=== AI SUMMARY FOR SALES TEAM ===
+${validatedData.aiSummary}
+======================================
+
+` : ''}New RFQ Request from ${validatedData.name}
 
 Company: ${validatedData.company}
 Email: ${validatedData.email}
@@ -180,6 +194,9 @@ Submitted: ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}
             formData.append('annualVolume', validatedData.annualVolume);
             formData.append('material', validatedData.material || '');
             formData.append('message', validatedData.message || '');
+            if (validatedData.aiSummary) {
+              formData.append('aiSummary', validatedData.aiSummary);
+            }
             formData.append('submittedAt', new Date().toISOString());
             
             if (attachment) {
@@ -216,6 +233,10 @@ Submitted: ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}
         
         // Log the RFQ details for development debugging
         console.log('=== RFQ SUBMISSION (Development) ===');
+        if (validatedData.aiSummary) {
+          console.log(`AI Summary: ${validatedData.aiSummary}`);
+          console.log('-------------------------------------');
+        }
         console.log(`From: ${validatedData.name} (${validatedData.company})`);
         console.log(`Email: ${validatedData.email} | Phone: ${validatedData.phone}`);
         console.log(`Product: ${validatedData.product}`);
@@ -270,6 +291,419 @@ Submitted: ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}
         success: false,
         message: 'Internal server error'
       });
+    }
+  });
+
+  // AI API Routes
+  
+  // Helper function to get client IP
+  const getClientIP = (req: any) => {
+    return req.ip || req.connection.remoteAddress || req.socket.remoteAddress || 
+           (req.connection.socket ? req.connection.socket.remoteAddress : null) || '127.0.0.1';
+  };
+
+  // AI Chat endpoint
+  app.post('/api/ai/chat', async (req, res) => {
+    const startTime = Date.now();
+    const requestId = uuidv4();
+    const clientLogger = logger.child({ requestId });
+    
+    try {
+      const ip = getClientIP(req);
+      await limitOrThrow(ip, 'chat');
+
+      const schema = z.object({
+        messages: z.array(z.object({
+          role: z.enum(['user', 'assistant', 'system']),
+          content: z.string().min(1).max(4000)
+        })).min(1).max(20),
+        context: z.object({
+          product: z.string().optional()
+        }).optional()
+      });
+
+      const { messages, context } = schema.parse(req.body);
+
+      // Moderate user messages
+      const userMessages = messages.filter(m => m.role === 'user');
+      for (const msg of userMessages) {
+        await moderate(msg.content);
+      }
+
+      const companyContext = formatCapabilitiesForAI();
+      const systemPrompt = `You are "Neo AI", a procurement assistant for ${companyContext}. 
+Answer concisely for buyers. If details are missing, ask for: annual volume, material grade, tolerance, surface finish, drawing. 
+Offer to open the RFQ modal for quotes. Never invent capabilities we don't list.`;
+
+      const completion = await getClient().chat.completions.create({
+        model: 'gpt-4o-mini',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          ...messages.map(m => ({ role: m.role, content: trimTokens(m.content) }))
+        ],
+        temperature: 0.3,
+        max_tokens: 500,
+      });
+
+      const reply = completion.choices[0]?.message?.content || 'I apologize, but I cannot provide a response at this time.';
+      
+      // Generate suggestions based on context
+      const suggestions = context?.product 
+        ? [`What's the lead time for ${context.product}?`, 'Can you share tolerance specs?', 'Request a quote for this part']
+        : ['What products do you manufacture?', 'Tell me about your capabilities', 'How do I request a quote?'];
+
+      logAiUsage({
+        requestId,
+        endpoint: '/api/ai/chat',
+        model: 'gpt-4o-mini',
+        promptTokens: completion.usage?.prompt_tokens,
+        completionTokens: completion.usage?.completion_tokens,
+        totalTokens: completion.usage?.total_tokens,
+        duration: Date.now() - startTime,
+        success: true,
+      });
+
+      res.json({ reply, suggestions });
+
+    } catch (error: any) {
+      clientLogger.error({ error: error.message }, 'AI chat error');
+      
+      logAiUsage({
+        requestId,
+        endpoint: '/api/ai/chat',
+        model: 'gpt-4o-mini',
+        duration: Date.now() - startTime,
+        success: false,
+        error: error.message,
+      });
+
+      if (error.message.includes('Rate limit exceeded') || error.message.includes('Content flagged')) {
+        return res.status(400).json({ error: error.message, id: requestId });
+      }
+
+      res.status(500).json({ error: 'Something went wrong', id: requestId });
+    }
+  });
+
+  // RFQ Helper endpoint
+  app.post('/api/ai/rfq-helper', async (req, res) => {
+    const startTime = Date.now();
+    const requestId = uuidv4();
+    const clientLogger = logger.child({ requestId });
+    
+    try {
+      const ip = getClientIP(req);
+      await limitOrThrow(ip, 'rfq-helper');
+
+      const schema = z.object({
+        product: z.string().min(1).max(200),
+        annualVolume: z.string().optional(),
+        material: z.string().optional(),
+        finish: z.string().optional(),
+        notes: z.string().optional(),
+      });
+
+      const data = schema.parse(req.body);
+
+      // Moderate inputs
+      const textToModerate = [data.product, data.material, data.finish, data.notes].filter(Boolean).join(' ');
+      await moderate(textToModerate);
+
+      const companyContext = formatCapabilitiesForAI();
+      const prompt = `Based on ${companyContext}, provide RFQ suggestions for "${data.product}". 
+      Current input: Volume: ${data.annualVolume || 'not specified'}, Material: ${data.material || 'not specified'}, Finish: ${data.finish || 'not specified'}.
+      
+      Respond with JSON only:
+      {
+        "suggested": {
+          "annualVolume": "volume range recommendation",
+          "material": "specific grade recommendation",
+          "finish": "surface finish recommendation", 
+          "leadTimeWeeks": number
+        },
+        "checklist": ["question1", "question2", "question3"],
+        "cautions": ["caution1 if any"]
+      }`;
+
+      const completion = await getClient().chat.completions.create({
+        model: 'gpt-4o-mini',
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.2,
+        max_tokens: 400,
+      });
+
+      let response;
+      try {
+        response = JSON.parse(completion.choices[0]?.message?.content || '{}');
+      } catch {
+        response = {
+          suggested: {
+            annualVolume: "1,000-10,000 units",
+            material: "EN8 or equivalent",
+            finish: "Black oxide coating",
+            leadTimeWeeks: 4
+          },
+          checklist: ["PPAP level required?", "Drawing with tolerances?", "Surface roughness specs?"],
+          cautions: ["Verify material compatibility with application"]
+        };
+      }
+
+      logAiUsage({
+        requestId,
+        endpoint: '/api/ai/rfq-helper',
+        model: 'gpt-4o-mini',
+        promptTokens: completion.usage?.prompt_tokens,
+        completionTokens: completion.usage?.completion_tokens,
+        totalTokens: completion.usage?.total_tokens,
+        duration: Date.now() - startTime,
+        success: true,
+      });
+
+      res.json(response);
+
+    } catch (error: any) {
+      clientLogger.error({ error: error.message }, 'RFQ helper error');
+      
+      logAiUsage({
+        requestId,
+        endpoint: '/api/ai/rfq-helper',
+        model: 'gpt-4o-mini',
+        duration: Date.now() - startTime,
+        success: false,
+        error: error.message,
+      });
+
+      if (error.message.includes('Rate limit exceeded') || error.message.includes('Content flagged')) {
+        return res.status(400).json({ error: error.message, id: requestId });
+      }
+
+      res.status(500).json({ error: 'Something went wrong', id: requestId });
+    }
+  });
+
+  // PDF Extract endpoint
+  app.post('/api/ai/extract', upload.single('file'), async (req, res) => {
+    const startTime = Date.now();
+    const requestId = uuidv4();
+    const clientLogger = logger.child({ requestId });
+    
+    try {
+      const ip = getClientIP(req);
+      await limitOrThrow(ip, 'extract');
+
+      if (!req.file) {
+        return res.status(400).json({ error: 'PDF file is required' });
+      }
+
+      if (req.file.mimetype !== 'application/pdf') {
+        return res.status(400).json({ error: 'Only PDF files are supported' });
+      }
+
+      if (req.file.size > 10 * 1024 * 1024) { // 10MB
+        return res.status(400).json({ error: 'File size must be less than 10MB' });
+      }
+
+      // Parse PDF
+      const pdfBuffer = fs.readFileSync(req.file.path);
+      const pdfData = await pdfParse(pdfBuffer);
+      
+      // Clean up uploaded file
+      fs.unlinkSync(req.file.path);
+
+      // Extract first 12k characters
+      const content = trimTokens(pdfData.text, 12000);
+
+      const prompt = `Extract likely specs from this technical drawing/document. Focus on dimensions (mm), material grade, tolerance, finish, quantity.
+      
+      Document content:
+      ${content}
+      
+      Respond with JSON only:
+      {
+        "summary": "brief summary of what was found",
+        "fields": {
+          "material": "extracted material if found",
+          "dimensions": "key dimensions if found",
+          "tolerance": "tolerance specs if found",
+          "finish": "surface finish if found",
+          "quantity": "quantity if found"
+        }
+      }`;
+
+      const completion = await getClient().chat.completions.create({
+        model: 'gpt-4o-mini',
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.2,
+        max_tokens: 300,
+      });
+
+      let response;
+      try {
+        response = JSON.parse(completion.choices[0]?.message?.content || '{}');
+      } catch {
+        response = {
+          summary: "PDF processed but no specific manufacturing specs found",
+          fields: {}
+        };
+      }
+
+      logAiUsage({
+        requestId,
+        endpoint: '/api/ai/extract',
+        model: 'gpt-4o-mini',
+        promptTokens: completion.usage?.prompt_tokens,
+        completionTokens: completion.usage?.completion_tokens,
+        totalTokens: completion.usage?.total_tokens,
+        duration: Date.now() - startTime,
+        success: true,
+      });
+
+      res.json(response);
+
+    } catch (error: any) {
+      clientLogger.error({ error: error.message }, 'PDF extract error');
+      
+      // Clean up file if exists
+      if (req.file && fs.existsSync(req.file.path)) {
+        fs.unlinkSync(req.file.path);
+      }
+
+      logAiUsage({
+        requestId,
+        endpoint: '/api/ai/extract',
+        model: 'gpt-4o-mini',
+        duration: Date.now() - startTime,
+        success: false,
+        error: error.message,
+      });
+
+      if (error.message.includes('Rate limit exceeded') || error.message.includes('Content flagged')) {
+        return res.status(400).json({ error: error.message, id: requestId });
+      }
+
+      res.status(500).json({ error: 'Something went wrong', id: requestId });
+    }
+  });
+
+  // Semantic Search endpoint
+  app.post('/api/ai/search', async (req, res) => {
+    const startTime = Date.now();
+    const requestId = uuidv4();
+    const clientLogger = logger.child({ requestId });
+    
+    try {
+      const ip = getClientIP(req);
+      await limitOrThrow(ip, 'search');
+
+      const schema = z.object({
+        q: z.string().min(1).max(200),
+      });
+
+      const { q } = schema.parse(req.body);
+
+      await moderate(q);
+
+      const results = await nearestProducts(q, 5);
+
+      logAiUsage({
+        requestId,
+        endpoint: '/api/ai/search',
+        model: 'semantic-search',
+        duration: Date.now() - startTime,
+        success: true,
+      });
+
+      res.json({ results });
+
+    } catch (error: any) {
+      clientLogger.error({ error: error.message }, 'Semantic search error');
+      
+      logAiUsage({
+        requestId,
+        endpoint: '/api/ai/search',
+        model: 'semantic-search',
+        duration: Date.now() - startTime,
+        success: false,
+        error: error.message,
+      });
+
+      if (error.message.includes('Rate limit exceeded') || error.message.includes('Content flagged')) {
+        return res.status(400).json({ error: error.message, id: requestId });
+      }
+
+      res.status(500).json({ error: 'Something went wrong', id: requestId });
+    }
+  });
+
+  // Summary endpoint for internal mail
+  app.post('/api/ai/summary', async (req, res) => {
+    const startTime = Date.now();
+    const requestId = uuidv4();
+    const clientLogger = logger.child({ requestId });
+    
+    try {
+      const ip = getClientIP(req);
+      await limitOrThrow(ip, 'summary');
+
+      // Accept RFQ data structure
+      const rfqData = req.body;
+
+      const prompt = `Create a 5-bullet summary for sales team from this RFQ:
+      
+      Company: ${rfqData.company}
+      Contact: ${rfqData.name} (${rfqData.email})
+      Product: ${rfqData.product}
+      Volume: ${rfqData.annualVolume}
+      Material: ${rfqData.material || 'Not specified'}
+      
+      Additional details: ${rfqData.message || 'None'}
+      
+      Format as:
+      • Company & Contact info
+      • Product & Volume requirements  
+      • Material & Technical specs
+      • Key Requirements/Notes
+      • Recommended Next Steps`;
+
+      const completion = await getClient().chat.completions.create({
+        model: 'gpt-4o-mini',
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.2,
+        max_tokens: 200,
+      });
+
+      const summary = completion.choices[0]?.message?.content || 'Unable to generate summary';
+
+      logAiUsage({
+        requestId,
+        endpoint: '/api/ai/summary',
+        model: 'gpt-4o-mini',
+        promptTokens: completion.usage?.prompt_tokens,
+        completionTokens: completion.usage?.completion_tokens,
+        totalTokens: completion.usage?.total_tokens,
+        duration: Date.now() - startTime,
+        success: true,
+      });
+
+      res.json({ summary });
+
+    } catch (error: any) {
+      clientLogger.error({ error: error.message }, 'Summary generation error');
+      
+      logAiUsage({
+        requestId,
+        endpoint: '/api/ai/summary',
+        model: 'gpt-4o-mini',
+        duration: Date.now() - startTime,
+        success: false,
+        error: error.message,
+      });
+
+      if (error.message.includes('Rate limit exceeded') || error.message.includes('Content flagged')) {
+        return res.status(400).json({ error: error.message, id: requestId });
+      }
+
+      res.status(500).json({ error: 'Something went wrong', id: requestId });
     }
   });
 
