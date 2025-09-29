@@ -10,8 +10,8 @@
   --slate-800: hsl(215, 28%, 17%);
   --slate-600: hsl(218, 11%, 45%);
   --slate-50: hsl(210, 40%, 98%);
-  --sky-500: hsl(199, 89%, 48%);
-  --cyan-400: hsl(186, 100%, 59%);
+  --blue-500: hsl(217, 91%, 60%);
+  --blue-400: hsl(213, 93%, 68%);
   
   /* CSS Variables */
   --background: hsl(0, 0%, 100%);
@@ -20,19 +20,19 @@
   --card-foreground: hsl(222, 47%, 11%);
   --popover: hsl(0, 0%, 100%);
   --popover-foreground: hsl(222, 47%, 11%);
-  --primary: hsl(199, 89%, 48%);
+  --primary: hsl(217, 91%, 60%);
   --primary-foreground: hsl(0, 0%, 100%);
   --secondary: hsl(210, 40%, 96%);
   --secondary-foreground: hsl(222, 47%, 11%);
   --muted: hsl(210, 40%, 96%);
   --muted-foreground: hsl(215, 16%, 47%);
-  --accent: hsl(186, 100%, 94%);
-  --accent-foreground: hsl(186, 100%, 26%);
+  --accent: hsl(213, 93%, 94%);
+  --accent-foreground: hsl(213, 93%, 26%);
   --destructive: hsl(0, 84%, 60%);
   --destructive-foreground: hsl(0, 0%, 98%);
   --border: hsl(214, 32%, 91%);
   --input: hsl(214, 32%, 91%);
-  --ring: hsl(199, 89%, 48%);
+  --ring: hsl(217, 91%, 60%);
   --radius: 0.75rem;
   
   /* Custom properties for glassmorphism */
@@ -48,7 +48,7 @@
   --card-foreground: hsl(210, 40%, 98%);
   --popover: hsl(222, 47%, 11%);
   --popover-foreground: hsl(210, 40%, 98%);
-  --primary: hsl(199, 89%, 48%);
+  --primary: hsl(217, 91%, 60%);
   --primary-foreground: hsl(0, 0%, 100%);
   --secondary: hsl(215, 28%, 17%);
   --secondary-foreground: hsl(210, 40%, 98%);
@@ -60,7 +60,7 @@
   --destructive-foreground: hsl(0, 85%, 97%);
   --border: hsl(215, 28%, 17%);
   --input: hsl(215, 28%, 17%);
-  --ring: hsl(199, 89%, 48%);
+  --ring: hsl(217, 91%, 60%);
 }
 
 @layer base {

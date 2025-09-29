@@ -15,17 +15,17 @@ export default function PrivacyPage() {
   return (
     <div className="pt-16">
       {/* Header */}
-      <SectionWrapper className="py-20 bg-slate-900 text-white">
+      <SectionWrapper className="py-20 bg-bg-base text-white">
         <div className="text-center">
-          <Shield className="w-16 h-16 text-cyan-400 mx-auto mb-6" />
+          <Shield className="w-16 h-16 text-blue-400 mx-auto mb-6" />
           <h1 className="text-4xl lg:text-5xl font-display font-bold mb-6">
             Privacy <span className="gradient-text">Policy</span>
           </h1>
-          <p className="text-xl text-slate-300 max-w-3xl mx-auto">
+          <p className="text-xl text-text-muted max-w-3xl mx-auto">
             We are committed to protecting your privacy and ensuring the security 
             of your personal information.
           </p>
-          <p className="text-slate-400 mt-4">
+          <p className="text-text-muted mt-4">
             Last updated: {lastUpdated}
           </p>
         </div>
@@ -34,23 +34,23 @@ export default function PrivacyPage() {
       {/* Privacy Principles */}
       <SectionWrapper className="py-20 bg-white">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-display font-bold text-slate-900 mb-4">
+          <h2 className="text-3xl font-display font-bold text-text-primary mb-4">
             Our Privacy Principles
           </h2>
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+          <p className="text-xl text-text-muted max-w-3xl mx-auto">
             We follow these core principles in handling your personal data
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div className="text-center">
-            <div className="w-16 h-16 bg-sky-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <Eye className="w-8 h-8 text-sky-500" />
+            <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <Eye className="w-8 h-8 text-blue-500" />
             </div>
-            <h3 className="text-lg font-display font-semibold text-slate-900 mb-2">
+            <h3 className="text-lg font-display font-semibold text-text-primary mb-2">
               Transparency
             </h3>
-            <p className="text-slate-600 text-sm">
+            <p className="text-text-muted text-sm">
               Clear information about data collection and usage
             </p>
           </div>
@@ -59,10 +59,10 @@ export default function PrivacyPage() {
             <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <Lock className="w-8 h-8 text-blue-500" />
             </div>
-            <h3 className="text-lg font-display font-semibold text-slate-900 mb-2">
+            <h3 className="text-lg font-display font-semibold text-text-primary mb-2">
               Security
             </h3>
-            <p className="text-slate-600 text-sm">
+            <p className="text-text-muted text-sm">
               Strong protection measures for your data
             </p>
           </div>
@@ -71,10 +71,10 @@ export default function PrivacyPage() {
             <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <UserCheck className="w-8 h-8 text-orange-500" />
             </div>
-            <h3 className="text-lg font-display font-semibold text-slate-900 mb-2">
+            <h3 className="text-lg font-display font-semibold text-text-primary mb-2">
               Control
             </h3>
-            <p className="text-slate-600 text-sm">
+            <p className="text-text-muted text-sm">
               Your rights to access and control your data
             </p>
           </div>
@@ -83,10 +83,10 @@ export default function PrivacyPage() {
             <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <Shield className="w-8 h-8 text-purple-500" />
             </div>
-            <h3 className="text-lg font-display font-semibold text-slate-900 mb-2">
+            <h3 className="text-lg font-display font-semibold text-text-primary mb-2">
               Compliance
             </h3>
-            <p className="text-slate-600 text-sm">
+            <p className="text-text-muted text-sm">
               Adherence to applicable privacy laws
             </p>
           </div>
@@ -98,7 +98,7 @@ export default function PrivacyPage() {
         <div className="max-w-4xl mx-auto">
           <div className="prose prose-lg max-w-none">
             <div className="glass-card p-8 rounded-2xl mb-8">
-              <h2 className="text-2xl font-display font-bold text-slate-900 mb-4">
+              <h2 className="text-2xl font-display font-bold text-text-primary mb-4">
                 1. Information We Collect
               </h2>
               <div className="space-y-4 text-slate-700">
@@ -123,7 +123,7 @@ export default function PrivacyPage() {
             </div>
 
             <div className="glass-card p-8 rounded-2xl mb-8">
-              <h2 className="text-2xl font-display font-bold text-slate-900 mb-4">
+              <h2 className="text-2xl font-display font-bold text-text-primary mb-4">
                 2. How We Use Your Information
               </h2>
               <div className="space-y-4 text-slate-700">
@@ -139,7 +139,7 @@ export default function PrivacyPage() {
             </div>
 
             <div className="glass-card p-8 rounded-2xl mb-8">
-              <h2 className="text-2xl font-display font-bold text-slate-900 mb-4">
+              <h2 className="text-2xl font-display font-bold text-text-primary mb-4">
                 3. Information Sharing and Disclosure
               </h2>
               <div className="space-y-4 text-slate-700">
@@ -156,7 +156,7 @@ export default function PrivacyPage() {
             </div>
 
             <div className="glass-card p-8 rounded-2xl mb-8">
-              <h2 className="text-2xl font-display font-bold text-slate-900 mb-4">
+              <h2 className="text-2xl font-display font-bold text-text-primary mb-4">
                 4. Data Security
               </h2>
               <div className="space-y-4 text-slate-700">
@@ -173,7 +173,7 @@ export default function PrivacyPage() {
             </div>
 
             <div className="glass-card p-8 rounded-2xl mb-8">
-              <h2 className="text-2xl font-display font-bold text-slate-900 mb-4">
+              <h2 className="text-2xl font-display font-bold text-text-primary mb-4">
                 5. Your Rights
               </h2>
               <div className="space-y-4 text-slate-700">
@@ -195,7 +195,7 @@ export default function PrivacyPage() {
             </div>
 
             <div className="glass-card p-8 rounded-2xl mb-8">
-              <h2 className="text-2xl font-display font-bold text-slate-900 mb-4">
+              <h2 className="text-2xl font-display font-bold text-text-primary mb-4">
                 6. Cookies and Tracking
               </h2>
               <div className="space-y-4 text-slate-700">
@@ -206,7 +206,7 @@ export default function PrivacyPage() {
             </div>
 
             <div className="glass-card p-8 rounded-2xl mb-8">
-              <h2 className="text-2xl font-display font-bold text-slate-900 mb-4">
+              <h2 className="text-2xl font-display font-bold text-text-primary mb-4">
                 7. Data Retention
               </h2>
               <div className="space-y-4 text-slate-700">
@@ -217,7 +217,7 @@ export default function PrivacyPage() {
             </div>
 
             <div className="glass-card p-8 rounded-2xl mb-8">
-              <h2 className="text-2xl font-display font-bold text-slate-900 mb-4">
+              <h2 className="text-2xl font-display font-bold text-text-primary mb-4">
                 8. Changes to This Policy
               </h2>
               <div className="space-y-4 text-slate-700">
@@ -228,7 +228,7 @@ export default function PrivacyPage() {
             </div>
 
             <div className="glass-card p-8 rounded-2xl">
-              <h2 className="text-2xl font-display font-bold text-slate-900 mb-4">
+              <h2 className="text-2xl font-display font-bold text-text-primary mb-4">
                 9. Contact Information
               </h2>
               <div className="space-y-4 text-slate-700">

@@ -14,13 +14,13 @@ export default function QualityPage() {
   return (
     <div className="pt-16">
       {/* Header */}
-      <SectionWrapper className="py-20 bg-slate-900 text-white">
+      <SectionWrapper className="py-20 bg-bg-base text-white">
         <div className="text-center">
-          <Award className="w-16 h-16 text-cyan-400 mx-auto mb-6" />
+          <Award className="w-16 h-16 text-blue-400 mx-auto mb-6" />
           <h1 className="text-4xl lg:text-5xl font-display font-bold mb-6">
             Quality <span className="gradient-text">Excellence</span>
           </h1>
-          <p className="text-xl text-slate-300 max-w-3xl mx-auto">
+          <p className="text-xl text-text-muted max-w-3xl mx-auto">
             ISO 9001:2015 certified manufacturing with rigorous quality processes
             ensuring consistent precision and reliability in every component.
           </p>
@@ -31,10 +31,10 @@ export default function QualityPage() {
       <SectionWrapper className="py-20 bg-white">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div>
-            <h2 className="text-3xl font-display font-bold text-slate-900 mb-6">
+            <h2 className="text-3xl font-display font-bold text-text-primary mb-6">
               ISO 9001:2015 Certification
             </h2>
-            <p className="text-lg text-slate-600 mb-6 leading-relaxed">
+            <p className="text-lg text-text-muted mb-6 leading-relaxed">
               Our commitment to quality is demonstrated through our ISO 9001:2015 certification,
               which ensures that our quality management system meets international standards
               for consistency, efficiency, and customer satisfaction.
@@ -42,30 +42,30 @@ export default function QualityPage() {
             
             <div className="space-y-4">
               <div className="flex items-center">
-                <CheckCircle className="text-sky-500 mr-3 h-5 w-5" />
-                <span className="text-slate-700">Documented quality management system</span>
+                <CheckCircle className="text-blue-500 mr-3 h-5 w-5" />
+                <span className="text-text-muted">Documented quality management system</span>
               </div>
               <div className="flex items-center">
-                <CheckCircle className="text-sky-500 mr-3 h-5 w-5" />
-                <span className="text-slate-700">Regular internal and external audits</span>
+                <CheckCircle className="text-blue-500 mr-3 h-5 w-5" />
+                <span className="text-text-muted">Regular internal and external audits</span>
               </div>
               <div className="flex items-center">
-                <CheckCircle className="text-sky-500 mr-3 h-5 w-5" />
-                <span className="text-slate-700">Continuous improvement processes</span>
+                <CheckCircle className="text-blue-500 mr-3 h-5 w-5" />
+                <span className="text-text-muted">Continuous improvement processes</span>
               </div>
               <div className="flex items-center">
-                <CheckCircle className="text-sky-500 mr-3 h-5 w-5" />
-                <span className="text-slate-700">Customer satisfaction monitoring</span>
+                <CheckCircle className="text-blue-500 mr-3 h-5 w-5" />
+                <span className="text-text-muted">Customer satisfaction monitoring</span>
               </div>
             </div>
           </div>
           
           <div className="glass-card p-8 rounded-2xl text-center">
-            <Award className="w-20 h-20 text-sky-500 mx-auto mb-4" />
-            <h3 className="text-xl font-display font-semibold text-slate-900 mb-2">
+            <Award className="w-20 h-20 text-blue-500 mx-auto mb-4" />
+            <h3 className="text-xl font-display font-semibold text-text-primary mb-2">
               ISO 9001:2015
             </h3>
-            <p className="text-slate-600 mb-4">Quality Management Systems</p>
+            <p className="text-text-muted mb-4">Quality Management Systems</p>
             <div className="text-sm text-slate-500">
               Certified since 2015<br />
               Regular surveillance audits<br />
@@ -76,12 +76,12 @@ export default function QualityPage() {
       </SectionWrapper>
 
       {/* Quality Process */}
-      <SectionWrapper className="py-20 bg-slate-50">
+      <SectionWrapper className="py-20 bg-bg-elevated">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-display font-bold text-slate-900 mb-4">
+          <h2 className="text-3xl font-display font-bold text-text-primary mb-4">
             Quality Assurance Process
           </h2>
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+          <p className="text-xl text-text-muted max-w-3xl mx-auto">
             Our systematic approach ensures quality at every stage of manufacturing
           </p>
         </div>

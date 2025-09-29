@@ -32,12 +32,12 @@ export default function CareersPage() {
   return (
     <div className="pt-16">
       {/* Header */}
-      <SectionWrapper className="py-20 bg-slate-900 text-white">
+      <SectionWrapper className="py-20 bg-bg-base text-white">
         <div className="text-center">
           <h1 className="text-4xl lg:text-5xl font-display font-bold mb-6">
             Join Our <span className="gradient-text">Team</span>
           </h1>
-          <p className="text-xl text-slate-300 max-w-3xl mx-auto">
+          <p className="text-xl text-text-muted max-w-3xl mx-auto">
             Build your career in precision manufacturing with a company that values 
             quality, innovation, and professional growth.
           </p>
@@ -47,10 +47,10 @@ export default function CareersPage() {
       {/* Company Culture */}
       <SectionWrapper className="py-20 bg-white">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-display font-bold text-slate-900 mb-4">
+          <h2 className="text-3xl font-display font-bold text-text-primary mb-4">
             Why Work at Neo Automatics?
           </h2>
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto mb-12">
+          <p className="text-xl text-text-muted max-w-3xl mx-auto mb-12">
             We're committed to creating an environment where talented professionals 
             can thrive and contribute to manufacturing excellence.
           </p>
@@ -58,13 +58,13 @@ export default function CareersPage() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div className="text-center">
-            <div className="w-16 h-16 bg-sky-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <User className="w-8 h-8 text-sky-500" />
+            <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <User className="w-8 h-8 text-blue-500" />
             </div>
-            <h3 className="text-lg font-display font-semibold text-slate-900 mb-2">
+            <h3 className="text-lg font-display font-semibold text-text-primary mb-2">
               Professional Growth
             </h3>
-            <p className="text-slate-600 text-sm">
+            <p className="text-text-muted text-sm">
               Continuous learning opportunities and skill development programs
             </p>
           </div>
@@ -73,10 +73,10 @@ export default function CareersPage() {
             <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <Clock className="w-8 h-8 text-blue-500" />
             </div>
-            <h3 className="text-lg font-display font-semibold text-slate-900 mb-2">
+            <h3 className="text-lg font-display font-semibold text-text-primary mb-2">
               Work-Life Balance
             </h3>
-            <p className="text-slate-600 text-sm">
+            <p className="text-text-muted text-sm">
               Flexible schedules and comprehensive benefits package
             </p>
           </div>
@@ -85,10 +85,10 @@ export default function CareersPage() {
             <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <MapPin className="w-8 h-8 text-orange-500" />
             </div>
-            <h3 className="text-lg font-display font-semibold text-slate-900 mb-2">
+            <h3 className="text-lg font-display font-semibold text-text-primary mb-2">
               Great Location
             </h3>
-            <p className="text-slate-600 text-sm">
+            <p className="text-text-muted text-sm">
               Modern facilities in Rohtak with easy accessibility
             </p>
           </div>
@@ -97,10 +97,10 @@ export default function CareersPage() {
             <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <Mail className="w-8 h-8 text-purple-500" />
             </div>
-            <h3 className="text-lg font-display font-semibold text-slate-900 mb-2">
+            <h3 className="text-lg font-display font-semibold text-text-primary mb-2">
               Competitive Package
             </h3>
-            <p className="text-slate-600 text-sm">
+            <p className="text-text-muted text-sm">
               Market-competitive salary and performance incentives
             </p>
           </div>
@@ -110,10 +110,10 @@ export default function CareersPage() {
       {/* Current Openings */}
       <SectionWrapper className="py-20 bg-slate-50">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-display font-bold text-slate-900 mb-4">
+          <h2 className="text-3xl font-display font-bold text-text-primary mb-4">
             Current Openings
           </h2>
-          <p className="text-xl text-slate-600">
+          <p className="text-xl text-text-muted">
             Explore exciting opportunities to join our manufacturing team
           </p>
         </div>
@@ -125,10 +125,10 @@ export default function CareersPage() {
                 <div className="grid lg:grid-cols-3 gap-8">
                   <div className="lg:col-span-2">
                     <div className="flex flex-wrap items-center gap-4 mb-4">
-                      <h3 className="text-2xl font-display font-bold text-slate-900">
+                      <h3 className="text-2xl font-display font-bold text-text-primary">
                         {job.title}
                       </h3>
-                      <span className="px-3 py-1 bg-sky-100 text-sky-600 text-sm font-medium rounded-full">
+                      <span className="px-3 py-1 bg-blue-100 text-sky-600 text-sm font-medium rounded-full">
                         {job.department}
                       </span>
                       <span className="px-3 py-1 bg-blue-100 text-blue-500 text-sm font-medium rounded-full">
@@ -136,7 +136,7 @@ export default function CareersPage() {
                       </span>
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-6 text-sm text-slate-600 mb-6">
+                    <div className="flex flex-wrap items-center gap-6 text-sm text-text-muted mb-6">
                       <div className="flex items-center">
                         <MapPin className="w-4 h-4 mr-1" />
                         {job.location}
@@ -155,12 +155,12 @@ export default function CareersPage() {
                     </p>
 
                     <div>
-                      <h4 className="font-display font-semibold text-slate-900 mb-3">
+                      <h4 className="font-display font-semibold text-text-primary mb-3">
                         Requirements:
                       </h4>
                       <ul className="space-y-2">
                         {job.requirements.map((requirement, index) => (
-                          <li key={index} className="flex items-start text-slate-600">
+                          <li key={index} className="flex items-start text-text-muted">
                             <div className="w-2 h-2 bg-sky-500 rounded-full mr-3 mt-2 flex-shrink-0"></div>
                             {requirement}
                           </li>
@@ -171,10 +171,10 @@ export default function CareersPage() {
 
                   <div className="lg:col-span-1">
                     <div className="bg-slate-50 p-6 rounded-xl">
-                      <h4 className="font-display font-semibold text-slate-900 mb-4">
+                      <h4 className="font-display font-semibold text-text-primary mb-4">
                         Apply for this position
                       </h4>
-                      <p className="text-slate-600 text-sm mb-6">
+                      <p className="text-text-muted text-sm mb-6">
                         Send your resume and cover letter to our HR team. We'll get back to you within 5 business days.
                       </p>
                       <Button
@@ -194,13 +194,13 @@ export default function CareersPage() {
           <div className="text-center py-16">
             <div className="glass-card p-12 rounded-2xl max-w-2xl mx-auto">
               <User className="w-16 h-16 text-slate-400 mx-auto mb-6" />
-              <h3 className="text-2xl font-display font-bold text-slate-900 mb-4">
+              <h3 className="text-2xl font-display font-bold text-text-primary mb-4">
                 No Current Openings
               </h3>
-              <p className="text-slate-600 mb-6">
+              <p className="text-text-muted mb-6">
                 We don't have any open positions at the moment, but we're always looking for talented individuals to join our team.
               </p>
-              <p className="text-slate-600 mb-8">
+              <p className="text-text-muted mb-8">
                 Send us your resume and we'll keep it on file for future opportunities.
               </p>
               <Button
@@ -217,10 +217,10 @@ export default function CareersPage() {
       {/* Contact HR */}
       <SectionWrapper className="py-20 bg-white">
         <div className="text-center">
-          <h2 className="text-3xl font-display font-bold text-slate-900 mb-4">
+          <h2 className="text-3xl font-display font-bold text-text-primary mb-4">
             Have Questions?
           </h2>
-          <p className="text-xl text-slate-600 mb-8 max-w-3xl mx-auto">
+          <p className="text-xl text-text-muted mb-8 max-w-3xl mx-auto">
             Our HR team is here to help with any questions about career opportunities, 
             the application process, or working at Neo Automatics.
           </p>
@@ -235,7 +235,7 @@ export default function CareersPage() {
             <Button
               onClick={() => window.location.href = `tel:${company.phone}`}
               variant="outline"
-              className="magnetic-btn border-sky-500 text-sky-500 hover:bg-sky-50"
+              className="magnetic-btn border-sky-500 text-blue-500 hover:bg-sky-50"
             >
               <Clock className="mr-2 h-4 w-4" />
               Call Us

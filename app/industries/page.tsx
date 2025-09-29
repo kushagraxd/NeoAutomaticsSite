@@ -15,7 +15,7 @@ const industries = [
     products: ["Collars", "Rocker Arms", "Engine Bushes", "Ratchet Starter & Pinion"],
     challenges: ["Tight tolerances", "High volume production", "Cost optimization", "PPAP compliance"],
     solutions: ["30+ CNC machines", "In-house heat treatment", "Statistical process control", "Dedicated automotive lines"],
-    color: "sky"
+    color: "blue"
   },
   {
     icon: Tractor,
@@ -48,9 +48,9 @@ const industries = [
 
 const colorClasses = {
   sky: {
-    bg: "bg-sky-100",
-    icon: "text-sky-500",
-    border: "border-sky-200"
+    bg: "bg-blue-100",
+    icon: "text-blue-500",
+    border: "border-blue-200"
   },
   green: {
     bg: "bg-blue-100",
@@ -95,18 +95,18 @@ export default function IndustriesPage() {
                   <div className={`w-16 h-16 ${colorClasses[industry.color].bg} rounded-2xl flex items-center justify-center mr-4`}>
                     <industry.icon className={`w-8 h-8 ${colorClasses[industry.color].icon}`} />
                   </div>
-                  <h2 className="text-2xl lg:text-3xl font-display font-bold text-slate-900">
+                  <h2 className="text-2xl lg:text-3xl font-display font-bold text-text-primary">
                     {industry.name}
                   </h2>
                 </div>
                 
-                <p className="text-lg text-slate-600 mb-8 leading-relaxed">
+                <p className="text-lg text-text-muted mb-8 leading-relaxed">
                   {industry.description}
                 </p>
 
                 <div className="space-y-6">
                   <div>
-                    <h3 className="text-lg font-display font-semibold text-slate-900 mb-3">
+                    <h3 className="text-lg font-display font-semibold text-text-primary mb-3">
                       Key Products
                     </h3>
                     <div className="flex flex-wrap gap-2">
@@ -120,10 +120,10 @@ export default function IndustriesPage() {
 
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <h4 className="font-semibold text-slate-900 mb-2">Industry Challenges</h4>
+                      <h4 className="font-semibold text-text-primary mb-2">Industry Challenges</h4>
                       <ul className="space-y-1">
                         {industry.challenges.map((challenge, challengeIndex) => (
-                          <li key={challengeIndex} className="text-slate-600 text-sm flex items-center">
+                          <li key={challengeIndex} className="text-text-muted text-sm flex items-center">
                             <div className="w-1.5 h-1.5 bg-slate-400 rounded-full mr-2"></div>
                             {challenge}
                           </li>
@@ -132,7 +132,7 @@ export default function IndustriesPage() {
                     </div>
 
                     <div>
-                      <h4 className="font-semibold text-slate-900 mb-2">Our Solutions</h4>
+                      <h4 className="font-semibold text-text-primary mb-2">Our Solutions</h4>
                       <ul className="space-y-1">
                         {industry.solutions.map((solution, solutionIndex) => (
                           <li key={solutionIndex} className={`text-sm flex items-center ${colorClasses[industry.color].icon}`}>

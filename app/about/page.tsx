@@ -12,12 +12,12 @@ export default function AboutPage() {
   return (
     <div className="pt-16">
       {/* Header */}
-      <SectionWrapper className="py-20 bg-slate-900 text-white">
+      <SectionWrapper className="py-20 bg-bg-base text-white">
         <div className="text-center">
           <h1 className="text-4xl lg:text-5xl font-display font-bold mb-6">
             About <span className="gradient-text">Neo Automatics</span>
           </h1>
-          <p className="text-xl text-slate-300 max-w-3xl mx-auto">
+          <p className="text-xl text-text-muted max-w-3xl mx-auto">
             A family-run precision manufacturing company with over two decades
             of excellence in automotive and industrial components.
           </p>
@@ -27,10 +27,10 @@ export default function AboutPage() {
       {/* Company Story */}
       <SectionWrapper className="py-20 bg-white">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-display font-bold text-slate-900 mb-8 text-center">
+          <h2 className="text-3xl font-display font-bold text-text-primary mb-8 text-center">
             Our Story
           </h2>
-          <div className="prose prose-lg max-w-none text-slate-600">
+          <div className="prose prose-lg max-w-none text-text-muted">
             <p>
               Neo Automatics was founded with a vision to deliver precision-machined components
               that exceed industry standards. What started as a small machining operation has
@@ -48,9 +48,9 @@ export default function AboutPage() {
       </SectionWrapper>
 
       {/* Timeline */}
-      <SectionWrapper className="py-20 bg-slate-50">
+      <SectionWrapper className="py-20 bg-bg-elevated">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-display font-bold text-slate-900 mb-12 text-center">
+          <h2 className="text-3xl font-display font-bold text-text-primary mb-12 text-center">
             Our Journey
           </h2>
           <div className="space-y-8">
@@ -59,10 +59,10 @@ export default function AboutPage() {
                 2004
               </div>
               <div>
-                <h3 className="text-xl font-display font-semibold text-slate-900 mb-2">
+                <h3 className="text-xl font-display font-semibold text-text-primary mb-2">
                   Foundation
                 </h3>
-                <p className="text-slate-600">
+                <p className="text-text-muted">
                   Neo Automatics established with a focus on precision CNC turning
                   for automotive components.
                 </p>
@@ -74,10 +74,10 @@ export default function AboutPage() {
                 2010
               </div>
               <div>
-                <h3 className="text-xl font-display font-semibold text-slate-900 mb-2">
+                <h3 className="text-xl font-display font-semibold text-text-primary mb-2">
                   Expansion
                 </h3>
-                <p className="text-slate-600">
+                <p className="text-text-muted">
                   Added in-house heat treatment capabilities and expanded to
                   serve agricultural machinery sector.
                 </p>
@@ -89,10 +89,10 @@ export default function AboutPage() {
                 2015
               </div>
               <div>
-                <h3 className="text-xl font-display font-semibold text-slate-900 mb-2">
+                <h3 className="text-xl font-display font-semibold text-text-primary mb-2">
                   ISO Certification
                 </h3>
-                <p className="text-slate-600">
+                <p className="text-text-muted">
                   Achieved ISO 9001:2015 certification, establishing robust
                   quality management systems.
                 </p>
@@ -104,10 +104,10 @@ export default function AboutPage() {
                 2020
               </div>
               <div>
-                <h3 className="text-xl font-display font-semibold text-slate-900 mb-2">
+                <h3 className="text-xl font-display font-semibold text-text-primary mb-2">
                   Multi-Unit Operations
                 </h3>
-                <p className="text-slate-600">
+                <p className="text-text-muted">
                   Expanded to three manufacturing units with specialized
                   capabilities and backup capacity.
                 </p>
@@ -119,10 +119,10 @@ export default function AboutPage() {
                 2024
               </div>
               <div>
-                <h3 className="text-xl font-display font-semibold text-slate-900 mb-2">
+                <h3 className="text-xl font-display font-semibold text-text-primary mb-2">
                   Industry Leadership
                 </h3>
-                <p className="text-slate-600">
+                <p className="text-text-muted">
                   Recognized as a preferred supplier to leading OEMs with
                   30+ CNC machines and advanced quality systems.
                 </p>
@@ -135,10 +135,10 @@ export default function AboutPage() {
       {/* Manufacturing Units */}
       <SectionWrapper className="py-20 bg-white">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-display font-bold text-slate-900 mb-4">
+          <h2 className="text-3xl font-display font-bold text-text-primary mb-4">
             Manufacturing Units
           </h2>
-          <p className="text-xl text-slate-600">
+          <p className="text-xl text-text-muted">
             Strategic locations providing backup capacity and specialized capabilities
           </p>
         </div>
@@ -146,29 +146,29 @@ export default function AboutPage() {
         <div className="grid md:grid-cols-3 gap-8">
           {companyData.company.units.map((unit, index) => (
             <div key={index} className="glass-card p-6 rounded-2xl">
-              <MapPin className="w-8 h-8 text-sky-500 mb-4" />
-              <h3 className="text-lg font-display font-semibold text-slate-900 mb-2">
+              <MapPin className="w-8 h-8 text-blue-500 mb-4" />
+              <h3 className="text-lg font-display font-semibold text-text-primary mb-2">
                 {unit.name}
               </h3>
-              <p className="text-slate-600">{unit.address}</p>
+              <p className="text-text-muted">{unit.address}</p>
             </div>
           ))}
         </div>
       </SectionWrapper>
 
       {/* Leadership Message */}
-      <SectionWrapper className="py-20 bg-slate-900 text-white">
+      <SectionWrapper className="py-20 bg-bg-base text-white">
         <div className="max-w-4xl mx-auto text-center">
-          <User className="w-16 h-16 text-cyan-400 mx-auto mb-6" />
+          <User className="w-16 h-16 text-blue-400 mx-auto mb-6" />
           <h2 className="text-3xl font-display font-bold mb-6">
             Leadership Message
           </h2>
-          <blockquote className="text-xl text-slate-300 italic mb-6">
+          <blockquote className="text-xl text-text-muted italic mb-6">
             "At Neo Automatics, we believe that precision is not just about
             measurements—it's about commitment, consistency, and continuous improvement.
             Every component we manufacture carries our promise of quality and reliability."
           </blockquote>
-          <p className="text-lg text-cyan-400 font-medium">
+          <p className="text-lg text-blue-400 font-medium">
             — {companyData.company.owner}, Owner & Managing Director
           </p>
         </div>
