@@ -53,9 +53,9 @@ const colorClasses = {
     border: "border-sky-200"
   },
   green: {
-    bg: "bg-green-100",
-    icon: "text-green-500",
-    border: "border-green-200"
+    bg: "bg-blue-100",
+    icon: "text-blue-500",
+    border: "border-blue-200"
   },
   orange: {
     bg: "bg-orange-100",

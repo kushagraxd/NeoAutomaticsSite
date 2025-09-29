@@ -144,7 +144,7 @@ export function SemanticSearch({
   }, []);
 
   const getScoreColor = (score: number) => {
-    if (score > 0.8) return 'text-green-600';
+    if (score > 0.8) return 'text-blue-500';
     if (score > 0.6) return 'text-yellow-600';
     return 'text-gray-600';
   };
@@ -216,7 +216,7 @@ export function SemanticSearch({
                         </h4>
                         <div className="flex items-center space-x-1">
                           <div className={cn("w-2 h-2 rounded-full", {
-                            'bg-green-500': result.score > 0.8,
+                            'bg-blue-500': result.score > 0.8,
                             'bg-yellow-500': result.score > 0.6 && result.score <= 0.8,
                             'bg-gray-400': result.score <= 0.6,
                           })} />

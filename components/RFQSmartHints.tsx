@@ -267,7 +267,7 @@ function SuggestionItem({ label, value, field, applied, onApply }: SuggestionIte
         className={cn(
           "h-8 px-3",
           applied
-            ? "text-green-600 hover:text-green-600"
+            ? "text-blue-500 hover:text-blue-600"
             : "text-accent-primary hover:bg-accent-primary/10"
         )}
         data-testid={`button-apply-${field}`}

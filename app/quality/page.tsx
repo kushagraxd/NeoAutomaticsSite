@@ -100,8 +100,8 @@ export default function QualityPage() {
           </div>
 
           <div className="text-center">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-green-500 font-display font-bold text-xl">2</span>
+            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-blue-500 font-display font-bold text-xl">2</span>
             </div>
             <h3 className="font-display font-semibold text-slate-900 mb-2">
               In-Process Control
@@ -176,7 +176,7 @@ export default function QualityPage() {
               <div className="text-slate-600">Quality Acceptance Rate</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-display font-bold text-green-500 mb-2">&lt;0.1%</div>
+              <div className="text-4xl font-display font-bold text-blue-500 mb-2">&lt;0.1%</div>
               <div className="text-slate-600">Customer Rejection Rate</div>
             </div>
             <div className="text-center">

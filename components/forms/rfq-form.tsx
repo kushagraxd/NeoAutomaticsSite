@@ -253,7 +253,7 @@ export default function RFQForm() {
                   PDF, DWG, DXF, Images up to 10MB
                 </p>
                 {selectedFile && (
-                  <p className="text-sm text-green-600 font-medium">
+                  <p className="text-sm text-blue-500 font-medium">
                     Selected: {selectedFile.name}
                   </p>
                 )}
@@ -299,7 +299,7 @@ export default function RFQForm() {
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="flex items-center justify-center text-green-600 bg-green-50 p-4 rounded-lg"
+              className="flex items-center justify-center text-blue-500 bg-blue-50 p-4 rounded-lg"
             >
               <CheckCircle className="mr-2 h-5 w-5" />
               Quote request submitted successfully! We'll get back to you within 24 hours.

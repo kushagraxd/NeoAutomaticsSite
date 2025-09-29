@@ -50,8 +50,8 @@ export default function ContactPage() {
               </div>
               
               <div className="flex items-start">
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
-                  <Mail className="h-6 w-6 text-green-500" />
+                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                  <Mail className="h-6 w-6 text-blue-500" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-slate-900 mb-1">Email</h3>

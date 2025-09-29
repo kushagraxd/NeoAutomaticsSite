@@ -70,8 +70,8 @@ export default function CareersPage() {
           </div>
 
           <div className="text-center">
-            <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <Clock className="w-8 h-8 text-green-500" />
+            <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <Clock className="w-8 h-8 text-blue-500" />
             </div>
             <h3 className="text-lg font-display font-semibold text-slate-900 mb-2">
               Work-Life Balance
@@ -131,7 +131,7 @@ export default function CareersPage() {
                       <span className="px-3 py-1 bg-sky-100 text-sky-600 text-sm font-medium rounded-full">
                         {job.department}
                       </span>
-                      <span className="px-3 py-1 bg-green-100 text-green-600 text-sm font-medium rounded-full">
+                      <span className="px-3 py-1 bg-blue-100 text-blue-500 text-sm font-medium rounded-full">
                         {job.type}
                       </span>
                     </div>

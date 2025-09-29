@@ -56,8 +56,8 @@ export default function PrivacyPage() {
           </div>
 
           <div className="text-center">
-            <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <Lock className="w-8 h-8 text-green-500" />
+            <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <Lock className="w-8 h-8 text-blue-500" />
             </div>
             <h3 className="text-lg font-display font-semibold text-slate-900 mb-2">
               Security

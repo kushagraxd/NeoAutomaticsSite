@@ -213,12 +213,12 @@ export function PDFParseButton({ onFieldsExtracted, className }: PDFParseButtonP
 
       {/* Parse Results Preview */}
       {showPreview && parseResult && (
-        <Card className="bg-green-50 border-green-200" data-testid="pdf-parse-results">
+        <Card className="bg-blue-50 border-blue-200" data-testid="pdf-parse-results">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <CheckCircle className="w-5 h-5 text-green-600" />
-                <CardTitle className="text-lg font-semibold text-green-800">PDF Parsed Successfully</CardTitle>
+                <CheckCircle className="w-5 h-5 text-blue-500" />
+                <CardTitle className="text-lg font-semibold text-blue-800">PDF Parsed Successfully</CardTitle>
                 <Badge variant="secondary" className="bg-accent-primary/10 text-accent-primary">
                   AI
                 </Badge>
@@ -227,7 +227,7 @@ export function PDFParseButton({ onFieldsExtracted, className }: PDFParseButtonP
                 onClick={handleDismiss}
                 variant="ghost"
                 size="sm"
-                className="text-green-600 hover:text-green-700"
+                className="text-blue-500 hover:text-blue-600"
                 data-testid="button-close-preview"
               >
                 <X className="w-4 h-4" />
@@ -238,8 +238,8 @@ export function PDFParseButton({ onFieldsExtracted, className }: PDFParseButtonP
           <CardContent className="space-y-4">
             {/* Summary */}
             <div>
-              <h4 className="font-medium text-green-800 mb-2">Summary</h4>
-              <p className="text-sm text-green-700 bg-white/50 p-3 rounded border">
+              <h4 className="font-medium text-blue-800 mb-2">Summary</h4>
+              <p className="text-sm text-blue-700 bg-white/50 p-3 rounded border">
                 {parseResult.summary}
               </p>
             </div>
@@ -247,15 +247,15 @@ export function PDFParseButton({ onFieldsExtracted, className }: PDFParseButtonP
             {/* Extracted Fields */}
             {Object.keys(parseResult.fields).length > 0 && (
               <div>
-                <h4 className="font-medium text-green-800 mb-2">Extracted Information</h4>
+                <h4 className="font-medium text-blue-800 mb-2">Extracted Information</h4>
                 <div className="space-y-2">
                   {Object.entries(parseResult.fields).map(([key, value]) => (
                     value && (
                       <div key={key} className="flex justify-between items-start p-2 bg-white/50 rounded border">
-                        <span className="text-sm font-medium text-green-800 capitalize">
+                        <span className="text-sm font-medium text-blue-800 capitalize">
                           {key.replace(/([A-Z])/g, ' $1').trim()}:
                         </span>
-                        <span className="text-sm text-green-700 text-right ml-2">{value}</span>
+                        <span className="text-sm text-blue-700 text-right ml-2">{value}</span>
                       </div>
                     )
                   ))}
@@ -267,7 +267,7 @@ export function PDFParseButton({ onFieldsExtracted, className }: PDFParseButtonP
             <div className="flex space-x-2 pt-2">
               <Button
                 onClick={handleApplyFields}
-                className="bg-green-600 hover:bg-green-700 text-white"
+                className="bg-blue-500 hover:bg-blue-600 text-white"
                 data-testid="button-apply-fields"
               >
                 <CheckCircle className="w-4 h-4 mr-2" />
@@ -276,7 +276,7 @@ export function PDFParseButton({ onFieldsExtracted, className }: PDFParseButtonP
               <Button
                 onClick={handleDismiss}
                 variant="outline"
-                className="border-green-600 text-green-600 hover:bg-green-50"
+                className="border-blue-500 text-blue-500 hover:bg-blue-50"
                 data-testid="button-dismiss-results"
               >
                 Dismiss
