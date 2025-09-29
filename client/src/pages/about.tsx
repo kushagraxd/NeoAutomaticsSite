@@ -309,7 +309,7 @@ export default function AboutPage() {
             <div className="flex items-start gap-8 max-w-4xl mx-auto">
               <div className="flex-shrink-0">
                 <div className="w-20 h-20 rounded-full bg-gradient-to-br from-amber/20 to-red/20 flex items-center justify-center">
-                  <span className="text-2xl font-display font-bold text-amber">KD</span>
+                  <span className="text-2xl font-display font-bold text-amber">RD</span>
                 </div>
               </div>
               <div className="flex-1">
@@ -321,7 +321,7 @@ export default function AboutPage() {
                 </blockquote>
                 <div className="flex items-center gap-2">
                   <div>
-                    <div className="text-lg font-display font-semibold text-primary">Kushagra Dhingra</div>
+                    <div className="text-lg font-display font-semibold text-primary">Raj Dhingra</div>
                     <div className="text-amber font-medium">Founder & Managing Director</div>
                   </div>
                 </div>
@@ -344,7 +344,7 @@ export default function AboutPage() {
               Our Manufacturing <span className="gradient-text">Network</span>
             </h2>
             <p className="text-xl text-muted max-w-3xl mx-auto leading-relaxed">
-              Three strategically located manufacturing units in Pune, Maharashtra, ensuring optimal production capacity and logistics.
+              Three strategically located manufacturing units in Rohtak, Haryana, ensuring optimal production capacity and logistics.
             </p>
           </motion.div>
 
@@ -357,7 +357,7 @@ export default function AboutPage() {
               className="glass-card p-8"
               data-testid="manufacturing-units-map"
             >
-              <h3 className="text-xl font-display font-semibold text-primary mb-6 text-center">Pune Manufacturing Hub</h3>
+              <h3 className="text-xl font-display font-semibold text-primary mb-6 text-center">Rohtak Manufacturing Hub</h3>
               <svg viewBox="0 0 400 300" className="w-full h-auto">
                 {/* Background */}
                 <rect width="400" height="300" fill="currentColor" className="text-elevated opacity-50" />
@@ -395,7 +395,7 @@ export default function AboutPage() {
                 
                 {/* Title */}
                 <text x="200" y="40" textAnchor="middle" className="text-lg font-display font-semibold" fill="currentColor">
-                  Pune, Maharashtra
+                  Rohtak, Haryana
                 </text>
               </svg>
             </motion.div>
