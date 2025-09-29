@@ -11,30 +11,34 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Silicon Valley Graphite + Electric-Teal theme (hex values for opacity support)
+        // Enterprise Blue theme
         bg: {
-          base: "#0B0C0F", // page background (charcoal)
-          elevated: "#111317", // cards/nav
+          base: "#0A0F1A", // deep navy page background
+          elevated: "#0F1522", // panel background
         },
         text: {
-          primary: "#E8ECF2", // main text
-          muted: "#A6AABC", // secondary text
-          subtle: "#7E8496",
+          primary: "#E6ECF8", // main text
+          muted: "#A9B3C7", // secondary text
+          subtle: "#8894AA", // subtle text
         },
-        accent: {
-          primary: "#13E3B3", // electric-teal (primary accent)
-          soft: "#22BFA2", // softer teal for hovers/badges
+        blue: {
+          50: "#EAF3FF",
+          100: "#D5E7FF",
+          400: "#63A3FF",
+          500: "#3B82F6", // primary accent (accessible)
+          600: "#2662D9",
+          700: "#1C4FB3",
         },
-        border: "#262B33", // dividers/rings
-        overlay: "rgba(0,0,0,0.5)", // hero/video overlay
+        border: "#22304A", // dividers/rings
+        overlay: "rgba(4,10,20,0.55)", // hero/video overlay
         
-        // Legacy utility classes for backward compatibility (CSS variables)
-        "bg-base": "#0B0C0F",
-        "bg-elevated": "#111317",
-        "text-primary": "#E8ECF2",
-        "text-muted": "#A6AABC",
-        "accent-primary": "#13E3B3",
-        "accent-soft": "#22BFA2",
+        // Legacy utility classes for backward compatibility
+        "bg-base": "#0A0F1A",
+        "bg-elevated": "#0F1522",
+        "text-primary": "#E6ECF8",
+        "text-muted": "#A9B3C7",
+        "accent-primary": "#3B82F6",
+        "accent-soft": "#63A3FF",
         
         // Shadcn compatibility (separate from main accent)
         background: "var(--background)",
@@ -74,7 +78,7 @@ export default {
       },
       boxShadow: {
         card: "0 10px 30px rgba(0,0,0,0.35)",
-        glow: "0 0 24px rgba(19,227,179,0.20)", // teal glow
+        glow: "0 0 28px rgba(59,130,246,0.28)", // blue glow
       },
       borderRadius: {
         card: "1rem",
