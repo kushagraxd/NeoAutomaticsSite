@@ -10,42 +10,42 @@ const productDetails = [
     name: 'Collars',
     description: 'RR Panel & RR Wheel Side collars for automotive applications',
     category: 'Automotive',
-    image: 'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250',
+    image: 'https://images.unsplash.com/photo-1713371398485-7bde1bde9def?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250',
     color: 'sky',
   },
   {
     name: 'Ratchet Starter & Pinion',
     description: 'High-precision assemblies for automotive starter systems',
     category: 'Automotive',
-    image: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250',
+    image: 'https://images.unsplash.com/photo-1593019079637-ac824a5e6330?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250',
     color: 'sky',
   },
   {
     name: 'Rocker Arms',
     description: 'Critical engine components for valve train systems',
     category: 'Automotive',
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250',
+    image: 'https://images.unsplash.com/photo-1666634157070-6fd830fb5672?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250',
     color: 'sky',
   },
   {
     name: 'Engine Bushes',
     description: 'Including specialized 20x9 bushes for various engine applications',
     category: 'Automotive',
-    image: 'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250',
+    image: 'https://images.unsplash.com/photo-1625464736592-fab7c7bc4e2e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250',
     color: 'sky',
   },
   {
     name: 'Sprockets',
     description: 'High-strength sprockets for industrial and agricultural machinery',
     category: 'Industrial',
-    image: 'https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250',
+    image: 'https://images.unsplash.com/photo-1593062037896-764e9f52029e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250',
     color: 'orange',
   },
   {
     name: 'Gear Blanks',
     description: 'Precision blanks ready for gear tooth cutting operations',
     category: 'Agriculture',
-    image: 'https://images.unsplash.com/photo-1567789884554-0b844b597180?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250',
+    image: 'https://images.unsplash.com/photo-1666618090858-fbcee636bd3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250',
     color: 'green',
   },
 ];
@@ -87,8 +87,13 @@ export default function ProductsSection() {
               <div className="relative h-48 overflow-hidden">
                 <img
                   src={product.image}
-                  alt={`${product.name} - ${product.description}`}
+                  alt={`High-precision machined ${product.name.toLowerCase()} for ${product.category.toLowerCase()} applications`}
                   className="object-cover group-hover:scale-110 transition-transform duration-300 w-full h-full absolute inset-0"
+                  loading="lazy"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgdmlld0JveD0iMCAwIDQwMCAyNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMjUwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMDAgMTI1TDE2NSAxMDBIMjM1TDIwMCAxMjVaIiBmaWxsPSIjOUI5OUIzIi8+CjxwYXRoIGQ9Ik0yMDAgMTI1TDE2NSAxNTBIMjM1TDIwMCAxMjVaIiBmaWxsPSIjOUI5OUIzIi8+Cjx0ZXh0IHg9IjIwMCIgeT0iMTgwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNkI3Mjg0IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiPg0KSW1hZ2UgTm90IEF2YWlsYWJsZQ0KPC90ZXh0Pgo8L3N2Zz4K';
+                  }}
                 />
               </div>
               

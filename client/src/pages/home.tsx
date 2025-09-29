@@ -51,19 +51,43 @@ const featuredProducts = [
     name: "Precision Collars",
     category: "Automotive",
     description: "High-precision RR Panel & Wheel Side collars",
-    tolerance: "±0.02mm"
+    tolerance: "±0.02mm",
+    image: "https://images.unsplash.com/photo-1713371398485-7bde1bde9def?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250"
   },
   {
     name: "Rocker Arms",
     category: "Engine Components", 
     description: "Critical valve train components",
-    tolerance: "±0.005mm"
+    tolerance: "±0.005mm",
+    image: "https://images.unsplash.com/photo-1666634157070-6fd830fb5672?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250"
   },
   {
     name: "Sprockets",
     category: "Industrial",
     description: "Power transmission components", 
-    tolerance: "±0.01mm"
+    tolerance: "±0.01mm",
+    image: "https://images.unsplash.com/photo-1593062037896-764e9f52029e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250"
+  },
+  {
+    name: "Ratchet Starter & Pinion",
+    category: "Automotive",
+    description: "High-precision assemblies for automotive starter systems",
+    tolerance: "±0.01mm",
+    image: "https://images.unsplash.com/photo-1593019079637-ac824a5e6330?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250"
+  },
+  {
+    name: "Engine Bushes",
+    category: "Automotive",
+    description: "Including specialized 20x9 bushes for various engine applications",
+    tolerance: "±0.005mm",
+    image: "https://images.unsplash.com/photo-1625464736592-fab7c7bc4e2e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250"
+  },
+  {
+    name: "Gear Blanks",
+    category: "Agriculture",
+    description: "Precision blanks ready for gear tooth cutting operations",
+    tolerance: "±0.01mm",
+    image: "https://images.unsplash.com/photo-1666618090858-fbcee636bd3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250"
   }
 ];
 
@@ -446,7 +470,7 @@ export default function HomePage() {
             </p>
           </motion.div>
           
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredProducts.map((product, index) => (
               <motion.div
                 key={product.name}
@@ -457,8 +481,17 @@ export default function HomePage() {
                 className="glass-card rounded-2xl p-6 glow-hover group"
                 data-testid={`featured-product-${product.name.toLowerCase().replace(/[^a-z]/g, '-')}`}
               >
-                <div className="aspect-square bg-gradient-to-br from-amber/10 to-red/10 rounded-lg mb-6 flex items-center justify-center group-hover:from-amber/20 group-hover:to-red/20 transition-colors duration-300">
-                  <Factory className="h-12 w-12 text-amber" />
+                <div className="relative h-48 overflow-hidden rounded-lg mb-6">
+                  <img
+                    src={product.image}
+                    alt={`High-precision machined ${product.name.toLowerCase()} for ${product.category.toLowerCase()} applications`}
+                    className="object-cover group-hover:scale-110 transition-transform duration-300 w-full h-full absolute inset-0"
+                    loading="lazy"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgdmlld0JveD0iMCAwIDQwMCAyNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMjUwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMDAgMTI1TDE2NSAxMDBIMjM1TDIwMCAxMjVaIiBmaWxsPSIjOUI5OUIzIi8+CjxwYXRoIGQ9Ik0yMDAgMTI1TDE2NSAxNTBIMjM1TDIwMCAxMjVaIiBmaWxsPSIjOUI5OUIzIi8+Cjx0ZXh0IHg9IjIwMCIgeT0iMTgwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNkI3Mjg0IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiPg0KSW1hZ2UgTm90IEF2YWlsYWJsZQ0KPC90ZXh0Pgo8L3N2Zz4K';
+                    }}
+                  />
                 </div>
                 <div className="text-sm text-red font-medium mb-2">{product.category}</div>
                 <h3 className="text-lg font-display font-semibold text-primary mb-3">
