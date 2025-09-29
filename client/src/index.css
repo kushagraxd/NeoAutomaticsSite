@@ -121,9 +121,12 @@
   @apply max-w-7xl mx-auto px-6 md:px-10 py-20 md:py-28;
 }
 
-/* Blue accent text */
+/* Blue gradient text */
 .gradient-text {
-  color: rgb(var(--accent-primary));
+  background: linear-gradient(135deg, #3B82F6, #63A3FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* Primary blue button with glow effect */
