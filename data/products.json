@@ -1,0 +1,1475 @@
+{
+ "_note": "Sanitised catalogue. Product codes and ISO shape designations only. No prices, quantities, suppliers, grades or commercial terms are stored here or displayed on the site.",
+ "products": [
+  {
+   "code": "QCMT050204-CM",
+   "family": "QCMT",
+   "category": "drilling",
+   "geometry": "CM"
+  },
+  {
+   "code": "QCMT060204-CM",
+   "family": "QCMT",
+   "category": "drilling",
+   "geometry": "CM"
+  },
+  {
+   "code": "QCMT070304-CM",
+   "family": "QCMT",
+   "category": "drilling",
+   "geometry": "CM"
+  },
+  {
+   "code": "QCMT080304-CM",
+   "family": "QCMT",
+   "category": "drilling",
+   "geometry": "CM"
+  },
+  {
+   "code": "QCMT10T304-CM",
+   "family": "QCMT",
+   "category": "drilling",
+   "geometry": "CM"
+  },
+  {
+   "code": "SPMG05",
+   "family": "SPMG",
+   "category": "drilling",
+   "shape": "Square"
+  },
+  {
+   "code": "SPMG050204-DG",
+   "family": "SPMG",
+   "category": "drilling",
+   "geometry": "DG",
+   "shape": "Square"
+  },
+  {
+   "code": "SPMG06",
+   "family": "SPMG",
+   "category": "drilling",
+   "shape": "Square"
+  },
+  {
+   "code": "SPMG060204-DG",
+   "family": "SPMG",
+   "category": "drilling",
+   "geometry": "DG",
+   "shape": "Square"
+  },
+  {
+   "code": "SPMG07",
+   "family": "SPMG",
+   "category": "drilling",
+   "shape": "Square"
+  },
+  {
+   "code": "SPMG07T308-DG",
+   "family": "SPMG",
+   "category": "drilling",
+   "geometry": "DG",
+   "shape": "Square"
+  },
+  {
+   "code": "SPMG09",
+   "family": "SPMG",
+   "category": "drilling",
+   "shape": "Square"
+  },
+  {
+   "code": "SPMG090408-DG",
+   "family": "SPMG",
+   "category": "drilling",
+   "geometry": "DG",
+   "shape": "Square"
+  },
+  {
+   "code": "SPMG11",
+   "family": "SPMG",
+   "category": "drilling",
+   "shape": "Square"
+  },
+  {
+   "code": "SPMG110408-DG",
+   "family": "SPMG",
+   "category": "drilling",
+   "geometry": "DG",
+   "shape": "Square"
+  },
+  {
+   "code": "SPMG14",
+   "family": "SPMG",
+   "category": "drilling",
+   "shape": "Square"
+  },
+  {
+   "code": "SPMG140512-DG",
+   "family": "SPMG",
+   "category": "drilling",
+   "geometry": "DG",
+   "shape": "Square"
+  },
+  {
+   "code": "TPMX090208R-B",
+   "family": "TPMX",
+   "category": "drilling",
+   "geometry": "B",
+   "shape": "Triangular"
+  },
+  {
+   "code": "TPMX140308R-B",
+   "family": "TPMX",
+   "category": "drilling",
+   "geometry": "B",
+   "shape": "Triangular"
+  },
+  {
+   "code": "TPMX170408R-B",
+   "family": "TPMX",
+   "category": "drilling",
+   "geometry": "B",
+   "shape": "Triangular"
+  },
+  {
+   "code": "WCMX030208-A",
+   "family": "WCMX",
+   "category": "drilling",
+   "geometry": "A",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WCMX030208-PG",
+   "family": "WCMX",
+   "category": "drilling",
+   "geometry": "PG",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WCMX030208-U",
+   "family": "WCMX",
+   "category": "drilling",
+   "geometry": "U",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WCMX030208-WCB",
+   "family": "WCMX",
+   "category": "drilling",
+   "geometry": "WCB",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WCMX040208-A",
+   "family": "WCMX",
+   "category": "drilling",
+   "geometry": "A",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WCMX040208-PG",
+   "family": "WCMX",
+   "category": "drilling",
+   "geometry": "PG",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WCMX040208-U",
+   "family": "WCMX",
+   "category": "drilling",
+   "geometry": "U",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WCMX040208-WCB",
+   "family": "WCMX",
+   "category": "drilling",
+   "geometry": "WCB",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WCMX050308-A",
+   "family": "WCMX",
+   "category": "drilling",
+   "geometry": "A",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WCMX050308-PG",
+   "family": "WCMX",
+   "category": "drilling",
+   "geometry": "PG",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WCMX050308-U",
+   "family": "WCMX",
+   "category": "drilling",
+   "geometry": "U",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WCMX050308-WCB",
+   "family": "WCMX",
+   "category": "drilling",
+   "geometry": "WCB",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WCMX06T308-A",
+   "family": "WCMX",
+   "category": "drilling",
+   "geometry": "A",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WCMX06T308-PG",
+   "family": "WCMX",
+   "category": "drilling",
+   "geometry": "PG",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WCMX06T308-U",
+   "family": "WCMX",
+   "category": "drilling",
+   "geometry": "U",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WCMX06T308-WCB",
+   "family": "WCMX",
+   "category": "drilling",
+   "geometry": "WCB",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WCMX080412-A",
+   "family": "WCMX",
+   "category": "drilling",
+   "geometry": "A",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WCMX080412-U",
+   "family": "WCMX",
+   "category": "drilling",
+   "geometry": "U",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WCMX080412-WCB",
+   "family": "WCMX",
+   "category": "drilling",
+   "geometry": "WCB",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "MGMN150-G",
+   "family": "MGMN",
+   "category": "grooving",
+   "geometry": "G"
+  },
+  {
+   "code": "MGMN200-G",
+   "family": "MGMN",
+   "category": "grooving",
+   "geometry": "G"
+  },
+  {
+   "code": "MGMN200-M",
+   "family": "MGMN",
+   "category": "grooving"
+  },
+  {
+   "code": "MGMN250-G",
+   "family": "MGMN",
+   "category": "grooving",
+   "geometry": "G"
+  },
+  {
+   "code": "MGMN300-M",
+   "family": "MGMN",
+   "category": "grooving"
+  },
+  {
+   "code": "MGMN400-M",
+   "family": "MGMN",
+   "category": "grooving"
+  },
+  {
+   "code": "TDC2",
+   "family": "TDC",
+   "category": "grooving"
+  },
+  {
+   "code": "TDC200",
+   "family": "TDC",
+   "category": "grooving"
+  },
+  {
+   "code": "TDC3",
+   "family": "TDC",
+   "category": "grooving"
+  },
+  {
+   "code": "TDC300",
+   "family": "TDC",
+   "category": "grooving"
+  },
+  {
+   "code": "TDC400",
+   "family": "TDC",
+   "category": "grooving"
+  },
+  {
+   "code": "3PKT150508-M",
+   "family": "3PKT",
+   "category": "milling",
+   "geometry": "M"
+  },
+  {
+   "code": "4NKT040204R-M",
+   "family": "4NKT",
+   "category": "milling",
+   "geometry": "M"
+  },
+  {
+   "code": "4NKT060308R-M",
+   "family": "4NKT",
+   "category": "milling",
+   "geometry": "M"
+  },
+  {
+   "code": "4NKT060308R-MLS",
+   "family": "4NKT",
+   "category": "milling",
+   "geometry": "MLS"
+  },
+  {
+   "code": "ADKT100332",
+   "family": "ADKT",
+   "category": "milling",
+   "shape": "Parallelogram 85°"
+  },
+  {
+   "code": "AOGU030310ER-GM",
+   "family": "AOGU",
+   "category": "milling",
+   "geometry": "GM",
+   "shape": "Parallelogram 85°"
+  },
+  {
+   "code": "APMT1135PDER-DL",
+   "family": "APMT",
+   "category": "milling",
+   "geometry": "DL",
+   "shape": "Parallelogram 85°"
+  },
+  {
+   "code": "APMT1135PDER-H2",
+   "family": "APMT",
+   "category": "milling",
+   "geometry": "H2",
+   "shape": "Parallelogram 85°"
+  },
+  {
+   "code": "APMT1135PDER-HT",
+   "family": "APMT",
+   "category": "milling",
+   "geometry": "HT",
+   "shape": "Parallelogram 85°"
+  },
+  {
+   "code": "APMT1135PDER-M2",
+   "family": "APMT",
+   "category": "milling",
+   "geometry": "M2",
+   "shape": "Parallelogram 85°"
+  },
+  {
+   "code": "APMT160408ER-HT",
+   "family": "APMT",
+   "category": "milling",
+   "geometry": "HT",
+   "shape": "Parallelogram 85°"
+  },
+  {
+   "code": "APMT1604PDER-DL",
+   "family": "APMT",
+   "category": "milling",
+   "geometry": "DL",
+   "shape": "Parallelogram 85°"
+  },
+  {
+   "code": "APMT1604PDER-FM",
+   "family": "APMT",
+   "category": "milling",
+   "geometry": "FM",
+   "shape": "Parallelogram 85°"
+  },
+  {
+   "code": "APMT1604PDER-H2",
+   "family": "APMT",
+   "category": "milling",
+   "geometry": "H2",
+   "shape": "Parallelogram 85°"
+  },
+  {
+   "code": "APMT1604PDER-HT",
+   "family": "APMT",
+   "category": "milling",
+   "geometry": "HT",
+   "shape": "Parallelogram 85°"
+  },
+  {
+   "code": "APMT1604PDER-M2",
+   "family": "APMT",
+   "category": "milling",
+   "geometry": "M2",
+   "shape": "Parallelogram 85°"
+  },
+  {
+   "code": "BLMP0603R-M",
+   "family": "BLMP",
+   "category": "milling",
+   "geometry": "M"
+  },
+  {
+   "code": "BLMP0904R-M",
+   "family": "BLMP",
+   "category": "milling",
+   "geometry": "M"
+  },
+  {
+   "code": "BPMT1135ER-N23",
+   "family": "BPMT",
+   "category": "milling",
+   "geometry": "N23"
+  },
+  {
+   "code": "BPMT160408ER-N23",
+   "family": "BPMT",
+   "category": "milling",
+   "geometry": "N23"
+  },
+  {
+   "code": "BPMT160412ER-N23",
+   "family": "BPMT",
+   "category": "milling",
+   "geometry": "N23"
+  },
+  {
+   "code": "BPMT160416ER-N23",
+   "family": "BPMT",
+   "category": "milling",
+   "geometry": "N23"
+  },
+  {
+   "code": "BPMT160420ER-N23",
+   "family": "BPMT",
+   "category": "milling",
+   "geometry": "N23"
+  },
+  {
+   "code": "BPMT160430ER-N23",
+   "family": "BPMT",
+   "category": "milling",
+   "geometry": "N23"
+  },
+  {
+   "code": "CPMT080204",
+   "family": "CPMT",
+   "category": "milling",
+   "shape": "Rhombic 80°"
+  },
+  {
+   "code": "HNMU0907ANSN-M",
+   "family": "HNMU",
+   "category": "milling",
+   "geometry": "M",
+   "shape": "Hexagonal"
+  },
+  {
+   "code": "HNMU0907ANSN-R",
+   "family": "HNMU",
+   "category": "milling",
+   "geometry": "R",
+   "shape": "Hexagonal"
+  },
+  {
+   "code": "JDMT070204-ZK",
+   "family": "JDMT",
+   "category": "milling",
+   "geometry": "ZK"
+  },
+  {
+   "code": "JDMT070208-ZK",
+   "family": "JDMT",
+   "category": "milling",
+   "geometry": "ZK"
+  },
+  {
+   "code": "JWKJ028075",
+   "family": "JWKJ",
+   "category": "milling"
+  },
+  {
+   "code": "LNGX050306R-FL",
+   "family": "LNGX",
+   "category": "milling",
+   "geometry": "FL",
+   "shape": "Rectangular"
+  },
+  {
+   "code": "LNMU0202ZER-DZ",
+   "family": "LNMU",
+   "category": "milling",
+   "geometry": "DZ",
+   "shape": "Rectangular"
+  },
+  {
+   "code": "LNMU0303ZER-DZ",
+   "family": "LNMU",
+   "category": "milling",
+   "geometry": "DZ",
+   "shape": "Rectangular"
+  },
+  {
+   "code": "LNPU110408-S",
+   "family": "LNPU",
+   "category": "milling",
+   "geometry": "S",
+   "shape": "Rectangular"
+  },
+  {
+   "code": "LNPU15T608-S",
+   "family": "LNPU",
+   "category": "milling",
+   "geometry": "S",
+   "shape": "Rectangular"
+  },
+  {
+   "code": "MPHT060304-DM",
+   "family": "MPHT",
+   "category": "milling",
+   "geometry": "DM"
+  },
+  {
+   "code": "MPHT080305-DM",
+   "family": "MPHT",
+   "category": "milling",
+   "geometry": "DM"
+  },
+  {
+   "code": "MPHT120408-DM",
+   "family": "MPHT",
+   "category": "milling",
+   "geometry": "DM"
+  },
+  {
+   "code": "PNMU0905XNER",
+   "family": "PNMU",
+   "category": "milling",
+   "shape": "Pentagonal"
+  },
+  {
+   "code": "RCMT0602M0TN-ML",
+   "family": "RCMT",
+   "category": "milling",
+   "geometry": "ML",
+   "shape": "Round"
+  },
+  {
+   "code": "RDMW0501M0",
+   "family": "RDMW",
+   "category": "milling",
+   "shape": "Round"
+  },
+  {
+   "code": "RDMW1204MOTN-HR",
+   "family": "RDMW",
+   "category": "milling",
+   "geometry": "HR",
+   "shape": "Round"
+  },
+  {
+   "code": "RDMW1604M0",
+   "family": "RDMW",
+   "category": "milling",
+   "shape": "Round"
+  },
+  {
+   "code": "RPMT08T2M0E-JS",
+   "family": "RPMT",
+   "category": "milling",
+   "geometry": "JS",
+   "shape": "Round"
+  },
+  {
+   "code": "RPMT1003M0-DL",
+   "family": "RPMT",
+   "category": "milling",
+   "geometry": "DL",
+   "shape": "Round"
+  },
+  {
+   "code": "RPMT1003M0-FM",
+   "family": "RPMT",
+   "category": "milling",
+   "geometry": "FM",
+   "shape": "Round"
+  },
+  {
+   "code": "RPMT10T3-JS",
+   "family": "RPMT",
+   "category": "milling",
+   "geometry": "JS",
+   "shape": "Round"
+  },
+  {
+   "code": "RPMT1204-JS",
+   "family": "RPMT",
+   "category": "milling",
+   "geometry": "JS",
+   "shape": "Round"
+  },
+  {
+   "code": "RPMT1204M0-DL",
+   "family": "RPMT",
+   "category": "milling",
+   "geometry": "DL",
+   "shape": "Round"
+  },
+  {
+   "code": "RPMT1204M0-FM",
+   "family": "RPMT",
+   "category": "milling",
+   "geometry": "FM",
+   "shape": "Round"
+  },
+  {
+   "code": "RPMT1204M0-TT",
+   "family": "RPMT",
+   "category": "milling",
+   "geometry": "TT",
+   "shape": "Round"
+  },
+  {
+   "code": "RPMWT1003MOT-GM",
+   "family": "RPMWT",
+   "category": "milling",
+   "geometry": "GM",
+   "shape": "Round"
+  },
+  {
+   "code": "SDMT09T308-D51",
+   "family": "SDMT",
+   "category": "milling",
+   "geometry": "D51",
+   "shape": "Square"
+  },
+  {
+   "code": "SDMT120512-DH",
+   "family": "SDMT",
+   "category": "milling",
+   "geometry": "DH",
+   "shape": "Square"
+  },
+  {
+   "code": "SDMT150512-DH",
+   "family": "SDMT",
+   "category": "milling",
+   "geometry": "DH",
+   "shape": "Square"
+  },
+  {
+   "code": "SEET13T3AGEN-M31",
+   "family": "SEET",
+   "category": "milling",
+   "geometry": "M31",
+   "shape": "Square"
+  },
+  {
+   "code": "SEGR1203AFTN-MR",
+   "family": "SEGR",
+   "category": "milling",
+   "geometry": "MR",
+   "shape": "Square"
+  },
+  {
+   "code": "SEKT1204AFTN-MR",
+   "family": "SEKT",
+   "category": "milling",
+   "geometry": "MR",
+   "shape": "Square"
+  },
+  {
+   "code": "SEMR1203AFEN",
+   "family": "SEMR",
+   "category": "milling",
+   "shape": "Square"
+  },
+  {
+   "code": "SEMR1504AFEN",
+   "family": "SEMR",
+   "category": "milling",
+   "shape": "Square"
+  },
+  {
+   "code": "SEMT13T3AGEN-JM",
+   "family": "SEMT",
+   "category": "milling",
+   "geometry": "JM",
+   "shape": "Square"
+  },
+  {
+   "code": "SNMU1206-DL",
+   "family": "SNMU",
+   "category": "milling",
+   "geometry": "DL",
+   "shape": "Square"
+  },
+  {
+   "code": "SNMU1206ANN-M",
+   "family": "SNMU",
+   "category": "milling",
+   "geometry": "M",
+   "shape": "Square"
+  },
+  {
+   "code": "SNMU1206ANN-MM1",
+   "family": "SNMU",
+   "category": "milling",
+   "geometry": "MM1",
+   "shape": "Square"
+  },
+  {
+   "code": "SNMU1206ZNN-M",
+   "family": "SNMU",
+   "category": "milling",
+   "geometry": "M",
+   "shape": "Square"
+  },
+  {
+   "code": "SNMU130508EN-GM",
+   "family": "SNMU",
+   "category": "milling",
+   "geometry": "GM",
+   "shape": "Square"
+  },
+  {
+   "code": "SNMU1307ZNER-GN",
+   "family": "SNMU",
+   "category": "milling",
+   "geometry": "GN",
+   "shape": "Square"
+  },
+  {
+   "code": "SNMX1206ANN-M",
+   "family": "SNMX",
+   "category": "milling",
+   "geometry": "M",
+   "shape": "Square"
+  },
+  {
+   "code": "SNMX1206ZNN-M",
+   "family": "SNMX",
+   "category": "milling",
+   "geometry": "M",
+   "shape": "Square"
+  },
+  {
+   "code": "SOMT100420ER-GM",
+   "family": "SOMT",
+   "category": "milling",
+   "geometry": "GM",
+   "shape": "Square"
+  },
+  {
+   "code": "SOMT140520ER-GM",
+   "family": "SOMT",
+   "category": "milling",
+   "geometry": "GM",
+   "shape": "Square"
+  },
+  {
+   "code": "WNMU040304EM-GM",
+   "family": "WNMU",
+   "category": "milling",
+   "geometry": "GM",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WNMU060408R-HM",
+   "family": "WNMU",
+   "category": "milling",
+   "geometry": "HM",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WNMU060408R-M",
+   "family": "WNMU",
+   "category": "milling",
+   "geometry": "M",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WNMU080608EN-CM1",
+   "family": "WNMU",
+   "category": "milling",
+   "geometry": "CM1",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WNMU080608EN-GM",
+   "family": "WNMU",
+   "category": "milling",
+   "geometry": "GM",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WNMU080608EN-GM2",
+   "family": "WNMU",
+   "category": "milling",
+   "geometry": "GM2",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "XNEX080608R-AL",
+   "family": "XNEX",
+   "category": "milling",
+   "geometry": "AL"
+  },
+  {
+   "code": "XNEX080608TR-ME09",
+   "family": "XNEX",
+   "category": "milling",
+   "geometry": "ME09"
+  },
+  {
+   "code": "16ER1.50ISO-UM3",
+   "family": "16ER",
+   "category": "threading",
+   "geometry": "UM3"
+  },
+  {
+   "code": "16ER1.5ISO",
+   "family": "16ER",
+   "category": "threading"
+  },
+  {
+   "code": "16ER2.00ISO-UM3",
+   "family": "16ER",
+   "category": "threading",
+   "geometry": "UM3"
+  },
+  {
+   "code": "16ER2.0ISO",
+   "family": "16ER",
+   "category": "threading"
+  },
+  {
+   "code": "16IR1.50ISO-UM3",
+   "family": "16IR",
+   "category": "threading",
+   "geometry": "UM3"
+  },
+  {
+   "code": "16IR1.5ISO",
+   "family": "16IR",
+   "category": "threading"
+  },
+  {
+   "code": "CCGT060201-DF",
+   "family": "CCGT",
+   "category": "turning",
+   "geometry": "DF",
+   "shape": "Rhombic 80°"
+  },
+  {
+   "code": "CCGT060202-DF",
+   "family": "CCGT",
+   "category": "turning",
+   "geometry": "DF",
+   "shape": "Rhombic 80°"
+  },
+  {
+   "code": "CCGT0602S01-EL",
+   "family": "CCGT",
+   "category": "turning",
+   "geometry": "EL",
+   "shape": "Rhombic 80°"
+  },
+  {
+   "code": "CCGT0602S02-EL",
+   "family": "CCGT",
+   "category": "turning",
+   "geometry": "EL",
+   "shape": "Rhombic 80°"
+  },
+  {
+   "code": "CCGT09T301-DF",
+   "family": "CCGT",
+   "category": "turning",
+   "geometry": "DF",
+   "shape": "Rhombic 80°"
+  },
+  {
+   "code": "CCGT09T302-DF",
+   "family": "CCGT",
+   "category": "turning",
+   "geometry": "DF",
+   "shape": "Rhombic 80°"
+  },
+  {
+   "code": "CCGT09T3S01-EL",
+   "family": "CCGT",
+   "category": "turning",
+   "geometry": "EL",
+   "shape": "Rhombic 80°"
+  },
+  {
+   "code": "CCGT09T3S02-EL",
+   "family": "CCGT",
+   "category": "turning",
+   "geometry": "EL",
+   "shape": "Rhombic 80°"
+  },
+  {
+   "code": "CCMT060204-MK",
+   "family": "CCMT",
+   "category": "turning",
+   "geometry": "MK",
+   "shape": "Rhombic 80°"
+  },
+  {
+   "code": "CCMT060208-MK",
+   "family": "CCMT",
+   "category": "turning",
+   "geometry": "MK",
+   "shape": "Rhombic 80°"
+  },
+  {
+   "code": "CCMT09T304-MK",
+   "family": "CCMT",
+   "category": "turning",
+   "geometry": "MK",
+   "shape": "Rhombic 80°"
+  },
+  {
+   "code": "CCMT09T308-MK",
+   "family": "CCMT",
+   "category": "turning",
+   "geometry": "MK",
+   "shape": "Rhombic 80°"
+  },
+  {
+   "code": "CCMT120404-MK",
+   "family": "CCMT",
+   "category": "turning",
+   "geometry": "MK",
+   "shape": "Rhombic 80°"
+  },
+  {
+   "code": "CCMT120408-MK",
+   "family": "CCMT",
+   "category": "turning",
+   "geometry": "MK",
+   "shape": "Rhombic 80°"
+  },
+  {
+   "code": "CNMG120404-MA",
+   "family": "CNMG",
+   "category": "turning",
+   "geometry": "MA",
+   "shape": "Rhombic 80°"
+  },
+  {
+   "code": "CNMG120404-MS",
+   "family": "CNMG",
+   "category": "turning",
+   "geometry": "MS",
+   "shape": "Rhombic 80°"
+  },
+  {
+   "code": "CNMG120408-MA",
+   "family": "CNMG",
+   "category": "turning",
+   "geometry": "MA",
+   "shape": "Rhombic 80°"
+  },
+  {
+   "code": "CNMG120408-MS",
+   "family": "CNMG",
+   "category": "turning",
+   "geometry": "MS",
+   "shape": "Rhombic 80°"
+  },
+  {
+   "code": "CNMG120412-MA",
+   "family": "CNMG",
+   "category": "turning",
+   "geometry": "MA",
+   "shape": "Rhombic 80°"
+  },
+  {
+   "code": "DCGT070201-DF",
+   "family": "DCGT",
+   "category": "turning",
+   "geometry": "DF",
+   "shape": "Rhombic 55°"
+  },
+  {
+   "code": "DCGT070202-DF",
+   "family": "DCGT",
+   "category": "turning",
+   "geometry": "DF",
+   "shape": "Rhombic 55°"
+  },
+  {
+   "code": "DCGT0702S02-EL",
+   "family": "DCGT",
+   "category": "turning",
+   "geometry": "EL",
+   "shape": "Rhombic 55°"
+  },
+  {
+   "code": "DCGT11T301-DF",
+   "family": "DCGT",
+   "category": "turning",
+   "geometry": "DF",
+   "shape": "Rhombic 55°"
+  },
+  {
+   "code": "DCGT11T301-SF",
+   "family": "DCGT",
+   "category": "turning",
+   "geometry": "SF",
+   "shape": "Rhombic 55°"
+  },
+  {
+   "code": "DCGT11T302-DF",
+   "family": "DCGT",
+   "category": "turning",
+   "geometry": "DF",
+   "shape": "Rhombic 55°"
+  },
+  {
+   "code": "DCGT11T302-SF",
+   "family": "DCGT",
+   "category": "turning",
+   "geometry": "SF",
+   "shape": "Rhombic 55°"
+  },
+  {
+   "code": "DCGT11T3S02-EL",
+   "family": "DCGT",
+   "category": "turning",
+   "geometry": "EL",
+   "shape": "Rhombic 55°"
+  },
+  {
+   "code": "DCGT11T3S04-EL",
+   "family": "DCGT",
+   "category": "turning",
+   "geometry": "EL",
+   "shape": "Rhombic 55°"
+  },
+  {
+   "code": "DCMT070204-MK",
+   "family": "DCMT",
+   "category": "turning",
+   "geometry": "MK",
+   "shape": "Rhombic 55°"
+  },
+  {
+   "code": "DCMT11T304-MK",
+   "family": "DCMT",
+   "category": "turning",
+   "geometry": "MK",
+   "shape": "Rhombic 55°"
+  },
+  {
+   "code": "DNMG150404-MA",
+   "family": "DNMG",
+   "category": "turning",
+   "geometry": "MA",
+   "shape": "Rhombic 55°"
+  },
+  {
+   "code": "DNMG150404-MS",
+   "family": "DNMG",
+   "category": "turning",
+   "geometry": "MS",
+   "shape": "Rhombic 55°"
+  },
+  {
+   "code": "DNMG150408-MA",
+   "family": "DNMG",
+   "category": "turning",
+   "geometry": "MA",
+   "shape": "Rhombic 55°"
+  },
+  {
+   "code": "DNMG150604-MA",
+   "family": "DNMG",
+   "category": "turning",
+   "geometry": "MA",
+   "shape": "Rhombic 55°"
+  },
+  {
+   "code": "DNMG150608-MA",
+   "family": "DNMG",
+   "category": "turning",
+   "geometry": "MA",
+   "shape": "Rhombic 55°"
+  },
+  {
+   "code": "SCMT09T304-MK",
+   "family": "SCMT",
+   "category": "turning",
+   "geometry": "MK",
+   "shape": "Square"
+  },
+  {
+   "code": "SNMG120404-MA",
+   "family": "SNMG",
+   "category": "turning",
+   "geometry": "MA",
+   "shape": "Square"
+  },
+  {
+   "code": "SNMG120404-MS",
+   "family": "SNMG",
+   "category": "turning",
+   "geometry": "MS",
+   "shape": "Square"
+  },
+  {
+   "code": "SNMG120408-MA",
+   "family": "SNMG",
+   "category": "turning",
+   "geometry": "MA",
+   "shape": "Square"
+  },
+  {
+   "code": "SNMG120408-MS",
+   "family": "SNMG",
+   "category": "turning",
+   "geometry": "MS",
+   "shape": "Square"
+  },
+  {
+   "code": "SNMG120412-MA",
+   "family": "SNMG",
+   "category": "turning",
+   "geometry": "MA",
+   "shape": "Square"
+  },
+  {
+   "code": "SNMG120412-MS",
+   "family": "SNMG",
+   "category": "turning",
+   "geometry": "MS",
+   "shape": "Square"
+  },
+  {
+   "code": "TCMT110202-MK",
+   "family": "TCMT",
+   "category": "turning",
+   "geometry": "MK",
+   "shape": "Triangular"
+  },
+  {
+   "code": "TCMT110204-MK",
+   "family": "TCMT",
+   "category": "turning",
+   "geometry": "MK",
+   "shape": "Triangular"
+  },
+  {
+   "code": "TCMT110208-MK",
+   "family": "TCMT",
+   "category": "turning",
+   "geometry": "MK",
+   "shape": "Triangular"
+  },
+  {
+   "code": "TCMT16T304-MK",
+   "family": "TCMT",
+   "category": "turning",
+   "geometry": "MK",
+   "shape": "Triangular"
+  },
+  {
+   "code": "TCMT16T308-MK",
+   "family": "TCMT",
+   "category": "turning",
+   "geometry": "MK",
+   "shape": "Triangular"
+  },
+  {
+   "code": "TNGG160401-SF",
+   "family": "TNGG",
+   "category": "turning",
+   "geometry": "SF",
+   "shape": "Triangular"
+  },
+  {
+   "code": "TNGG160402-SF",
+   "family": "TNGG",
+   "category": "turning",
+   "geometry": "SF",
+   "shape": "Triangular"
+  },
+  {
+   "code": "TNMG160404-EA",
+   "family": "TNMG",
+   "category": "turning",
+   "geometry": "EA",
+   "shape": "Triangular"
+  },
+  {
+   "code": "TNMG160404-MA",
+   "family": "TNMG",
+   "category": "turning",
+   "geometry": "MA",
+   "shape": "Triangular"
+  },
+  {
+   "code": "TNMG160404-MS",
+   "family": "TNMG",
+   "category": "turning",
+   "geometry": "MS",
+   "shape": "Triangular"
+  },
+  {
+   "code": "TNMG160408-EA",
+   "family": "TNMG",
+   "category": "turning",
+   "geometry": "EA",
+   "shape": "Triangular"
+  },
+  {
+   "code": "TNMG160408-MA",
+   "family": "TNMG",
+   "category": "turning",
+   "geometry": "MA",
+   "shape": "Triangular"
+  },
+  {
+   "code": "TNMG160408-MS",
+   "family": "TNMG",
+   "category": "turning",
+   "geometry": "MS",
+   "shape": "Triangular"
+  },
+  {
+   "code": "TNMG160408-SF",
+   "family": "TNMG",
+   "category": "turning",
+   "geometry": "SF",
+   "shape": "Triangular"
+  },
+  {
+   "code": "TNMG160412-MA",
+   "family": "TNMG",
+   "category": "turning",
+   "geometry": "MA",
+   "shape": "Triangular"
+  },
+  {
+   "code": "VBGT110301-DF",
+   "family": "VBGT",
+   "category": "turning",
+   "geometry": "DF",
+   "shape": "Rhombic 35°"
+  },
+  {
+   "code": "VBGT110301-SF",
+   "family": "VBGT",
+   "category": "turning",
+   "geometry": "SF",
+   "shape": "Rhombic 35°"
+  },
+  {
+   "code": "VBGT110302-DF",
+   "family": "VBGT",
+   "category": "turning",
+   "geometry": "DF",
+   "shape": "Rhombic 35°"
+  },
+  {
+   "code": "VBGT110302-SF",
+   "family": "VBGT",
+   "category": "turning",
+   "geometry": "SF",
+   "shape": "Rhombic 35°"
+  },
+  {
+   "code": "VBGT11T2S02-EL",
+   "family": "VBGT",
+   "category": "turning",
+   "geometry": "EL",
+   "shape": "Rhombic 35°"
+  },
+  {
+   "code": "VBGT11T2S04-EL",
+   "family": "VBGT",
+   "category": "turning",
+   "geometry": "EL",
+   "shape": "Rhombic 35°"
+  },
+  {
+   "code": "VCGT110301-DF",
+   "family": "VCGT",
+   "category": "turning",
+   "geometry": "DF",
+   "shape": "Rhombic 35°"
+  },
+  {
+   "code": "VCGT110301-SF",
+   "family": "VCGT",
+   "category": "turning",
+   "geometry": "SF",
+   "shape": "Rhombic 35°"
+  },
+  {
+   "code": "VCGT110302-DF",
+   "family": "VCGT",
+   "category": "turning",
+   "geometry": "DF",
+   "shape": "Rhombic 35°"
+  },
+  {
+   "code": "VCGT110302-SF",
+   "family": "VCGT",
+   "category": "turning",
+   "geometry": "SF",
+   "shape": "Rhombic 35°"
+  },
+  {
+   "code": "VCGT11T2S02-EL",
+   "family": "VCGT",
+   "category": "turning",
+   "geometry": "EL",
+   "shape": "Rhombic 35°"
+  },
+  {
+   "code": "VCGT11T2S04-EL",
+   "family": "VCGT",
+   "category": "turning",
+   "geometry": "EL",
+   "shape": "Rhombic 35°"
+  },
+  {
+   "code": "VNMG120404",
+   "family": "VNMG",
+   "category": "turning",
+   "shape": "Rhombic 35°"
+  },
+  {
+   "code": "VNMG12T304",
+   "family": "VNMG",
+   "category": "turning",
+   "shape": "Rhombic 35°"
+  },
+  {
+   "code": "VNMG12T308",
+   "family": "VNMG",
+   "category": "turning",
+   "shape": "Rhombic 35°"
+  },
+  {
+   "code": "VNMG160404-MA",
+   "family": "VNMG",
+   "category": "turning",
+   "geometry": "MA",
+   "shape": "Rhombic 35°"
+  },
+  {
+   "code": "VNMG160404-MS",
+   "family": "VNMG",
+   "category": "turning",
+   "geometry": "MS",
+   "shape": "Rhombic 35°"
+  },
+  {
+   "code": "VNMG160408-MA",
+   "family": "VNMG",
+   "category": "turning",
+   "geometry": "MA",
+   "shape": "Rhombic 35°"
+  },
+  {
+   "code": "VNMG160408-MS",
+   "family": "VNMG",
+   "category": "turning",
+   "geometry": "MS",
+   "shape": "Rhombic 35°"
+  },
+  {
+   "code": "WNMG080404-EA",
+   "family": "WNMG",
+   "category": "turning",
+   "geometry": "EA",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WNMG080404-MA",
+   "family": "WNMG",
+   "category": "turning",
+   "geometry": "MA",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WNMG080404-MS",
+   "family": "WNMG",
+   "category": "turning",
+   "geometry": "MS",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WNMG080408-EA",
+   "family": "WNMG",
+   "category": "turning",
+   "geometry": "EA",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WNMG080408-MA",
+   "family": "WNMG",
+   "category": "turning",
+   "geometry": "MA",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WNMG080408-MF3",
+   "family": "WNMG",
+   "category": "turning",
+   "geometry": "MF3",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WNMG080408-MFX",
+   "family": "WNMG",
+   "category": "turning",
+   "geometry": "MFX",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WNMG080408-MS",
+   "family": "WNMG",
+   "category": "turning",
+   "geometry": "MS",
+   "shape": "Trigon 80°"
+  },
+  {
+   "code": "WNMG080412-MA",
+   "family": "WNMG",
+   "category": "turning",
+   "geometry": "MA",
+   "shape": "Trigon 80°"
+  }
+ ]
+}

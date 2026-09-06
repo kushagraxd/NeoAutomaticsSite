@@ -1,554 +1,264 @@
-import { motion } from 'framer-motion';
-import { ArrowRight, Download, CheckCircle, Factory, Users, Award, Zap, DollarSign, Clock } from 'lucide-react';
 import { Link } from 'wouter';
-import { Button } from '../components/ui/button';
-import Counter from '../../../components/ui/counter';
-import AutoPartsBackdrop from '../../../components/AutoPartsBackdrop';
-import { getCompanyInfo, getManufacturingCapabilities, formatCompanyName } from '../../../shared/company';
-import { usePageTitle } from '../lib/usePageTitle';
+import { ArrowRight, Search, PackageSearch, Ship, MessagesSquare, ClipboardList, Boxes } from 'lucide-react';
+import { usePageMeta } from '../lib/usePageMeta';
+import InsertGlyph from '../components/insert-glyph';
+import {
+  categories, countsByCategory, totalFamilyCount, totalProductCount, allFamilies,
+} from '../../../shared/catalog';
+import { company } from '../../../shared/company';
 
-// Trust logos placeholder data
-const trustLogos = [
-  { name: "OEM Partner 1", width: 120 },
-  { name: "OEM Partner 2", width: 100 },
-  { name: "Tier-1 Supplier", width: 140 },
-  { name: "Industry Leader", width: 110 },
+const STEPS = [
+  { icon: ClipboardList, title: 'Send your requirement', body: 'Share an ISO code, a drawing, a sample or simply the part you currently buy.' },
+  { icon: PackageSearch, title: 'We check the source', body: 'We confirm availability and specification with our suppliers in China and Taiwan.' },
+  { icon: MessagesSquare, title: 'You receive a quotation', body: 'Pricing, lead time and packing details, sent back to you directly.' },
+  { icon: Ship, title: 'Supply', body: 'We import and deliver against your confirmed order.' },
 ];
 
-// Value pills data
-const valuePills = [
-  {
-    title: "Cost Leadership",
-    description: "Competitive pricing through process optimization",
-    icon: DollarSign,
-    color: "text-amber"
-  },
-  {
-    title: "Reliability", 
-    description: "ISO 9001:2015 certified quality systems",
-    icon: Award,
-    color: "text-red"
-  },
-  {
-    title: "Speed & Agility",
-    description: "Rapid prototyping and quick turnaround",
-    icon: Zap,
-    color: "text-amber"
-  }
-];
-
-// Metrics data - now using company data
-const getMetrics = (capabilities: any) => [
-  { target: capabilities.machines.CNC, label: "CNC Machines", suffix: "+" },
-  { target: capabilities.units.length, label: "Manufacturing Units", suffix: "" },
-  { target: 2015, label: "ISO 9001 Certified", suffix: "" },
-  { target: 100, label: "PPAP Ready", suffix: "%" }
-];
-
-// Featured products data
-const featuredProducts = [
-  {
-    name: "Precision Collars",
-    category: "Automotive",
-    description: "High-precision RR Panel & Wheel Side collars",
-    tolerance: "±0.02mm",
-    image: "https://images.unsplash.com/photo-1713371398485-7bde1bde9def?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250"
-  },
-  {
-    name: "Rocker Arms",
-    category: "Engine Components", 
-    description: "Critical valve train components",
-    tolerance: "±0.005mm",
-    image: "https://images.unsplash.com/photo-1666634157070-6fd830fb5672?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250"
-  },
-  {
-    name: "Sprockets",
-    category: "Industrial",
-    description: "Power transmission components", 
-    tolerance: "±0.01mm",
-    image: "https://images.unsplash.com/photo-1593062037896-764e9f52029e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250"
-  },
-  {
-    name: "Ratchet Starter & Pinion",
-    category: "Automotive",
-    description: "High-precision assemblies for automotive starter systems",
-    tolerance: "±0.01mm",
-    image: "https://images.unsplash.com/photo-1593019079637-ac824a5e6330?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250"
-  },
-  {
-    name: "Engine Bushes",
-    category: "Automotive",
-    description: "Including specialized 20x9 bushes for various engine applications",
-    tolerance: "±0.005mm",
-    image: "https://images.unsplash.com/photo-1625464736592-fab7c7bc4e2e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250"
-  },
-  {
-    name: "Gear Blanks",
-    category: "Agriculture",
-    description: "Precision blanks ready for gear tooth cutting operations",
-    tolerance: "±0.01mm",
-    image: "https://images.unsplash.com/photo-1666618090858-fbcee636bd3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250"
-  }
+const REASONS = [
+  { title: 'Codes you already use', body: 'Search the catalogue by the ISO designation on your current insert box. No cross-referencing required.' },
+  { title: 'Standard and non-standard', body: 'Common geometries from stock enquiry, plus special-design inserts sourced against a drawing or sample.' },
+  { title: 'Direct sourcing', body: `We buy directly from producers in ${company.sourcingRegions.join(' and ')}, so you deal with one point of contact for both.` },
+  { title: 'Quotation-led, not a shopfront', body: 'Pricing depends on grade, quantity and lead time, so we quote against your actual requirement rather than publishing a list price.' },
 ];
 
 export default function HomePage() {
-  usePageTitle('Neo Automatics - Precision Machined Components for OEMs & Tier-1s', 'End-to-end machining, heat treatment & QA—delivered at scale. ISO 9001:2015 certified manufacturer with 20+ years experience.', '%s');
-  
-  const companyInfo = getCompanyInfo();
-  const capabilities = getManufacturingCapabilities();
-  const { firstWord, restOfName } = formatCompanyName(companyInfo.name);
-  
+  usePageMeta(
+    'Carbide Inserts & Cutting Tools',
+    'Sree Raj Tools supplies carbide inserts and cutting tools across India, sourced from established producers in China and Taiwan. Search by ISO code and request a quotation.',
+  );
+
+  const counts = countsByCategory();
+  const listed = categories.filter((c) => !c.enquiryOnly);
+  const bySource = categories.filter((c) => c.enquiryOnly);
+  const featuredFamilies = allFamilies().filter((f) =>
+    ['TNMG', 'CNMG', 'WNMG', 'VNMG', 'DNMG', 'CCMT', 'DCMT', 'TCMT', 'APMT', 'SPMG', 'WCMX', 'MGMN', 'RPMT', 'SEHT', '16ER'].includes(f),
+  );
+
   return (
-    <div className="min-h-screen bg-base">
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Professional AutoParts Backdrop */}
-        <AutoPartsBackdrop />
-        
-        {/* Industrial hero background gradient */}
-        <div className="absolute inset-0 hero-bg opacity-40" />
-        
-        <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-10 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <h1 className="text-6xl md:text-7xl font-display font-bold text-primary mb-6 tracking-tight leading-tight">
-              {firstWord} <span className="gradient-text">{restOfName}</span>
+    <>
+      {/* Hero */}
+      <section className="bg-graphite text-graphite-ink">
+        <div className="shell grid gap-12 py-16 md:py-24 lg:grid-cols-[1.15fr_1fr] lg:items-center">
+          <div>
+            <span className="accent-rule mb-6" />
+            <p className="label mb-4 text-accent">Importer &amp; Supplier · India</p>
+            <h1 className="text-[40px] leading-[1.05] sm:text-[54px] lg:text-[62px]">
+              Carbide inserts and cutting tools, sourced for Indian workshops
             </h1>
-            
-            <h2 className="text-2xl md:text-3xl font-display font-semibold text-muted mb-8">
-              Precision Machined Components for OEMs & Tier-1s
-            </h2>
-            
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="text-xl md:text-2xl text-muted mb-12 max-w-4xl mx-auto leading-relaxed"
-            >
-              End-to-end machining, heat treatment & QA—delivered at scale.
-            </motion.p>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="flex flex-col sm:flex-row gap-6 justify-center items-center"
-            >
-              <Link href="/contact">
-                <Button 
-                  className="btn-primary magnetic-btn group" 
-                  data-testid="hero-request-quote"
-                  aria-label="Request a quote for precision machining services"
-                >
-                  <ArrowRight className="mr-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                  Request a Quote
-                </Button>
+            <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-graphite-muted">
+              {company.summary}
+            </p>
+
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <Link href="/products" className="btn-primary">
+                Explore Products <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
-              
-              <a 
-                href="/neo-capability-profile.pdf" 
-                download
-                className="btn-secondary magnetic-btn group inline-flex items-center"
-                data-testid="hero-download-capability"
-                aria-label="Download Neo Automatics capability profile PDF"
-              >
-                <Download className="mr-2 h-5 w-5 group-hover:translate-y-0.5 transition-transform" />
-                Download Capability Profile
-              </a>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Trust Bar */}
-      <section className="py-16 bg-elevated border-y border-white/10">
-        <div className="max-w-7xl mx-auto px-6 md:px-10">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center mb-8"
-          >
-            <p className="text-muted font-medium">Trusted by leading OEMs & Tier-1 suppliers</p>
-          </motion.div>
-          
-          <div className="flex justify-center items-center gap-12 opacity-40">
-            {trustLogos.map((logo, index) => (
-              <motion.div
-                key={logo.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="glass-card rounded-2xl px-6 py-3"
-                style={{ width: logo.width }}
-              >
-                <div className="text-muted font-medium text-sm">{logo.name}</div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Value Pills */}
-      <section className="py-20 md:py-28">
-        <div className="max-w-7xl mx-auto px-6 md:px-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6 tracking-tight">
-              Why Industry Leaders <span className="gradient-text">Choose Us</span>
-            </h2>
-            <p className="text-xl text-muted max-w-3xl mx-auto leading-relaxed">
-              Three core pillars that drive our manufacturing excellence and customer success.
-            </p>
-          </motion.div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            {valuePills.map((pill, index) => {
-              const IconComponent = pill.icon;
-              return (
-                <motion.div
-                  key={pill.title}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="glass-card rounded-2xl p-8 glow-hover group"
-                  data-testid={`value-pill-${pill.title.toLowerCase().replace(/[^a-z]/g, '-')}`}
-                >
-                  <IconComponent className={`h-12 w-12 ${pill.color} mb-6 group-hover:scale-110 transition-transform duration-300`} />
-                  <h3 className="text-xl font-display font-semibold text-primary mb-4">
-                    {pill.title}
-                  </h3>
-                  <p className="text-muted leading-relaxed">{pill.description}</p>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Metrics Section */}
-      <section className="py-20 md:py-28 bg-elevated">
-        <div className="max-w-7xl mx-auto px-6 md:px-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6 tracking-tight">
-              Manufacturing <span className="gradient-text">Excellence</span>
-            </h2>
-            <p className="text-xl text-muted max-w-3xl mx-auto leading-relaxed">
-              Numbers that demonstrate our scale, capability, and commitment to quality.
-            </p>
-          </motion.div>
-          
-          <div className="grid md:grid-cols-4 gap-8">
-            {getMetrics(capabilities).map((metric, index) => (
-              <motion.div
-                key={metric.label}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="text-center glass-card rounded-2xl p-6 glow-hover"
-                data-testid={`metric-${metric.label.toLowerCase().replace(/[^a-z]/g, '-')}`}
-              >
-                <div className="text-4xl md:text-5xl font-display font-bold text-amber mb-2">
-                  <Counter target={metric.target} suffix={metric.suffix} />
-                </div>
-                <div className="text-muted font-medium">{metric.label}</div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Capabilities Snapshot */}
-      <section className="py-20 md:py-28">
-        <div className="max-w-7xl mx-auto px-6 md:px-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6 tracking-tight">
-              Manufacturing <span className="gradient-text">Capabilities</span>
-            </h2>
-            <p className="text-xl text-muted max-w-3xl mx-auto leading-relaxed">
-              Complete machining, heat treatment, and QA capabilities under one roof.
-            </p>
-          </motion.div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0 }}
-              className="glass-card rounded-2xl p-8 glow-hover group"
-              data-testid="capability-machining"
-            >
-              <Factory className="h-12 w-12 text-amber mb-6 group-hover:scale-110 transition-transform duration-300" />
-              <h3 className="text-xl font-display font-semibold text-primary mb-4">
-                CNC Machining
-              </h3>
-              <p className="text-muted leading-relaxed mb-4">{capabilities.machines.CNC}+ CNC machines including TRAUB multi-spindle automats for high-volume precision.</p>
-              <div className="text-amber font-medium">{capabilities.machines.TRAUB_A30_A25 + capabilities.machines.TRAUB_A42_A60} TRAUB • {capabilities.machines.Centerless_Grinder}+ Grinders</div>
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="glass-card rounded-2xl p-8 glow-hover group"
-              data-testid="capability-heat-treatment"
-            >
-              <Zap className="h-12 w-12 text-red mb-6 group-hover:scale-110 transition-transform duration-300" />
-              <h3 className="text-xl font-display font-semibold text-primary mb-4">
-                Heat Treatment
-              </h3>
-              <p className="text-muted leading-relaxed mb-4">In-house quenching and tempering with sealed furnaces and mesh belt systems.</p>
-              <div className="text-red font-medium">Sealed Quench • Mesh Belt</div>
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="glass-card rounded-2xl p-8 glow-hover group"
-              data-testid="capability-qa"
-            >
-              <Award className="h-12 w-12 text-amber mb-6 group-hover:scale-110 transition-transform duration-300" />
-              <h3 className="text-xl font-display font-semibold text-primary mb-4">
-                Inspection & QA
-              </h3>
-              <p className="text-muted leading-relaxed mb-4">Complete metrology lab with Rockwell testers, surface roughness, and profile projectors.</p>
-              <div className="text-amber font-medium">{capabilities.certifications.join(' • ')}</div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Process Timeline */}
-      <section className="py-20 md:py-28 bg-elevated">
-        <div className="max-w-7xl mx-auto px-6 md:px-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6 tracking-tight">
-              Our <span className="gradient-text">Process</span>
-            </h2>
-            <p className="text-xl text-muted max-w-3xl mx-auto leading-relaxed">
-              From concept to delivery, our streamlined process ensures quality and speed.
-            </p>
-          </motion.div>
-          
-          <div className="grid md:grid-cols-4 gap-8">
-            {[
-              { step: "01", title: "Requirements", description: "Technical drawing analysis and feasibility study", icon: Users },
-              { step: "02", title: "Prototyping", description: "Rapid prototyping and design validation", icon: Factory },
-              { step: "03", title: "Production", description: "High-volume manufacturing with quality control", icon: Zap },
-              { step: "04", title: "Delivery", description: "PPAP documentation and on-time shipment", icon: CheckCircle }
-            ].map((item, index) => {
-              const IconComponent = item.icon;
-              return (
-                <motion.div
-                  key={item.step}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="text-center glass-card rounded-2xl p-6 glow-hover group"
-                  data-testid={`process-step-${item.step}`}
-                >
-                  <div className="text-amber font-display text-lg font-bold mb-4">{item.step}</div>
-                  <IconComponent className="h-12 w-12 text-primary mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
-                  <h3 className="text-lg font-display font-semibold text-primary mb-3">
-                    {item.title}
-                  </h3>
-                  <p className="text-muted text-sm leading-relaxed">{item.description}</p>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Case Teasers */}
-      <section className="py-20 md:py-28">
-        <div className="max-w-7xl mx-auto px-6 md:px-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6 tracking-tight">
-              Success <span className="gradient-text">Stories</span>
-            </h2>
-            <p className="text-xl text-muted max-w-3xl mx-auto leading-relaxed">
-              Real results from our partnerships with industry leaders.
-            </p>
-          </motion.div>
-          
-          <div className="grid md:grid-cols-2 gap-8">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="glass-card rounded-2xl p-8 glow-hover group"
-              data-testid="case-automotive"
-            >
-              <div className="text-red font-medium mb-2">Automotive OEM</div>
-              <h3 className="text-xl font-display font-semibold text-primary mb-4">
-                50% Cost Reduction in Rocker Arms
-              </h3>
-              <p className="text-muted leading-relaxed mb-6">
-                Optimized manufacturing process reduced per-unit cost by 50% while maintaining ±0.005mm tolerance requirements for critical valve train components.
-              </p>
-              <div className="flex items-center justify-between">
-                <span className="text-amber font-medium">2M+ units delivered</span>
-                <ArrowRight className="h-5 w-5 text-amber group-hover:translate-x-1 transition-transform" />
-              </div>
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="glass-card rounded-2xl p-8 glow-hover group"
-              data-testid="case-agriculture"
-            >
-              <div className="text-red font-medium mb-2">Agriculture Equipment</div>
-              <h3 className="text-xl font-display font-semibold text-primary mb-4">
-                30-Day Development Cycle
-              </h3>
-              <p className="text-muted leading-relaxed mb-6">
-                Rapid prototyping and PPAP approval achieved in record time for complex sprocket assemblies, enabling faster market entry.
-              </p>
-              <div className="flex items-center justify-between">
-                <span className="text-amber font-medium">15-day PPAP approval</span>
-                <ArrowRight className="h-5 w-5 text-amber group-hover:translate-x-1 transition-transform" />
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Products */}
-      <section className="py-20 md:py-28">
-        <div className="max-w-7xl mx-auto px-6 md:px-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6 tracking-tight">
-              Featured <span className="gradient-text">Products</span>
-            </h2>
-            <p className="text-xl text-muted max-w-3xl mx-auto leading-relaxed">
-              Precision-engineered components that power the world's leading machines.
-            </p>
-          </motion.div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredProducts.map((product, index) => (
-              <motion.div
-                key={product.name}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="glass-card rounded-2xl p-6 glow-hover group"
-                data-testid={`featured-product-${product.name.toLowerCase().replace(/[^a-z]/g, '-')}`}
-              >
-                <div className="relative h-48 overflow-hidden rounded-lg mb-6">
-                  <img
-                    src={product.image}
-                    alt={`High-precision machined ${product.name.toLowerCase()} for ${product.category.toLowerCase()} applications`}
-                    className="object-cover group-hover:scale-110 transition-transform duration-300 w-full h-full absolute inset-0"
-                    loading="lazy"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgdmlld0JveD0iMCAwIDQwMCAyNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMjUwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMDAgMTI1TDE2NSAxMDBIMjM1TDIwMCAxMjVaIiBmaWxsPSIjOUI5OUIzIi8+CjxwYXRoIGQ9Ik0yMDAgMTI1TDE2NSAxNTBIMjM1TDIwMCAxMjVaIiBmaWxsPSIjOUI5OUIzIi8+Cjx0ZXh0IHg9IjIwMCIgeT0iMTgwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNkI3Mjg0IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiPg0KSW1hZ2UgTm90IEF2YWlsYWJsZQ0KPC90ZXh0Pgo8L3N2Zz4K';
-                    }}
-                  />
-                </div>
-                <div className="text-sm text-red font-medium mb-2">{product.category}</div>
-                <h3 className="text-lg font-display font-semibold text-primary mb-3">
-                  {product.name}
-                </h3>
-                <p className="text-muted mb-4 leading-relaxed">{product.description}</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-amber font-medium">Tolerance: {product.tolerance}</span>
-                  <CheckCircle className="h-5 w-5 text-amber" />
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 md:py-28 bg-elevated">
-        <div className="max-w-4xl mx-auto px-6 md:px-10 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6 tracking-tight">
-              Ready to Start Your <span className="gradient-text">Next Project?</span>
-            </h2>
-            <p className="text-xl text-muted mb-12 leading-relaxed">
-              Partner with Neo Automatics for precision components that exceed expectations. 
-              Get your custom quote today.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <Link href="/contact">
-                <Button 
-                  className="btn-primary magnetic-btn group" 
-                  data-testid="cta-request-quote"
-                  aria-label="Get started with your precision machining project"
-                >
-                  <ArrowRight className="mr-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                  Request a Quote
-                </Button>
-              </Link>
-              
-              <Link href="/capabilities">
-                <Button 
-                  className="btn-secondary magnetic-btn" 
-                  data-testid="cta-view-capabilities"
-                  aria-label="Learn more about our manufacturing capabilities"
-                >
-                  View Our Capabilities
-                </Button>
+              <Link href="/quote" className="btn-onDark">
+                Request a Quote
               </Link>
             </div>
-          </motion.div>
+
+            <dl className="mt-12 grid max-w-lg grid-cols-3 gap-6 border-t border-graphite-line pt-7">
+              {[
+                { label: 'Codes listed', value: totalProductCount },
+                { label: 'ISO families', value: totalFamilyCount },
+                { label: 'Categories', value: categories.length },
+              ].map((stat) => (
+                <div key={stat.label} className="flex flex-col">
+                  <dd className="font-display text-3xl font-bold leading-none text-accent">{stat.value}</dd>
+                  <dt className="label mt-2 text-graphite-muted">{stat.label}</dt>
+                </div>
+              ))}
+            </dl>
+          </div>
+
+          {/* Schematic shape wall — original technical illustration, not photography */}
+          <div className="hidden grid-cols-3 gap-3 lg:grid" aria-hidden="true">
+            {['Triangular', 'Rhombic 80°', 'Square', 'Rhombic 35°', 'Round', 'Trigon 80°', 'Rhombic 55°', 'Rectangular', 'Triangular'].map(
+              (s, i) => (
+                <div key={i} className="flex aspect-square items-center justify-center border border-graphite-line bg-graphite-light">
+                  <InsertGlyph shape={s} onDark className="h-16 w-16" />
+                </div>
+              ),
+            )}
+          </div>
         </div>
       </section>
-    </div>
+
+      {/* Search prompt */}
+      <section className="border-b border-rule bg-surface-subtle">
+        <div className="shell flex flex-col items-start gap-4 py-7 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-[16px] text-ink-soft">
+            Know the code on your insert box? Search the catalogue directly.
+          </p>
+          <Link href="/products" className="btn-outline whitespace-nowrap">
+            <Search className="h-4 w-4" aria-hidden="true" /> Search by product code
+          </Link>
+        </div>
+      </section>
+
+      {/* Categories */}
+      <section className="py-16 md:py-24">
+        <div className="shell">
+          <span className="accent-rule mb-5" />
+          <h2 className="text-[32px] sm:text-[40px]">Product categories</h2>
+          <p className="mt-3 max-w-2xl text-[17px] text-ink-soft">
+            The catalogue is organised by machining operation. Each category lists the ISO codes we
+            currently handle; anything not listed can be sourced on enquiry.
+          </p>
+
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {listed.map((c) => (
+              <Link key={c.id} href={`/products/${c.slug}`} className="tile group flex gap-4 p-5">
+                <InsertGlyph category={c.id} className="h-12 w-12 shrink-0" />
+                <div>
+                  <h3 className="text-[19px] text-ink group-hover:text-accent-ink">{c.name}</h3>
+                  <p className="mt-1.5 text-[14px] leading-relaxed text-ink-muted">{c.description}</p>
+                  <p className="mt-2.5 font-mono text-[12px] text-accent-ink">{counts[c.id]} codes listed</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          <h3 className="label mt-12 mb-4 text-ink-muted">Also sourced on enquiry</h3>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {bySource.map((c) => (
+              <Link key={c.id} href={`/products/${c.slug}`} className="tile group p-5">
+                <h4 className="text-[17px] text-ink group-hover:text-accent-ink">{c.name}</h4>
+                <p className="mt-1.5 text-[14px] leading-relaxed text-ink-muted">{c.description}</p>
+                {c.needsConfirmation && (
+                  <p className="mt-2.5 font-mono text-[12px] text-ink-muted">Range being finalised</p>
+                )}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Families currently handled */}
+      <section className="border-y border-rule bg-surface-subtle py-16 md:py-20">
+        <div className="shell">
+          <span className="accent-rule mb-5" />
+          <h2 className="text-[32px] sm:text-[40px]">Insert families we handle</h2>
+          <p className="mt-3 max-w-2xl text-[17px] text-ink-soft">
+            These are the ISO families currently represented in our catalogue. Sizes, geometries and
+            grades within each family are confirmed at the time of quotation.
+          </p>
+          <ul className="mt-8 flex flex-wrap gap-2">
+            {featuredFamilies.map((f) => (
+              <li key={f}>
+                <Link
+                  href={`/products?q=${f}`}
+                  className="inline-block border border-rule bg-white px-3.5 py-2 font-mono text-[14px] text-ink hover:border-ink hover:text-accent-ink"
+                >
+                  {f}
+                </Link>
+              </li>
+            ))}
+            <li>
+              <Link href="/products" className="inline-block px-3.5 py-2 font-mono text-[14px] font-semibold text-accent-ink hover:underline">
+                +{totalFamilyCount - featuredFamilies.length} more →
+              </Link>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      {/* Custom sourcing */}
+      <section className="py-16 md:py-24">
+        <div className="shell grid gap-10 lg:grid-cols-2 lg:items-center">
+          <div>
+            <span className="accent-rule mb-5" />
+            <h2 className="text-[32px] sm:text-[40px]">Not in the list? We source it.</h2>
+            <p className="mt-4 text-[17px] leading-relaxed text-ink-soft">
+              Much of what we supply starts as a specific request — a size that is hard to find, a
+              geometry for a particular material, or a replacement for an insert that has been
+              discontinued. Send the code, the drawing or a photograph of the worn part and we will
+              work back to a specification.
+            </p>
+            <ul className="mt-6 space-y-3">
+              {[
+                'Non-standard sizes and geometries',
+                'Special-design inserts made to a drawing',
+                'Mining inserts and tube scraper inserts',
+                'Replacements for discontinued part numbers',
+              ].map((t) => (
+                <li key={t} className="flex gap-3 text-[16px] text-ink-soft">
+                  <Boxes className="mt-0.5 h-5 w-5 shrink-0 text-accent-ink" aria-hidden="true" />
+                  {t}
+                </li>
+              ))}
+            </ul>
+            <Link href="/custom-sourcing" className="btn-outline mt-8">
+              How custom sourcing works <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            {['Rhombic 35°', 'Trigon 80°', 'Round', 'Square'].map((s) => (
+              <div key={s} className="flex flex-col items-center justify-center border border-rule bg-surface-subtle p-7">
+                <InsertGlyph shape={s} className="h-20 w-20" />
+                <span className="mt-3 font-mono text-[12px] text-ink-muted">{s}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Why work with us */}
+      <section className="bg-graphite py-16 text-graphite-ink md:py-24">
+        <div className="shell">
+          <span className="accent-rule mb-5" />
+          <h2 className="text-[32px] text-graphite-ink sm:text-[40px]">Why work with {company.displayName}</h2>
+          <div className="mt-10 grid gap-px border border-graphite-line bg-graphite-line sm:grid-cols-2">
+            {REASONS.map((r) => (
+              <div key={r.title} className="bg-graphite p-7">
+                <h3 className="text-[20px] text-graphite-ink">{r.title}</h3>
+                <p className="mt-2.5 text-[15px] leading-relaxed text-graphite-muted">{r.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Process */}
+      <section className="py-16 md:py-24">
+        <div className="shell">
+          <span className="accent-rule mb-5" />
+          <h2 className="text-[32px] sm:text-[40px]">How an enquiry works</h2>
+          <ol className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            {STEPS.map((s, i) => (
+              <li key={s.title}>
+                <div className="flex items-center gap-3">
+                  <span className="font-mono text-[13px] font-semibold text-accent-ink">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <span className="h-px flex-1 bg-rule" aria-hidden="true" />
+                </div>
+                <s.icon className="mt-5 h-6 w-6 text-ink" aria-hidden="true" />
+                <h3 className="mt-3 text-[19px]">{s.title}</h3>
+                <p className="mt-1.5 text-[15px] leading-relaxed text-ink-muted">{s.body}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="border-t border-rule bg-surface-subtle py-16 md:py-20">
+        <div className="shell flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h2 className="text-[30px] sm:text-[36px]">Tell us what you need</h2>
+            <p className="mt-2.5 max-w-xl text-[17px] text-ink-soft">
+              Send an ISO code, a drawing or a description of the job. We will come back with pricing,
+              lead time and available grades.
+            </p>
+          </div>
+          <Link href="/quote" className="btn-primary shrink-0">
+            Request a Quote <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
+        </div>
+      </section>
+    </>
   );
 }

@@ -1,70 +1,21 @@
 import express, { type Request, Response, NextFunction } from "express";
-import multer from "multer";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
-
-// Configure multer for handling multipart/form-data (file uploads)
-const upload = multer({
-  dest: "uploads/", // temporary storage directory
-  limits: {
-    fileSize: 10 * 1024 * 1024, // 10MB limit to match frontend
-  },
-  fileFilter: (req, file, cb) => {
-    // Allow file types that match the frontend validation
-    const allowedTypes = [
-      "application/pdf",
-      "application/vnd.ms-excel",
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      "image/jpeg",
-      "image/png",
-    ];
-
-    const allowedExtensions = [".dwg", ".dxf", ".step", ".stp"];
-    const hasAllowedExtension = allowedExtensions.some((ext) =>
-      file.originalname.toLowerCase().endsWith(ext),
-    );
-
-    if (allowedTypes.includes(file.mimetype) || hasAllowedExtension) {
-      cb(null, true);
-    } else {
-      cb(new Error("Invalid file type"));
-    }
-  },
-});
+import { logger } from "./lib/logger";
 
 const app = express();
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.disable("x-powered-by");
+app.use(express.json({ limit: "1mb" }));
+app.use(express.urlencoded({ extended: false, limit: "1mb" }));
 
 app.use((req, res, next) => {
   const start = Date.now();
-  const path = req.path;
-  let capturedJsonResponse: Record<string, any> | undefined;
-
-  const originalResJson = res.json;
-
-  res.json = function (bodyJson, ...args) {
-    capturedJsonResponse = bodyJson;
-    return originalResJson.apply(res, [bodyJson, ...args]);
-  };
+  const { path } = req;
 
   res.on("finish", () => {
-    const duration = Date.now() - start;
-
-    if (path.startsWith("/api")) {
-      let logLine = `${req.method} ${path} ${res.statusCode} in ${duration}ms`;
-
-      if (capturedJsonResponse) {
-        logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
-      }
-
-      if (logLine.length > 80) {
-        logLine = `${logLine.slice(0, 79)}…`;
-      }
-
-      log(logLine);
-    }
+    if (!path.startsWith("/api")) return;
+    log(`${req.method} ${path} ${res.statusCode} in ${Date.now() - start}ms`);
   });
 
   next();
@@ -73,35 +24,35 @@ app.use((req, res, next) => {
 (async () => {
   const server = await registerRoutes(app);
 
-  app.use(
-    (err: any, _req: Request, res: Response, _next: NextFunction) => {
-      const status = err.status || err.statusCode || 500;
-      const message = err.message || "Internal Server Error";
+  // Error handler. It must NOT re-throw: doing so turns a handled request
+  // into an uncaught exception and can take the whole process down.
+  app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
+    const status = err?.status || err?.statusCode || 500;
+    logger.error({ err }, "Unhandled request error");
+    if (res.headersSent) return;
+    res.status(status).json({ ok: false, message: "Something went wrong. Please try again." });
+  });
 
-      res.status(status).json({ message });
-      throw err;
-    },
-  );
-
-  // Set up Vite only in development and after registering API routes,
-  // so the catch-all route does not interfere with them.
+  // Vite is registered after the API routes so its catch-all cannot shadow them.
   if (app.get("env") === "development") {
     await setupVite(app, server);
   } else {
     serveStatic(app);
   }
 
-  // Serve the API and client from the configured port.
-  // Default to port 5000 when PORT is not specified.
   const port = parseInt(process.env.PORT || "5000", 10);
 
-  server.listen(
-    {
-      port,
-      host: "0.0.0.0",
-    },
-    () => {
-      log(`serving on port ${port}`);
-    },
-  );
+  server.on("error", (error: NodeJS.ErrnoException) => {
+    if (error.code === "EADDRINUSE") {
+      log(`Port ${port} is already in use. Stop the other process or set PORT to a free port.`);
+    } else {
+      logger.error({ err: error }, "Server failed to start");
+    }
+    process.exit(1);
+  });
+
+  // host 0.0.0.0 without reusePort — reusePort is unsupported on macOS.
+  server.listen({ port, host: "0.0.0.0" }, () => {
+    log(`serving on http://localhost:${port}`);
+  });
 })();

@@ -1,354 +1,88 @@
-import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Clock, Users, Zap, Factory, Award } from 'lucide-react';
-import { RFQForm } from '../../../components/ui/rfq-form';
-import { getCompanyInfo, getManufacturingCapabilities, getCompanyUnits, formatPhoneForTel } from '../../../shared/company';
-import { usePageTitle } from '../lib/usePageTitle';
-
-const createContactInfo = (companyInfo: any, capabilities: any) => [
-  {
-    icon: Phone,
-    title: "Phone",
-    details: [companyInfo.phone, "Mon-Fri: 8AM-6PM IST"],
-    color: "amber"
-  },
-  {
-    icon: Mail,
-    title: "Email",
-    details: [companyInfo.email, "quotes@neoautomatics.com"],
-    color: "red"
-  },
-  {
-    icon: MapPin,
-    title: "Location",
-    details: [companyInfo.hq, `${capabilities.units.length} Manufacturing Units`],
-    color: "amber"
-  },
-  {
-    icon: Clock,
-    title: "Response Time",
-    details: ["Quote: Within 24 hours", "Technical: Within 4 hours"],
-    color: "red"
-  }
-];
-
-const contactReasons = [
-  {
-    icon: Factory,
-    title: "New Projects",
-    description: "Request quotes for new component manufacturing projects",
-    cta: "Get Quote"
-  },
-  {
-    icon: Users,
-    title: "Technical Support",
-    description: "Engineering assistance and design optimization consultation",
-    cta: "Contact Engineers"
-  },
-  {
-    icon: Award,
-    title: "Quality Queries",
-    description: "Quality documentation, certifications, and PPAP requirements",
-    cta: "Quality Team"
-  },
-  {
-    icon: Zap,
-    title: "Rapid Prototyping",
-    description: "Quick turnaround prototyping and development support",
-    cta: "Prototype Request"
-  }
-];
+import { Link } from 'wouter';
+import { Mail, Phone, MapPin, ArrowRight } from 'lucide-react';
+import { usePageMeta } from '../lib/usePageMeta';
+import { company, confirmed, telHref } from '../../../shared/company';
 
 export default function ContactPage() {
-  usePageTitle('Contact Us - Get a Quote', 'Get a personalized quote for your precision machining needs. Our expert team will provide a competitive proposal within 24 hours.');
-  
-  const companyInfo = getCompanyInfo();
-  const capabilities = getManufacturingCapabilities();
-  const contactDetails = createContactInfo(companyInfo, capabilities);
+  usePageMeta(
+    'Contact',
+    'Get in touch with Sree Raj Tools about carbide inserts and cutting tools. Send your requirement and we will respond with pricing and availability.',
+  );
+
+  const email = confirmed(company.contact.email);
+  const phone = confirmed(company.contact.phone);
+  const whatsapp = confirmed(company.contact.whatsapp);
+  const address = confirmed(company.contact.address);
+  const hours = confirmed(company.contact.hours);
+  const hasAny = Boolean(email || phone || whatsapp || address);
+
   return (
-    <div className="min-h-screen bg-base">
-      {/* Hero Section */}
-      <section className="relative py-28 overflow-hidden">
-        {/* Background Effects */}
-        <div className="absolute inset-0 aurora-bg opacity-10" />
-        <div className="geometric-shape geometric-shape-1" />
-        <div className="geometric-shape geometric-shape-2" />
-        
-        <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
-          >
-            <h1 className="text-4xl md:text-6xl font-display font-bold text-primary mb-6 tracking-tight leading-tight">
-              Request a <span className="gradient-text">Quote</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-muted max-w-4xl mx-auto leading-relaxed">
-              Get a personalized quote for your precision machining needs.
-              Our expert team will review your requirements and provide a 
-              <span className="text-amber font-semibold"> competitive proposal within 24 hours</span>.
-            </p>
-          </motion.div>
-
-          {/* Contact Info Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
-            {contactDetails.map((info: any, index: number) => {
-              const IconComponent = info.icon;
-              const iconColor = info.color === 'amber' ? 'text-amber' : 'text-red';
-              
-              return (
-                <motion.div
-                  key={info.title}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="text-center glass-card p-6 glow-hover group"
-                  data-testid={`contact-info-${info.title.toLowerCase()}`}
-                >
-                  <IconComponent className={`h-8 w-8 ${iconColor} mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`} />
-                  <h3 className="font-display font-semibold text-primary mb-3">{info.title}</h3>
-                  {info.details.map((detail: string, detailIndex: number) => (
-                    <div key={detailIndex} className="text-muted text-sm mb-1">
-                      {detail}
-                    </div>
-                  ))}
-                </motion.div>
-              );
-            })}
-          </div>
-
-          {/* Our Locations Panel */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="glass-card p-8 mb-12"
-          >
-            <h2 className="text-2xl md:text-3xl font-display font-bold text-primary mb-8 text-center">
-              Our <span className="gradient-text">Locations</span>
-            </h2>
-            
-            <div className="grid md:grid-cols-3 gap-6">
-              {getCompanyUnits().map((unit, index) => (
-                <motion.div
-                  key={unit.name}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="glass-card p-6 border border-accent-secondary/20"
-                  data-testid={`location-${index + 1}`}
-                >
-                  <div className={`w-8 h-8 rounded-full ${index % 2 === 0 ? 'bg-accent-primary' : 'bg-accent-secondary'} flex items-center justify-center text-base font-bold text-bg-base mb-4`}>
-                    {index + 1}
-                  </div>
-                  
-                  <h3 className="text-lg font-display font-semibold text-primary mb-3">{unit.name}</h3>
-                  
-                  <div className="space-y-2 text-sm">
-                    <div>
-                      <span className="text-accent-primary font-medium">Address:</span>
-                      <p className="text-muted mt-1">{unit.address}</p>
-                    </div>
-                    
-                    <div>
-                      <span className="text-accent-primary font-medium">Phone:</span>
-                      <div className="mt-1">
-                        {unit.phones.map((phone, phoneIndex) => (
-                          <a 
-                            key={phoneIndex}
-                            href={`tel:${formatPhoneForTel(phone)}`}
-                            className="block text-accent-primary hover:underline hover:text-text-primary transition-colors"
-                            data-testid={`phone-${index + 1}-${phoneIndex + 1}`}
-                          >
-                            +91 {phone}
-                          </a>
-                        ))}
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <span className="text-accent-primary font-medium">Email:</span>
-                      <div className="mt-1">
-                        {unit.emails.map((email, emailIndex) => (
-                          <a 
-                            key={emailIndex}
-                            href={`mailto:${email}`}
-                            className="block text-accent-primary hover:underline hover:text-text-primary transition-colors"
-                            data-testid={`email-${index + 1}-${emailIndex + 1}`}
-                          >
-                            {email}
-                          </a>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+    <>
+      <section className="bg-graphite py-14 text-graphite-ink md:py-16">
+        <div className="shell max-w-3xl">
+          <span className="accent-rule mb-5" />
+          <h1 className="text-[38px] sm:text-[48px]">Contact</h1>
+          <p className="mt-4 text-[17px] leading-relaxed text-graphite-muted">
+            The quickest way to reach us about a product is the enquiry form — it puts your
+            requirement straight in front of us with everything we need to quote.
+          </p>
         </div>
       </section>
 
-      {/* Contact Reasons */}
-      <section className="py-20 md:py-28 bg-elevated">
-        <div className="max-w-7xl mx-auto px-6 md:px-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6 tracking-tight">
-              How Can We <span className="gradient-text">Help?</span>
-            </h2>
-            <p className="text-xl text-muted max-w-3xl mx-auto leading-relaxed">
-              Whether you need quotes, technical support, or quality documentation, our team is ready to assist.
+      <section className="py-14 md:py-20">
+        <div className="shell grid gap-10 lg:grid-cols-2">
+          <div>
+            <h2 className="text-[28px]">Send an enquiry</h2>
+            <p className="mt-3 text-[16px] leading-relaxed text-ink-soft">
+              Share a product code, a drawing or a description of the job. You can attach a file up to
+              10 MB. We reply with pricing, available grades and lead time.
             </p>
-          </motion.div>
+            <Link href="/quote" className="btn-primary mt-6">
+              Request a Quote <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+          </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {contactReasons.map((reason, index) => {
-              const IconComponent = reason.icon;
-              
-              return (
-                <motion.div
-                  key={reason.title}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="text-center glass-card p-8 glow-hover group"
-                  data-testid={`contact-reason-${reason.title.toLowerCase().replace(/[^a-z]/g, '-')}`}
-                >
-                  <IconComponent className="h-12 w-12 text-amber mx-auto mb-6 group-hover:scale-110 transition-transform duration-300" />
-                  <h3 className="text-lg font-display font-semibold text-primary mb-4">
-                    {reason.title}
-                  </h3>
-                  <p className="text-muted mb-6 leading-relaxed">{reason.description}</p>
-                  <div className="text-red font-medium text-sm">{reason.cta}</div>
-                </motion.div>
-              );
-            })}
+          <div>
+            <h2 className="text-[28px]">Direct contact</h2>
+            {hasAny ? (
+              <ul className="mt-5 space-y-4">
+                {email && (
+                  <li className="flex gap-3">
+                    <Mail className="mt-0.5 h-5 w-5 shrink-0 text-accent-ink" aria-hidden="true" />
+                    <a href={`mailto:${email}`} className="text-[16px] text-ink hover:text-accent-ink">{email}</a>
+                  </li>
+                )}
+                {phone && (
+                  <li className="flex gap-3">
+                    <Phone className="mt-0.5 h-5 w-5 shrink-0 text-accent-ink" aria-hidden="true" />
+                    <a href={telHref(phone)} className="text-[16px] text-ink hover:text-accent-ink">{phone}</a>
+                  </li>
+                )}
+                {whatsapp && (
+                  <li className="flex gap-3">
+                    <Phone className="mt-0.5 h-5 w-5 shrink-0 text-accent-ink" aria-hidden="true" />
+                    <span className="text-[16px] text-ink">{whatsapp} <span className="text-ink-muted">(WhatsApp)</span></span>
+                  </li>
+                )}
+                {address && (
+                  <li className="flex gap-3">
+                    <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-accent-ink" aria-hidden="true" />
+                    <span className="text-[16px] text-ink-soft">{address}</span>
+                  </li>
+                )}
+                {hours && <li className="text-[15px] text-ink-muted">{hours}</li>}
+              </ul>
+            ) : (
+              <div className="mt-5 border border-rule bg-surface-subtle p-6">
+                <p className="text-[16px] leading-relaxed text-ink-soft">
+                  Our published contact details are being finalised. Until then, please use the enquiry
+                  form — it reaches us directly and lets you attach a drawing or photograph.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </section>
-
-      {/* RFQ Form Section */}
-      <section className="py-20 md:py-28">
-        <div className="max-w-4xl mx-auto px-6 md:px-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6 tracking-tight">
-              Submit Your <span className="gradient-text">Requirements</span>
-            </h2>
-            <p className="text-xl text-muted max-w-3xl mx-auto leading-relaxed">
-              Fill out the form below with your project details. Include technical drawings for the most accurate quote.
-            </p>
-          </motion.div>
-          
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="glass-card p-8 md:p-12 glow-hover"
-            data-testid="rfq-form-section"
-          >
-            <RFQForm />
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Additional Contact Methods */}
-      <section className="py-20 md:py-28 bg-elevated">
-        <div className="max-w-7xl mx-auto px-6 md:px-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6 tracking-tight">
-              Alternative <span className="gradient-text">Contact</span>
-            </h2>
-            <p className="text-xl text-muted max-w-3xl mx-auto leading-relaxed">
-              Prefer other communication methods? We're flexible to work with your preferences.
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="text-center glass-card p-8 glow-hover group"
-            >
-              <Mail className="h-12 w-12 text-amber mx-auto mb-6 group-hover:scale-110 transition-transform duration-300" />
-              <h3 className="text-xl font-display font-semibold text-primary mb-4">Direct Email</h3>
-              <p className="text-muted mb-6 leading-relaxed">
-                Send your requirements directly to our engineering team for immediate attention.
-              </p>
-              <a 
-                href="mailto:quotes@neoautomatics.com" 
-                className="btn-primary text-sm inline-flex items-center magnetic-btn group"
-                data-testid="contact-direct-email"
-              >
-                Send Email
-                <Mail className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-              </a>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-center glass-card p-8 glow-hover group"
-            >
-              <Phone className="h-12 w-12 text-red mx-auto mb-6 group-hover:scale-110 transition-transform duration-300" />
-              <h3 className="text-xl font-display font-semibold text-primary mb-4">Phone Call</h3>
-              <p className="text-muted mb-6 leading-relaxed">
-                Speak directly with our technical team for immediate assistance and consultation.
-              </p>
-              <a 
-                href="tel:+91-XXX-XXXX-XXX" 
-                className="btn-secondary text-sm inline-flex items-center magnetic-btn group"
-                data-testid="contact-phone-call"
-              >
-                Call Now
-                <Phone className="ml-2 h-4 w-4 group-hover:scale-110 transition-transform" />
-              </a>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-center glass-card p-8 glow-hover group"
-            >
-              <Factory className="h-12 w-12 text-amber mx-auto mb-6 group-hover:scale-110 transition-transform duration-300" />
-              <h3 className="text-xl font-display font-semibold text-primary mb-4">Facility Visit</h3>
-              <p className="text-muted mb-6 leading-relaxed">
-                Schedule a visit to our manufacturing facility to see our capabilities firsthand.
-              </p>
-              <a 
-                href="mailto:info@neoautomatics.com?subject=Facility%20Visit%20Request" 
-                className="btn-secondary text-sm inline-flex items-center magnetic-btn group"
-                data-testid="contact-facility-visit"
-              >
-                Schedule Visit
-                <MapPin className="ml-2 h-4 w-4 group-hover:translate-y-0.5 transition-transform" />
-              </a>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-    </div>
+    </>
   );
 }

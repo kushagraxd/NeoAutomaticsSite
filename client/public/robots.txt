@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Disallow: /api/
+
+# Sitemap: added automatically once the final domain is set.
+# Run `SITE_URL=https://yourdomain.com node scripts/generate-sitemap.mjs`
