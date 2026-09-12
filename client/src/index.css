@@ -108,11 +108,18 @@
            hover:border-ink hover:bg-surface-subtle active:scale-[.985];
   }
   .btn-onDark {
-    @apply btn bg-white text-ink hover:bg-[#e8e8ea] active:scale-[.985];
+    @apply btn bg-white text-ink shadow-xs
+           hover:bg-accent hover:text-night hover:shadow-lift active:scale-[.985];
   }
   .btn-ghostDark {
-    @apply btn border border-night-line bg-transparent text-night-ink
-           hover:border-[#3f3f46] hover:bg-[#161618] active:scale-[.985];
+    @apply btn border border-[#3f3f46] bg-white/[.04] text-night-ink backdrop-blur-sm
+           hover:border-accent hover:bg-[rgba(210,168,87,0.12)] hover:text-accent active:scale-[.985];
+  }
+
+  /* Larger call-to-action sizing, used in the hero */
+  .btn-lg {
+    @apply gap-2.5 rounded-lg text-[16.5px] font-semibold;
+    padding: 1.0625rem 1.75rem;
   }
 
   /* ---- Surfaces ---- */
@@ -156,6 +163,20 @@
   .hairline {
     @apply h-px w-full bg-rule;
   }
+
+  /* ---- Scroll reveal ---- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition:
+      opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+  }
+  .reveal-in {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @layer utilities {
@@ -177,10 +198,27 @@
   .tabnum {
     font-variant-numeric: tabular-nums;
   }
+
+  /* Slow travel of the scroll indicator line */
+  @keyframes cue-travel {
+    0% { transform: translateY(-100%); opacity: 0; }
+    35% { opacity: 1; }
+    100% { transform: translateY(100%); opacity: 0; }
+  }
+  .scroll-cue::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 55%;
+    background: linear-gradient(to bottom, transparent, var(--accent));
+    animation: cue-travel 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .reveal { opacity: 1 !important; transform: none !important; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
