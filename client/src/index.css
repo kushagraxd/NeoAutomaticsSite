@@ -118,7 +118,7 @@
 
   /* Larger call-to-action sizing, used in the hero */
   .btn-lg {
-    @apply gap-2.5 rounded-lg text-[16.5px] font-semibold;
+    @apply gap-2.5 whitespace-nowrap rounded-lg text-[16.5px] font-semibold;
     padding: 1.0625rem 1.75rem;
   }
 
@@ -179,6 +179,77 @@
   }
 }
 
+@layer components {
+  /* Serif italic accent word inside a Geist heading */
+  .accent-word {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  /* ---- Spotlight card: a soft light follows the cursor in the card's tone ---- */
+  .spotlight {
+    --mx: 50%;
+    --my: 50%;
+    --tone: 210, 168, 87;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+  .spotlight::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(520px circle at var(--mx) var(--my), rgba(var(--tone), 0.16), transparent 45%);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+  .spotlight::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    padding: 1px;
+    background: radial-gradient(320px circle at var(--mx) var(--my), rgba(var(--tone), 0.75), transparent 60%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+  .spotlight:hover::before,
+  .spotlight:hover::after,
+  .spotlight:focus-within::before,
+  .spotlight:focus-within::after {
+    opacity: 1;
+  }
+
+  /* ---- Marquee ---- */
+  .marquee {
+    mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  }
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee var(--marquee-duration, 60s) linear infinite;
+  }
+  .marquee-track[data-direction="reverse"] {
+    animation-direction: reverse;
+  }
+  .marquee:hover .marquee-track,
+  .marquee:focus-within .marquee-track {
+    animation-play-state: paused;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+}
+
 @layer utilities {
   /* Soft radial light behind dark hero content */
   .night-glow {
@@ -219,6 +290,7 @@
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .reveal { opacity: 1 !important; transform: none !important; }
+  .marquee-track { animation: none !important; flex-wrap: wrap; width: auto; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;

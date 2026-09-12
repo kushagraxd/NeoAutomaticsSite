@@ -33,6 +33,15 @@ export default {
           DEFAULT: "var(--rule)",
           strong: "var(--rule-strong)",
         },
+        // One tone per machining operation — colour encodes the category.
+        tone: {
+          turning: "#E3B55F",
+          milling: "#4FC7B6",
+          drilling: "#6E9BFF",
+          grooving: "#A98BF5",
+          threading: "#F07E9A",
+          neutral: "#A1A1AA",
+        },
 
         background: "var(--background)",
         foreground: "var(--foreground)",
@@ -49,6 +58,7 @@ export default {
       fontFamily: {
         sans: ["Geist", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
         mono: ["'Geist Mono'", "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
+        serif: ["'Instrument Serif'", "Georgia", "serif"],
       },
       fontSize: {
         display: ["clamp(2.75rem, 6vw, 4.5rem)", { lineHeight: "1.02", letterSpacing: "-0.04em" }],

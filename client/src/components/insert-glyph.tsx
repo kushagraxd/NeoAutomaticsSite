@@ -74,12 +74,14 @@ export interface InsertGlyphProps {
   className?: string;
   /** Renders light-on-dark for the near-black sections. */
   onDark?: boolean;
+  /** Explicit stroke colour, e.g. a category tone. Overrides onDark. */
+  color?: string;
 }
 
-export default function InsertGlyph({ shape, category, className, onDark }: InsertGlyphProps) {
+export default function InsertGlyph({ shape, category, className, onDark, color }: InsertGlyphProps) {
   const kind = glyphFor(shape, category);
-  const stroke = onDark ? 'var(--accent)' : 'var(--ink-soft)';
-  const fill = onDark ? 'rgba(210,168,87,0.08)' : 'var(--surface-panel)';
+  const stroke = color ?? (onDark ? 'var(--accent)' : 'var(--ink-soft)');
+  const fill = color ? 'rgba(255,255,255,0.03)' : onDark ? 'rgba(210,168,87,0.08)' : 'var(--surface-panel)';
 
   return (
     <svg viewBox="0 0 100 100" className={className} role="img" aria-label={shape ? `${shape} insert` : 'Carbide insert'}>
