@@ -11,7 +11,7 @@ export default function NotFound() {
       <div className="shell max-w-xl text-center">
         <InsertGlyph shape="Triangular" className="mx-auto mb-7 h-20 w-20" />
         <p className="label mb-3 text-accent-ink">Error 404</p>
-        <h1 className="text-[36px] sm:text-[44px]">We could not find that page</h1>
+        <h1 className="text-h1">We could not find that page</h1>
         <p className="mt-4 text-[17px] leading-relaxed text-ink-soft">
           The link may be out of date. You can search the catalogue by product code, or send us the
           requirement directly.

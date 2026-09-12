@@ -144,7 +144,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
 
       await transporter.sendMail({
-        from: `"Sree Raj Tools — Website Enquiry" <${mail.user}>`,
+        from: `"ShreeRaj Tools — Website Enquiry" <${mail.user}>`,
         to: mail.to,
         replyTo: data.email,
         subject: `Enquiry from ${data.company} — ${data.productCode || categoryById(data.productCategory as never)?.name || 'General'} [${ref}]`,

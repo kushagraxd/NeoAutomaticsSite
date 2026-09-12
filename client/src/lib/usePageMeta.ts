@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const SITE = 'Sree Raj Tools';
+const SITE = 'ShreeRaj Tools';
 
 function setMeta(selector: string, attr: 'name' | 'property', key: string, content: string) {
   let el = document.head.querySelector<HTMLMetaElement>(selector);

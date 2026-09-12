@@ -18,6 +18,7 @@ export interface CompanyContact {
   address: ConfirmableField;
   city: ConfirmableField;
   gstin: ConfirmableField;
+  iec: ConfirmableField;
   domain: ConfirmableField;
   hours: ConfirmableField;
 }
@@ -29,14 +30,18 @@ export interface Company {
   tagline: string;
   descriptor: string;
   summary: string;
+  shortSummary: string;
+  basedIn: string;
   country: string;
   sourcingRegions: string[];
+  marketNote: string;
   parentFirm: { name: string; relationship: string; note: string };
   contact: CompanyContact;
   claims: {
     certifications: string[];
     yearsExperience: number | null;
     customerCount: number | null;
+    countriesServed: number | null;
     authorisedDistributorFor: string[];
     partnerships: string[];
   };

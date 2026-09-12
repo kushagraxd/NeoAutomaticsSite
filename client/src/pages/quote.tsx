@@ -7,7 +7,7 @@ import type { RfqInput } from '../../../shared/rfq';
 export default function QuotePage() {
   usePageMeta(
     'Request a Quote',
-    'Send your carbide insert or cutting tool requirement to Sree Raj Tools. Share an ISO code, drawing or sample and receive pricing, availability and lead time.',
+    'Send your carbide insert or cutting tool requirement to ShreeRaj Tools. Share an ISO code, drawing or sample and receive pricing, availability and lead time.',
   );
 
   const search = useSearch();
@@ -16,11 +16,11 @@ export default function QuotePage() {
 
   return (
     <>
-      <section className="bg-graphite py-14 text-graphite-ink md:py-16">
+      <section className="bg-night py-14 text-night-ink md:py-16">
         <div className="shell max-w-3xl">
-          <span className="accent-rule mb-5" />
-          <h1 className="text-[38px] sm:text-[48px]">Request a quote</h1>
-          <p className="mt-4 text-[17px] leading-relaxed text-graphite-muted">
+          <span className="accent-rule-dark mb-5" />
+          <h1 className="text-h1">Request a quote</h1>
+          <p className="mt-4 text-[17px] leading-relaxed text-night-muted">
             Tell us what you need and we will come back with pricing, available grades and lead time.
             If you do not know the exact code, a drawing, a photograph or a description of the job is
             enough to start.
@@ -32,7 +32,7 @@ export default function QuotePage() {
         <div className="shell grid gap-10 lg:grid-cols-[1fr_300px] lg:items-start">
           <RfqForm defaultCategory={valid as RfqInput['productCategory'] | undefined} />
 
-          <aside className="border border-rule bg-surface-subtle p-6">
+          <aside className="rounded-lg border border-rule bg-surface-subtle p-6">
             <h2 className="label mb-4 text-ink-muted">What helps us quote faster</h2>
             <ul className="space-y-3 text-[15px] leading-relaxed text-ink-soft">
               <li>The ISO code from your current insert box, if you have it.</li>

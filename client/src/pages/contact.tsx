@@ -6,7 +6,7 @@ import { company, confirmed, telHref } from '../../../shared/company';
 export default function ContactPage() {
   usePageMeta(
     'Contact',
-    'Get in touch with Sree Raj Tools about carbide inserts and cutting tools. Send your requirement and we will respond with pricing and availability.',
+    'Get in touch with ShreeRaj Tools about carbide inserts and cutting tools. Send your requirement and we will respond with pricing and availability.',
   );
 
   const email = confirmed(company.contact.email);
@@ -18,11 +18,11 @@ export default function ContactPage() {
 
   return (
     <>
-      <section className="bg-graphite py-14 text-graphite-ink md:py-16">
+      <section className="bg-night py-14 text-night-ink md:py-16">
         <div className="shell max-w-3xl">
-          <span className="accent-rule mb-5" />
-          <h1 className="text-[38px] sm:text-[48px]">Contact</h1>
-          <p className="mt-4 text-[17px] leading-relaxed text-graphite-muted">
+          <span className="accent-rule-dark mb-5" />
+          <h1 className="text-h1">Contact</h1>
+          <p className="mt-4 text-[17px] leading-relaxed text-night-muted">
             The quickest way to reach us about a product is the enquiry form — it puts your
             requirement straight in front of us with everything we need to quote.
           </p>
@@ -32,7 +32,7 @@ export default function ContactPage() {
       <section className="py-14 md:py-20">
         <div className="shell grid gap-10 lg:grid-cols-2">
           <div>
-            <h2 className="text-[28px]">Send an enquiry</h2>
+            <h2 className="text-h2">Send an enquiry</h2>
             <p className="mt-3 text-[16px] leading-relaxed text-ink-soft">
               Share a product code, a drawing or a description of the job. You can attach a file up to
               10 MB. We reply with pricing, available grades and lead time.
@@ -43,7 +43,7 @@ export default function ContactPage() {
           </div>
 
           <div>
-            <h2 className="text-[28px]">Direct contact</h2>
+            <h2 className="text-h2">Direct contact</h2>
             {hasAny ? (
               <ul className="mt-5 space-y-4">
                 {email && (
@@ -73,7 +73,7 @@ export default function ContactPage() {
                 {hours && <li className="text-[15px] text-ink-muted">{hours}</li>}
               </ul>
             ) : (
-              <div className="mt-5 border border-rule bg-surface-subtle p-6">
+              <div className="mt-5 rounded-lg border border-rule bg-surface-subtle p-6">
                 <p className="text-[16px] leading-relaxed text-ink-soft">
                   Our published contact details are being finalised. Until then, please use the enquiry
                   form — it reaches us directly and lets you attach a drawing or photograph.

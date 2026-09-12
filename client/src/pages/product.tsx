@@ -15,7 +15,7 @@ export default function ProductPage() {
   usePageMeta(
     product ? `${product.code} — ${category?.name ?? 'Carbide Insert'}` : 'Product not found',
     product
-      ? `${product.code} carbide insert${product.shape ? `, ${product.shape.toLowerCase()} shape` : ''}. Request pricing and availability from Sree Raj Tools.`
+      ? `${product.code} carbide insert${product.shape ? `, ${product.shape.toLowerCase()} shape` : ''}. Request pricing and availability from ShreeRaj Tools.`
       : '',
   );
 
@@ -50,7 +50,7 @@ export default function ProductPage() {
       <section className="py-12 md:py-16">
         <div className="shell grid gap-10 lg:grid-cols-[420px_1fr]">
           <div>
-            <div className="flex aspect-square items-center justify-center border border-rule bg-surface-subtle">
+            <div className="flex aspect-square items-center justify-center rounded-lg border border-rule bg-surface-subtle">
               {photo ? (
                 <img src={photo} alt={`${product.code} carbide insert`} className="h-full w-full object-contain p-8" />
               ) : (
@@ -66,7 +66,7 @@ export default function ProductPage() {
           </div>
 
           <div>
-            <span className="accent-rule mb-5" />
+            <span className="accent-rule-dark mb-5" />
             <h1 className="font-mono text-[34px] font-semibold tracking-tight text-ink sm:text-[42px]">
               {product.code}
             </h1>
@@ -114,7 +114,7 @@ export default function ProductPage() {
       {related.length > 0 && (
         <section className="border-t border-rule bg-surface-subtle py-12">
           <div className="shell">
-            <h2 className="mb-6 text-[24px]">Other {product.family} codes</h2>
+            <h2 className="mb-6 text-h3">Other {product.family} codes</h2>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {related.map((p) => (
                 <ProductCard key={p.code} product={p} />
@@ -126,8 +126,8 @@ export default function ProductPage() {
 
       <section id="enquire" className="scroll-mt-20 py-14 md:py-20">
         <div className="shell max-w-3xl">
-          <span className="accent-rule mb-5" />
-          <h2 className="text-[30px]">Enquire about {product.code}</h2>
+          <span className="accent-rule-dark mb-5" />
+          <h2 className="text-h2">Enquire about {product.code}</h2>
           <p className="mb-8 mt-3 text-[16px] text-ink-soft">
             The code and category are already filled in. Add your quantity and material and we will
             come back with pricing and availability.

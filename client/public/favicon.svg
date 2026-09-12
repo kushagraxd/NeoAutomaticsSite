@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Sree Raj Tools">
-  <rect width="64" height="64" rx="10" fill="#15181B"/>
-  <path d="M32 13 L52 47 H12 Z" fill="none" stroke="#E8A33D" stroke-width="5" stroke-linejoin="round"/>
-  <circle cx="32" cy="36" r="5.5" fill="#E8A33D"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="ShreeRaj Tools">
+  <rect width="64" height="64" rx="14" fill="#09090B"/>
+  <path d="M32 15 L51 47 H13 Z" fill="none" stroke="#D2A857" stroke-width="4.5" stroke-linejoin="round"/>
+  <circle cx="32" cy="36" r="5" fill="#D2A857"/>
 </svg>

@@ -1,18 +1,21 @@
 {
   "_note": "Single source of truth for company identity. Fields marked confirmed:false are NOT rendered publicly — the UI shows an enquiry-led fallback instead. Do not set confirmed:true until the owner supplies the real value.",
   "company": {
-    "name": "Sree Raj Tools",
-    "displayName": "SREE RAJ TOOLS",
-    "wordmark": { "first": "SREE RAJ", "second": "TOOLS" },
-    "tagline": "Carbide inserts and cutting tools, sourced and supplied across India",
+    "name": "ShreeRaj Tools",
+    "displayName": "ShreeRaj Tools",
+    "wordmark": { "first": "ShreeRaj", "second": "Tools" },
+    "tagline": "Carbide inserts and cutting tools, sourced and supplied worldwide",
     "descriptor": "Importer and supplier of carbide inserts and cutting tools",
-    "summary": "Sree Raj Tools supplies carbide inserts and cutting tools to workshops and manufacturers in India, sourced from established producers in China and Taiwan. We stock commonly required geometries and source additional specifications to order.",
+    "summary": "ShreeRaj Tools supplies carbide inserts and cutting tools sourced from established producers in China and Taiwan. We serve manufacturers and machining workshops in India, and welcome enquiries from buyers internationally.",
+    "shortSummary": "Carbide inserts and cutting tools, sourced from China and Taiwan and supplied to manufacturers in India and internationally.",
+    "basedIn": "India",
     "country": "India",
     "sourcingRegions": ["China", "Taiwan"],
+    "marketNote": "We supply customers in India and accept enquiries from international buyers.",
     "parentFirm": {
       "name": "Neo Automatics",
-      "relationship": "Sree Raj Tools is a new, separately operated tooling supply business started by the family behind Neo Automatics.",
-      "note": "Neo Automatics is a separate business and a separate legal entity. Its capabilities, history and credentials are not those of Sree Raj Tools."
+      "relationship": "ShreeRaj Tools is a new, separately operated tooling supply business started by the family behind Neo Automatics.",
+      "note": "Neo Automatics is a separate business and a separate legal entity. Its capabilities, history and credentials are not those of ShreeRaj Tools."
     },
     "contact": {
       "email": { "value": null, "confirmed": false, "needs": "Business email address for enquiries and RFQ delivery" },
@@ -21,6 +24,7 @@
       "address": { "value": null, "confirmed": false, "needs": "Public business address" },
       "city": { "value": null, "confirmed": false, "needs": "City / state to display" },
       "gstin": { "value": null, "confirmed": false, "needs": "GSTIN, if it should be displayed" },
+      "iec": { "value": null, "confirmed": false, "needs": "Import Export Code, if it should be displayed" },
       "domain": { "value": null, "confirmed": false, "needs": "Final website domain" },
       "hours": { "value": null, "confirmed": false, "needs": "Business hours, if you want them shown" }
     },
@@ -29,6 +33,7 @@
       "certifications": [],
       "yearsExperience": null,
       "customerCount": null,
+      "countriesServed": null,
       "authorisedDistributorFor": [],
       "partnerships": []
     }

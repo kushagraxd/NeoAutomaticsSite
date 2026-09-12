@@ -4,49 +4,49 @@
 
 @layer base {
   :root {
-    /* Foundation */
+    /* Foundation — white with refined neutral greys */
     --surface: #ffffff;
-    --surface-subtle: #f4f5f6;
-    --surface-panel: #eceef0;
+    --surface-subtle: #fafafa;
+    --surface-panel: #f4f4f5;
 
-    /* Graphite sections */
-    --graphite: #15181b;
-    --graphite-light: #1e2328;
-    --graphite-line: #2b3238;
-    --graphite-ink: #eef0f2;
-    --graphite-muted: #9aa3ab;
+    /* Near-black sections */
+    --night: #09090b;
+    --night-soft: #161618;
+    --night-line: #27272a;
+    --night-ink: #fafafa;
+    --night-muted: #a1a1aa;
 
     /* Ink on light */
-    --ink: #14171a;
-    --ink-soft: #3d444b;
-    --ink-muted: #6b747d;
-    --rule: #dde1e4;
+    --ink: #09090b;
+    --ink-soft: #3f3f46;
+    --ink-muted: #71717a;
+    --rule: #e8e8ea;
+    --rule-strong: #d4d4d8;
 
-    /* Single accent */
-    --accent: #e8a33d;        /* on graphite */
-    --accent-strong: #c97f14; /* fills on light */
-    --accent-ink: #8a5a08;    /* accent text on light — 5.7:1 on white */
-    --accent-soft: #fdf4e6;
+    /* Single accent — brass, drawn from the coating on a carbide insert */
+    --accent: #d2a857;      /* on dark surfaces */
+    --accent-ink: #8a6520;  /* accent text on white — 5.1:1 */
+    --accent-soft: #fbf6ec;
 
     /* shadcn/Radix tokens */
     --background: #ffffff;
-    --foreground: #14171a;
+    --foreground: #09090b;
     --card: #ffffff;
-    --card-foreground: #14171a;
+    --card-foreground: #09090b;
     --popover: #ffffff;
-    --popover-foreground: #14171a;
-    --primary: #15181b;
+    --popover-foreground: #09090b;
+    --primary: #09090b;
     --primary-foreground: #ffffff;
-    --secondary: #f4f5f6;
-    --secondary-foreground: #14171a;
-    --muted: #f4f5f6;
-    --muted-foreground: #6b747d;
+    --secondary: #f4f4f5;
+    --secondary-foreground: #09090b;
+    --muted: #f4f4f5;
+    --muted-foreground: #71717a;
     --destructive: #b42318;
     --destructive-foreground: #ffffff;
-    --border: #dde1e4;
-    --input: #dde1e4;
-    --ring: #c97f14;
-    --radius: 3px;
+    --border: #e8e8ea;
+    --input: #e8e8ea;
+    --ring: #09090b;
+    --radius: 8px;
   }
 
   * {
@@ -59,24 +59,27 @@
   }
 
   body {
-    @apply bg-surface text-ink font-sans antialiased;
+    @apply bg-surface font-sans text-ink antialiased;
     font-size: 16px;
-    line-height: 1.6;
+    line-height: 1.65;
+    font-feature-settings: "cv11", "ss01";
+    font-variation-settings: normal;
   }
 
   h1, h2, h3, h4 {
-    @apply font-display font-semibold tracking-tight;
+    @apply font-semibold;
     text-wrap: balance;
   }
 
   :focus-visible {
-    outline: 2px solid var(--accent-strong);
+    outline: 2px solid var(--ink);
     outline-offset: 2px;
+    border-radius: 2px;
   }
 
   ::selection {
-    background: var(--accent);
-    color: var(--graphite);
+    background: var(--ink);
+    color: #fff;
   }
 }
 
@@ -85,43 +88,94 @@
     @apply mx-auto w-full max-w-shell px-5 sm:px-8;
   }
 
-  /* Uppercase technical label — used for eyebrows and table headers */
+  /* Small technical label — eyebrows, table headers, data keys */
   .label {
-    @apply font-mono text-[11px] font-medium uppercase tracking-[0.14em];
+    @apply font-mono text-[11px] font-medium uppercase tracking-[0.12em];
   }
 
+  /* ---- Buttons: near-black primary is the anchor, everything else recedes ---- */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-sm px-5 py-3
-           font-sans text-[15px] font-semibold leading-none transition-colors
-           disabled:pointer-events-none disabled:opacity-60;
+    @apply inline-flex items-center justify-center gap-2 rounded-lg text-[15px]
+           font-medium leading-none transition-all duration-200
+           disabled:pointer-events-none disabled:opacity-50;
+    padding: 0.8125rem 1.25rem;
   }
   .btn-primary {
-    @apply btn bg-accent-strong text-white hover:bg-[#a86910];
-  }
-  .btn-dark {
-    @apply btn bg-graphite text-white hover:bg-graphite-light;
+    @apply btn bg-ink text-white shadow-xs hover:bg-[#27272a] active:scale-[.985];
   }
   .btn-outline {
-    @apply btn border border-rule bg-white text-ink hover:border-ink hover:bg-surface-subtle;
+    @apply btn border border-rule-strong bg-white text-ink
+           hover:border-ink hover:bg-surface-subtle active:scale-[.985];
   }
   .btn-onDark {
-    @apply btn border border-graphite-line bg-transparent text-graphite-ink
-           hover:border-accent hover:text-accent;
+    @apply btn bg-white text-ink hover:bg-[#e8e8ea] active:scale-[.985];
+  }
+  .btn-ghostDark {
+    @apply btn border border-night-line bg-transparent text-night-ink
+           hover:border-[#3f3f46] hover:bg-[#161618] active:scale-[.985];
   }
 
-  /* Product / category card */
+  /* ---- Surfaces ---- */
   .tile {
-    @apply block border border-rule bg-white transition-all
-           hover:border-ink hover:shadow-lift;
+    @apply block rounded-lg border border-rule bg-white transition-all duration-200
+           hover:-translate-y-0.5 hover:border-rule-strong hover:shadow-lift;
+  }
+  .panel {
+    @apply rounded-lg border border-rule bg-white;
   }
 
   .code {
-    @apply font-mono text-[13px] tracking-tight text-ink;
+    @apply font-mono text-[13px] tracking-tight;
   }
 
-  /* Amber rule used to open a dark section */
+  /* Eyebrow pill used above section headings */
+  .eyebrow {
+    @apply label inline-flex items-center gap-2 text-ink-muted;
+  }
+  .eyebrow::before {
+    content: "";
+    @apply inline-block h-1 w-1 rounded-full bg-accent-ink;
+  }
+  .eyebrow-dark {
+    @apply label inline-flex items-center gap-2 text-night-muted;
+  }
+  .eyebrow-dark::before {
+    content: "";
+    @apply inline-block h-1 w-1 rounded-full bg-accent;
+  }
+
+  /* Short accent bar used to open a section */
   .accent-rule {
-    @apply block h-[3px] w-10 bg-accent;
+    @apply block h-[2px] w-9 rounded-full bg-accent-ink;
+  }
+  .accent-rule-dark {
+    @apply block h-[2px] w-9 rounded-full bg-accent;
+  }
+
+  /* Fine hairline divider */
+  .hairline {
+    @apply h-px w-full bg-rule;
+  }
+}
+
+@layer utilities {
+  /* Soft radial light behind dark hero content */
+  .night-glow {
+    background-image:
+      radial-gradient(60% 55% at 50% 0%, rgba(210, 168, 87, 0.09) 0%, transparent 70%),
+      radial-gradient(40% 40% at 85% 15%, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+  }
+
+  /* Faint technical grid, used sparingly on dark panels */
+  .grid-lines {
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  .tabnum {
+    font-variant-numeric: tabular-nums;
   }
 }
 

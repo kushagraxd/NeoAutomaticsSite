@@ -12,8 +12,8 @@ type Status =
   | { kind: 'failed'; message: string };
 
 const field =
-  'w-full border border-rule bg-white px-3.5 py-2.5 text-[15px] text-ink placeholder:text-ink-muted/70 ' +
-  'focus:border-accent-strong focus:outline-none focus:ring-1 focus:ring-accent-strong';
+  'w-full rounded-md border border-rule-strong bg-white px-3.5 py-2.5 text-[15px] text-ink ' +
+  'placeholder:text-ink-muted/60 transition-colors focus:border-ink focus:outline-none focus:ring-2 focus:ring-ink/10';
 
 const labelCls = 'mb-1.5 block text-[14px] font-medium text-ink';
 
@@ -88,9 +88,9 @@ export default function RfqForm({ defaultCategory, defaultCode }: RfqFormProps) 
 
   if (status.kind === 'sent') {
     return (
-      <div className="border border-rule bg-white p-8 text-center">
+      <div className="panel p-10 text-center">
         <CheckCircle2 className="mx-auto mb-4 h-11 w-11 text-accent-ink" aria-hidden="true" />
-        <h3 className="mb-2 text-2xl text-ink">Enquiry sent</h3>
+        <h3 className="mb-2 text-h3 text-ink">Enquiry sent</h3>
         <p className="mx-auto mb-1 max-w-md text-[15px] text-ink-soft">{status.message}</p>
         <p className="mb-6 font-mono text-[13px] text-ink-muted">Reference {status.reference}</p>
         <button type="button" className="btn-outline" onClick={() => setStatus({ kind: 'idle' })}>
@@ -101,7 +101,7 @@ export default function RfqForm({ defaultCategory, defaultCode }: RfqFormProps) 
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate className="border border-rule bg-white p-6 sm:p-8">
+    <form onSubmit={handleSubmit(onSubmit)} noValidate className="panel p-6 sm:p-8">
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label htmlFor="name" className={labelCls}>Name <span className="text-accent-ink">*</span></label>
@@ -130,7 +130,7 @@ export default function RfqForm({ defaultCategory, defaultCode }: RfqFormProps) 
         <div className="flex flex-wrap gap-4">
           {(['email', 'phone', 'whatsapp'] as const).map((m) => (
             <label key={m} className="flex cursor-pointer items-center gap-2 text-[15px] text-ink-soft">
-              <input type="radio" value={m} className="accent-[var(--accent-strong)]" {...register('preferredContact')} />
+              <input type="radio" value={m} className="accent-ink" {...register('preferredContact')} />
               <span className="capitalize">{m}</span>
             </label>
           ))}
@@ -186,14 +186,14 @@ export default function RfqForm({ defaultCategory, defaultCode }: RfqFormProps) 
       <div className="mt-5">
         <span className={labelCls}>Drawing or specification <span className="font-normal text-ink-muted">(optional)</span></span>
         {file ? (
-          <div className="flex items-center justify-between border border-rule bg-surface-subtle px-3.5 py-2.5">
+          <div className="flex items-center justify-between rounded-md border border-rule bg-surface-subtle px-3.5 py-2.5">
             <span className="truncate font-mono text-[13px] text-ink">{file.name}</span>
             <button type="button" onClick={() => setFile(null)} className="ml-3 p-1 text-ink-muted hover:text-ink" aria-label="Remove file">
               <X className="h-4 w-4" />
             </button>
           </div>
         ) : (
-          <label className="flex cursor-pointer items-center gap-3 border border-dashed border-rule bg-surface-subtle px-4 py-5 text-[14px] text-ink-muted hover:border-ink">
+          <label className="flex cursor-pointer items-center gap-3 rounded-md border border-dashed border-rule-strong bg-surface-subtle px-4 py-5 text-[14px] text-ink-muted transition-colors hover:border-ink hover:bg-white">
             <Upload className="h-5 w-5 shrink-0" aria-hidden="true" />
             <span>
               <span className="font-medium text-ink">Attach a file</span> — {UPLOAD_HINT}
@@ -210,7 +210,7 @@ export default function RfqForm({ defaultCategory, defaultCode }: RfqFormProps) 
       </div>
 
       {status.kind === 'failed' && (
-        <div role="alert" className="mt-6 flex gap-3 border border-destructive/30 bg-[#fdf2f1] p-4">
+        <div role="alert" className="mt-6 flex gap-3 rounded-md border border-destructive/25 bg-[#fdf2f1] p-4">
           <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-destructive" aria-hidden="true" />
           <p className="text-[14px] text-ink-soft">{status.message}</p>
         </div>

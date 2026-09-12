@@ -72,22 +72,22 @@ export interface InsertGlyphProps {
   shape?: string;
   category?: CategoryId;
   className?: string;
-  /** Renders light-on-dark for graphite sections. */
+  /** Renders light-on-dark for the near-black sections. */
   onDark?: boolean;
 }
 
 export default function InsertGlyph({ shape, category, className, onDark }: InsertGlyphProps) {
   const kind = glyphFor(shape, category);
-  const stroke = onDark ? 'var(--accent)' : 'var(--ink)';
-  const fill = onDark ? 'rgba(232,163,61,0.10)' : 'var(--surface-panel)';
+  const stroke = onDark ? 'var(--accent)' : 'var(--ink-soft)';
+  const fill = onDark ? 'rgba(210,168,87,0.08)' : 'var(--surface-panel)';
 
   return (
     <svg viewBox="0 0 100 100" className={className} role="img" aria-label={shape ? `${shape} insert` : 'Carbide insert'}>
-      <path d={PATHS[kind]} fill={fill} stroke={stroke} strokeWidth="2.5" strokeLinejoin="round" />
+      <path d={PATHS[kind]} fill={fill} stroke={stroke} strokeWidth="2" strokeLinejoin="round" />
       {HOLED.includes(kind) && (
-        <circle cx="50" cy={kind === 'triangle' ? 57 : 50} r="8" fill="none" stroke={stroke} strokeWidth="2.5" />
+        <circle cx="50" cy={kind === 'triangle' ? 57 : 50} r="8" fill="none" stroke={stroke} strokeWidth="2" />
       )}
-      {kind === 'groove' && <path d="M74 38 V62" fill="none" stroke={stroke} strokeWidth="2.5" />}
+      {kind === 'groove' && <path d="M74 38 V62" fill="none" stroke={stroke} strokeWidth="2" />}
     </svg>
   );
 }
