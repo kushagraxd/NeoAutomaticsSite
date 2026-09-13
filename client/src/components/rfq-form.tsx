@@ -13,7 +13,7 @@ type Status =
 
 const field =
   'w-full rounded-md border border-rule-strong bg-white px-3.5 py-2.5 text-[15px] text-ink ' +
-  'placeholder:text-ink-muted/60 transition-colors focus:border-ink focus:outline-none focus:ring-2 focus:ring-ink/10';
+  'placeholder:text-[#a1a1aa] transition-colors focus:border-ink focus:outline-none focus:ring-2 focus:ring-[rgba(9,9,11,0.08)]';
 
 const labelCls = 'mb-1.5 block text-[14px] font-medium text-ink';
 
@@ -22,9 +22,15 @@ export interface RfqFormProps {
   defaultCategory?: RfqInput['productCategory'];
   /** Pre-fills the product code, e.g. from a product detail page. */
   defaultCode?: string;
+  /** Codes from the enquiry list, attached at submit time. */
+  enquiryCodes?: string[];
+  /** Pre-fills the requirement text. */
+  defaultRequirement?: string;
+  /** Called after the server confirms delivery. */
+  onSent?: () => void;
 }
 
-export default function RfqForm({ defaultCategory, defaultCode }: RfqFormProps) {
+export default function RfqForm({ defaultCategory, defaultCode, enquiryCodes, defaultRequirement, onSent }: RfqFormProps) {
   const [status, setStatus] = useState<Status>({ kind: 'idle' });
   const [file, setFile] = useState<File | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
@@ -40,6 +46,7 @@ export default function RfqForm({ defaultCategory, defaultCode }: RfqFormProps) 
       preferredContact: 'email',
       productCategory: defaultCategory ?? ('turning' as RfqInput['productCategory']),
       productCode: defaultCode ?? '',
+      requirement: defaultRequirement ?? '',
     },
   });
 
@@ -63,6 +70,7 @@ export default function RfqForm({ defaultCategory, defaultCode }: RfqFormProps) 
     try {
       const body = new FormData();
       Object.entries(values).forEach(([k, v]) => body.append(k, String(v ?? '')));
+      if (enquiryCodes?.length) body.set('enquiryList', enquiryCodes.join(', '));
       if (file) body.append('attachment', file);
 
       const res = await fetch('/api/rfq', { method: 'POST', body });
@@ -72,6 +80,7 @@ export default function RfqForm({ defaultCategory, defaultCode }: RfqFormProps) 
         setStatus({ kind: 'sent', reference: json.reference, message: json.message });
         reset();
         setFile(null);
+        onSent?.();
         return;
       }
       setStatus({
@@ -210,7 +219,7 @@ export default function RfqForm({ defaultCategory, defaultCode }: RfqFormProps) 
       </div>
 
       {status.kind === 'failed' && (
-        <div role="alert" className="mt-6 flex gap-3 rounded-md border border-destructive/25 bg-[#fdf2f1] p-4">
+        <div role="alert" className="mt-6 flex gap-3 rounded-md border border-[rgba(180,35,24,0.25)] bg-[#fdf2f1] p-4">
           <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-destructive" aria-hidden="true" />
           <p className="text-[14px] text-ink-soft">{status.message}</p>
         </div>

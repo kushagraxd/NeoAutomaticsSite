@@ -250,6 +250,75 @@
   }
 }
 
+@layer components {
+  /* ---- Filter pills: tone-coloured, filled when active ---- */
+  .pill {
+    --tone: 9, 9, 11;
+    --pill-active-ink: #09090b;
+    @apply inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full border border-rule bg-white px-4 py-2 text-[14px] font-medium text-ink-soft transition-all duration-200;
+  }
+  .pill:hover {
+    border-color: rgb(var(--tone));
+    background-color: rgba(var(--tone), 0.07);
+    color: var(--ink);
+    transform: translateY(-1px);
+  }
+  .pill[data-active="true"] {
+    border-color: rgb(var(--tone));
+    background-color: rgb(var(--tone));
+    color: var(--pill-active-ink);
+    box-shadow: 0 8px 22px -10px rgba(var(--tone), 0.7);
+    transform: none;
+  }
+  .pill:disabled {
+    opacity: 0.4;
+    pointer-events: none;
+  }
+  .pill-dot {
+    @apply h-2 w-2 shrink-0 rounded-full;
+    background-color: rgb(var(--tone));
+  }
+  .pill[data-active="true"] .pill-dot {
+    background-color: currentColor;
+    opacity: 0.55;
+  }
+  .pill-count {
+    @apply rounded-full px-1.5 py-px font-mono text-[11.5px] font-medium;
+    background-color: var(--surface-panel);
+    color: var(--ink-muted);
+  }
+  .pill[data-active="true"] .pill-count {
+    background-color: rgba(0, 0, 0, 0.12);
+    color: inherit;
+  }
+  .pill[data-dark="true"][data-active="true"] .pill-count {
+    background-color: rgba(255, 255, 255, 0.18);
+  }
+
+  .kbd {
+    @apply inline-flex h-7 min-w-[1.75rem] items-center justify-center rounded-md border px-2 font-mono text-[12px];
+    border-color: rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--night-muted);
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .float {
+    animation: float 6s ease-in-out infinite;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
 @layer utilities {
   /* Soft radial light behind dark hero content */
   .night-glow {
@@ -291,6 +360,7 @@
   html { scroll-behavior: auto; }
   .reveal { opacity: 1 !important; transform: none !important; }
   .marquee-track { animation: none !important; flex-wrap: wrap; width: auto; }
+  .float { animation: none !important; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;

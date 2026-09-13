@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'wouter';
 import { ArrowRight, ScanLine } from 'lucide-react';
-import InsertGlyph from '../insert-glyph';
+import InsertRender from '../insert-render';
 import Reveal from '../reveal';
 import FamilyMarquee, { familyCount } from './family-marquee';
 import { decodeInsert, SEGMENT_COLOURS, type SegmentKey } from '../../lib/iso-decoder';
@@ -56,7 +56,7 @@ export default function InsertExplorer() {
                   onChange={(e) => setCode(e.target.value)}
                   spellCheck={false}
                   autoComplete="off"
-                  className="w-full rounded-xl border border-rule-strong bg-surface-subtle py-4 pl-12 pr-4 font-mono text-[20px] font-medium uppercase tracking-tight text-ink transition-colors focus:border-ink focus:bg-white focus:outline-none focus:ring-4 focus:ring-ink/5"
+                  className="w-full rounded-xl border border-rule-strong bg-surface-subtle py-4 pl-12 pr-4 font-mono text-[20px] font-medium uppercase tracking-tight text-ink transition-colors focus:border-ink focus:bg-white focus:outline-none focus:ring-4 focus:ring-[rgba(9,9,11,0.06)]"
                 />
               </div>
 
@@ -79,7 +79,7 @@ export default function InsertExplorer() {
 
               <div className="mt-9 flex items-center gap-5 rounded-xl bg-surface-subtle p-5">
                 <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-lg bg-white shadow-xs">
-                  <InsertGlyph shape={segments ? SHAPE_FROM_LETTER[clean[0]] : undefined} category="special" className="h-16 w-16" />
+                  <InsertRender code={clean || 'CNMG120408'} category={match?.category ?? 'turning'} className="h-20 w-auto" />
                 </div>
                 <div className="min-w-0">
                   <p className="text-[14px] text-ink-muted">{match ? 'In our catalogue' : 'Not a listed code'}</p>

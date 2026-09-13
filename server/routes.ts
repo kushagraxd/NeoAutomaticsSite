@@ -69,6 +69,7 @@ function formatEnquiry(data: RfqInput, ref: string, hasFile: string | null): str
     row('Grade / coating', data.gradeOrCoating) +
     row('Workpiece material', data.workpieceMaterial) +
     row('Quantity', data.quantity) +
+    row('Enquiry list', data.enquiryList) +
     `\n${data.requirement}\n\n` +
     (hasFile ? `Attachment: ${hasFile}\n` : 'No attachment provided\n') +
     `\nReceived: ${new Date().toISOString()}\n`

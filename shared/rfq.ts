@@ -27,6 +27,8 @@ export const rfqSchema = z.object({
   gradeOrCoating: z.string().trim().max(120).optional().or(z.literal('')),
   workpieceMaterial: z.string().trim().max(160).optional().or(z.literal('')),
   quantity: z.string().trim().max(80).optional().or(z.literal('')),
+  /** Codes collected in the browser's enquiry list, sent alongside the message. */
+  enquiryList: z.string().trim().max(2000).optional().or(z.literal('')),
 
   requirement: z
     .string()
