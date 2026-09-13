@@ -25,7 +25,7 @@ function Row({ items, reverse, duration }: { items: string[]; reverse?: boolean;
               <Link
                 href={`/products?q=${f}`}
                 tabIndex={hidden ? -1 : undefined}
-                className="group flex items-center gap-2.5 whitespace-nowrap rounded-full border border-rule bg-white px-4 py-2.5 shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lift"
+                className="group flex items-center gap-2.5 whitespace-nowrap rounded-full border border-rule bg-surface-card px-4 py-2.5 shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lift"
                 onMouseEnter={(e) => (e.currentTarget.style.borderColor = tone.hex)}
                 onMouseLeave={(e) => (e.currentTarget.style.borderColor = '')}
               >

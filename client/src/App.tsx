@@ -11,7 +11,6 @@ import CategoryPage from './pages/category';
 import ProductPage from './pages/product';
 import CustomSourcingPage from './pages/custom-sourcing';
 import AboutPage from './pages/about';
-import QuotePage from './pages/quote';
 import ContactPage from './pages/contact';
 import PrivacyPage from './pages/privacy';
 import NotFound from './pages/not-found';
@@ -34,7 +33,7 @@ export default function App() {
         <ScrollToTop />
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:bg-ink focus:px-4 focus:py-2 focus:text-white"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:bg-brand focus:px-4 focus:py-2 focus:text-white"
         >
           Skip to content
         </a>
@@ -47,7 +46,7 @@ export default function App() {
             <Route path="/products/:slug/:code" component={ProductPage} />
             <Route path="/custom-sourcing" component={CustomSourcingPage} />
             <Route path="/about" component={AboutPage} />
-            <Route path="/quote" component={QuotePage} />
+            <Route path="/quote" component={ContactPage} />
             <Route path="/contact" component={ContactPage} />
             <Route path="/privacy" component={PrivacyPage} />
             <Route component={NotFound} />

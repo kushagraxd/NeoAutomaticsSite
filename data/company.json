@@ -3,30 +3,72 @@
   "company": {
     "name": "ShreeRaj Tools",
     "displayName": "ShreeRaj Tools",
-    "wordmark": { "first": "ShreeRaj", "second": "Tools" },
-    "tagline": "Carbide inserts and cutting tools, sourced and supplied worldwide",
+    "wordmark": {
+      "first": "ShreeRaj",
+      "second": "Tools"
+    },
+    "tagline": "Carbide inserts and cutting tools, sourced from China and Taiwan and supplied across India",
     "descriptor": "Importer and supplier of carbide inserts and cutting tools",
-    "summary": "ShreeRaj Tools supplies carbide inserts and cutting tools sourced from established producers in China and Taiwan. We serve manufacturers and machining workshops in India, and welcome enquiries from buyers internationally.",
-    "shortSummary": "Carbide inserts and cutting tools, sourced from China and Taiwan and supplied to manufacturers in India and internationally.",
+    "summary": "ShreeRaj Tools supplies carbide inserts and cutting tools sourced from established producers in China and Taiwan. We serve manufacturers and machining workshops across India — standard geometries from our catalogue, and uncommon or special designs sourced to your requirement.",
+    "shortSummary": "Carbide inserts and cutting tools, sourced from China and Taiwan and supplied to manufacturers across India.",
     "basedIn": "India",
     "country": "India",
-    "sourcingRegions": ["China", "Taiwan"],
-    "marketNote": "We supply customers in India and accept enquiries from international buyers.",
+    "sourcingRegions": [
+      "China",
+      "Taiwan"
+    ],
+    "marketNote": "We supply customers across India.",
     "parentFirm": {
       "name": "Neo Automatics",
-      "relationship": "ShreeRaj Tools is a new, separately operated tooling supply business started by the family behind Neo Automatics.",
-      "note": "Neo Automatics is a separate business and a separate legal entity. Its capabilities, history and credentials are not those of ShreeRaj Tools."
+      "relationship": "ShreeRaj Tools is a new venture from a family with an existing background in industry through Neo Automatics.",
+      "note": "Neo Automatics is a separate, established business."
     },
     "contact": {
-      "email": { "value": null, "confirmed": false, "needs": "Business email address for enquiries and RFQ delivery" },
-      "phone": { "value": null, "confirmed": false, "needs": "Public business phone number" },
-      "whatsapp": { "value": null, "confirmed": false, "needs": "WhatsApp business number" },
-      "address": { "value": null, "confirmed": false, "needs": "Public business address" },
-      "city": { "value": null, "confirmed": false, "needs": "City / state to display" },
-      "gstin": { "value": null, "confirmed": false, "needs": "GSTIN, if it should be displayed" },
-      "iec": { "value": null, "confirmed": false, "needs": "Import Export Code, if it should be displayed" },
-      "domain": { "value": null, "confirmed": false, "needs": "Final website domain" },
-      "hours": { "value": null, "confirmed": false, "needs": "Business hours, if you want them shown" }
+      "email": {
+        "value": null,
+        "confirmed": false,
+        "needs": "Business email address for enquiries and RFQ delivery"
+      },
+      "phone": {
+        "value": null,
+        "confirmed": false,
+        "needs": "Public business phone number"
+      },
+      "whatsapp": {
+        "value": null,
+        "confirmed": false,
+        "needs": "WhatsApp business number"
+      },
+      "address": {
+        "value": null,
+        "confirmed": false,
+        "needs": "Public business address"
+      },
+      "city": {
+        "value": null,
+        "confirmed": false,
+        "needs": "City / state to display"
+      },
+      "gstin": {
+        "value": null,
+        "confirmed": false,
+        "needs": "GSTIN, if it should be displayed"
+      },
+      "iec": {
+        "value": null,
+        "confirmed": false,
+        "needs": "Import Export Code, if it should be displayed"
+      },
+      "domain": {
+        "value": null,
+        "confirmed": false,
+        "needs": "Final website domain"
+      },
+      "hours": {
+        "value": null,
+        "confirmed": false,
+        "needs": "Business hours, if you want them shown"
+      }
     },
     "claims": {
       "_note": "Deliberately empty. No certifications, years of experience, customer counts, delivery statistics, factories, machines or partnerships are asserted anywhere on this site.",

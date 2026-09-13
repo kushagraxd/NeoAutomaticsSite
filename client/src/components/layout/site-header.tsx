@@ -1,32 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type MouseEvent } from 'react';
 import { Link, useLocation } from 'wouter';
-import { Menu, X, ChevronDown, ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, ChevronDown, Menu, X } from 'lucide-react';
+import BrandLogo from '../brand-logo';
 import { categories, countsByCategory } from '../../../../shared/catalog';
-import { company } from '../../../../shared/company';
+import { toneFor } from '../../lib/category-tones';
+import { focusEnquiryForm } from '../../lib/focus-enquiry';
 
 const NAV = [
   { href: '/custom-sourcing', label: 'Custom Sourcing' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
 ];
-
-export function Wordmark({ onDark = false }: { onDark?: boolean }) {
-  return (
-    <Link href="/" className="flex items-center gap-2.5" aria-label={`${company.displayName} — home`}>
-      <svg viewBox="0 0 64 64" className="h-[30px] w-[30px] shrink-0" aria-hidden="true">
-        <rect width="64" height="64" rx="14" fill={onDark ? '#161618' : '#09090B'} />
-        <path d="M32 15 L51 47 H13 Z" fill="none" stroke="var(--accent)" strokeWidth="4.5" strokeLinejoin="round" />
-        <circle cx="32" cy="36" r="5" fill="var(--accent)" />
-      </svg>
-      <span
-        className={`text-[18px] font-semibold tracking-[-0.025em] ${onDark ? 'text-night-ink' : 'text-ink'}`}
-      >
-        {company.wordmark.first}
-        <span className={onDark ? 'text-night-muted' : 'text-ink-muted'}> {company.wordmark.second}</span>
-      </span>
-    </Link>
-  );
-}
 
 export default function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -39,67 +23,92 @@ export default function SiteHeader() {
     setProductsOpen(false);
   }, [location]);
 
-  const isActive = (href: string) =>
-    href === '/products' ? location.startsWith('/products') : location === href;
+  useEffect(() => {
+    if (!open && !productsOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setOpen(false);
+        setProductsOpen(false);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [open, productsOpen]);
 
-  const linkCls = (active: boolean) =>
-    `rounded-md px-3 py-2 text-[14.5px] font-medium transition-colors ${
-      active ? 'text-ink' : 'text-ink-muted hover:text-ink'
-    }`;
+  const isActive = (href: string) =>
+    href === '/products'
+      ? location.startsWith('/products')
+      : location === href || (href === '/contact' && location === '/quote');
+
+  // Already on the contact page: scroll to the form instead of re-navigating.
+  const onQuote = (e: MouseEvent<HTMLAnchorElement>) => {
+    if (location === '/contact' || location === '/quote') {
+      e.preventDefault();
+      setOpen(false);
+      focusEnquiryForm();
+    }
+  };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-rule bg-white/80 backdrop-blur-xl">
-      <div className="shell flex h-[60px] items-center justify-between gap-6">
-        <Wordmark />
+    <header className="site-header sticky top-0 z-50">
+      <div className="shell flex h-16 items-center justify-between gap-6">
+        <Link href="/" className="-ml-1 flex items-center rounded-lg p-1" aria-label="ShreeRaj Tools — home">
+          <BrandLogo variant="full" size={40} className="hidden sm:flex" />
+          <BrandLogo variant="emblem" size={40} className="sm:hidden" />
+        </Link>
 
-        <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Main">
-          <div
-            className="relative"
-            onMouseEnter={() => setProductsOpen(true)}
-            onMouseLeave={() => setProductsOpen(false)}
-          >
-            <Link href="/products" className={`${linkCls(isActive('/products'))} flex items-center gap-1`}>
-              Products
-              <ChevronDown
-                className={`h-3.5 w-3.5 transition-transform duration-200 ${productsOpen ? 'rotate-180' : ''}`}
-                aria-hidden="true"
-              />
-            </Link>
+        <nav className="hidden items-center gap-1 lg:flex" aria-label="Main">
+          <div className="relative" onMouseEnter={() => setProductsOpen(true)} onMouseLeave={() => setProductsOpen(false)}>
+            <div className="flex items-center">
+              <Link href="/products" className={`nav-link ${isActive('/products') ? 'is-active' : ''}`}>
+                Products
+              </Link>
+              <button
+                type="button"
+                className="nav-caret"
+                aria-label="Show product categories"
+                aria-expanded={productsOpen}
+                aria-controls="products-menu"
+                onClick={() => setProductsOpen((v) => !v)}
+              >
+                <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-200 ${productsOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
+              </button>
+            </div>
 
             {productsOpen && (
-              <div className="absolute left-0 top-full w-[380px] pt-2">
-                <div className="animate-rise overflow-hidden rounded-lg border border-rule bg-white p-1.5 shadow-glow">
+              <div id="products-menu" className="absolute left-0 top-full w-[400px] pt-2">
+                <div className="menu-panel animate-rise p-1.5">
                   {categories.map((c) => (
-                    <Link
-                      key={c.id}
-                      href={`/products/${c.slug}`}
-                      className="flex items-center justify-between gap-4 rounded-md px-3 py-2.5 transition-colors hover:bg-surface-subtle"
-                    >
-                      <span className="text-[14px] font-medium text-ink">{c.name}</span>
-                      <span className="code shrink-0 text-ink-muted">
-                        {counts[c.id] > 0 ? counts[c.id] : 'Enquiry'}
+                    <Link key={c.id} href={`/products/${c.slug}`} className="menu-item">
+                      <span className="flex items-center gap-2.5">
+                        <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: toneFor(c.id).hex }} aria-hidden="true" />
+                        <span className="text-[14px] font-medium text-ink">{c.name}</span>
                       </span>
+                      <span className="code shrink-0 text-ink-muted">{counts[c.id] > 0 ? counts[c.id] : 'Enquiry'}</span>
                     </Link>
                   ))}
+                  <Link href="/products" className="menu-footer">
+                    Browse the full catalogue <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+                  </Link>
                 </div>
               </div>
             )}
           </div>
 
           {NAV.map((n) => (
-            <Link key={n.href} href={n.href} className={linkCls(isActive(n.href))}>
+            <Link key={n.href} href={n.href} className={`nav-link ${isActive(n.href) ? 'is-active' : ''}`}>
               {n.label}
             </Link>
           ))}
 
-          <Link href="/quote" className="btn-primary ml-3 px-4 py-2.5 text-[14px]">
+          <Link href="/contact#enquiry" onClick={onQuote} className="btn-primary ml-3 px-4 py-2.5 text-[14px]">
             Request a Quote
           </Link>
         </nav>
 
         <button
           type="button"
-          className="-mr-2 rounded-md p-2 text-ink lg:hidden"
+          className="-mr-2 rounded-lg p-2 text-ink transition-colors hover:bg-surface-panel lg:hidden"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-controls="mobile-nav"
@@ -110,29 +119,32 @@ export default function SiteHeader() {
       </div>
 
       {open && (
-        <div id="mobile-nav" className="border-t border-rule bg-white lg:hidden">
-          <nav className="shell flex flex-col py-4" aria-label="Mobile">
-            <Link href="/products" className="flex items-center gap-1.5 py-2 text-[15px] font-semibold text-ink">
-              All Products <ArrowUpRight className="h-4 w-4 text-ink-muted" aria-hidden="true" />
+        <div id="mobile-nav" className="mobile-nav lg:hidden">
+          <nav className="shell flex max-h-[calc(100dvh-4rem)] flex-col overflow-y-auto py-4" aria-label="Mobile">
+            <Link href="/products" className="flex items-center gap-1.5 py-2.5 text-[15.5px] font-semibold text-ink">
+              All products <ArrowUpRight className="h-4 w-4 text-ink-muted" aria-hidden="true" />
             </Link>
-            <div className="mb-2 mt-1 flex flex-col gap-0.5 border-l border-rule pl-4">
+            <div className="mb-2 mt-1 flex flex-col border-l border-rule pl-4">
               {categories.map((c) => (
-                <Link
-                  key={c.id}
-                  href={`/products/${c.slug}`}
-                  className="flex items-center justify-between py-2 text-[14px] text-ink-muted"
-                >
-                  {c.name}
-                  <span className="code">{counts[c.id] > 0 ? counts[c.id] : '—'}</span>
+                <Link key={c.id} href={`/products/${c.slug}`} className="flex items-center justify-between gap-3 py-2.5 text-[14.5px] text-ink-soft">
+                  <span className="flex items-center gap-2.5">
+                    <span className="h-1.5 w-1.5 rounded-full" style={{ background: toneFor(c.id).hex }} aria-hidden="true" />
+                    {c.name}
+                  </span>
+                  <span className="code text-ink-muted">{counts[c.id] > 0 ? counts[c.id] : '—'}</span>
                 </Link>
               ))}
             </div>
             {NAV.map((n) => (
-              <Link key={n.href} href={n.href} className="border-t border-rule py-3 text-[15px] font-medium text-ink">
+              <Link
+                key={n.href}
+                href={n.href}
+                className={`border-t border-rule py-3.5 text-[15.5px] font-medium ${isActive(n.href) ? 'text-brand-bright' : 'text-ink'}`}
+              >
                 {n.label}
               </Link>
             ))}
-            <Link href="/quote" className="btn-primary mt-4 w-full">
+            <Link href="/contact#enquiry" onClick={onQuote} className="btn-primary btn-lg mt-4 w-full">
               Request a Quote
             </Link>
           </nav>

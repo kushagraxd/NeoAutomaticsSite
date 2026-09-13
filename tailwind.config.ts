@@ -1,5 +1,9 @@
 import type { Config } from "tailwindcss";
 
+/*
+ * Every colour resolves to a CSS variable defined in client/src/index.css,
+ * so the theme lives in one place.
+ */
 export default {
   darkMode: ["class"],
   content: ["./client/index.html", "./client/src/**/*.{js,ts,jsx,tsx}"],
@@ -10,8 +14,9 @@ export default {
           DEFAULT: "var(--surface)",
           subtle: "var(--surface-subtle)",
           panel: "var(--surface-panel)",
+          card: "var(--surface-card)",
+          stage: "var(--surface-stage)",
         },
-        // Near-black sections
         night: {
           DEFAULT: "var(--night)",
           soft: "var(--night-soft)",
@@ -24,6 +29,16 @@ export default {
           soft: "var(--ink-soft)",
           muted: "var(--ink-muted)",
         },
+        brand: {
+          DEFAULT: "var(--brand)",
+          hover: "var(--brand-hover)",
+          bright: "var(--brand-bright)",
+          soft: "var(--brand-soft)",
+        },
+        gold: {
+          DEFAULT: "var(--gold)",
+          deep: "var(--gold-deep)",
+        },
         accent: {
           DEFAULT: "var(--accent)",
           ink: "var(--accent-ink)",
@@ -33,6 +48,8 @@ export default {
           DEFAULT: "var(--rule)",
           strong: "var(--rule-strong)",
         },
+        success: "var(--success)",
+        warning: "var(--warning)",
         // One tone per machining operation — colour encodes the category.
         tone: {
           turning: "#E3B55F",
@@ -73,10 +90,10 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       boxShadow: {
-        xs: "0 1px 2px rgba(9,9,11,.04)",
-        card: "0 1px 3px rgba(9,9,11,.05), 0 1px 2px rgba(9,9,11,.03)",
-        lift: "0 12px 32px -8px rgba(9,9,11,.12), 0 4px 10px -4px rgba(9,9,11,.06)",
-        glow: "0 0 0 1px rgba(9,9,11,.05), 0 20px 50px -12px rgba(9,9,11,.18)",
+        xs: "0 1px 2px rgba(0,0,0,.45)",
+        card: "inset 0 1px 0 rgba(255,255,255,.03), 0 18px 40px -28px rgba(0,0,0,.9)",
+        lift: "inset 0 1px 0 rgba(255,255,255,.05), 0 24px 50px -24px rgba(0,0,0,.85), 0 0 0 1px rgba(142,166,248,.10)",
+        glow: "0 0 0 1px rgba(142,166,248,.07), 0 30px 70px -30px rgba(0,0,0,.95)",
       },
       maxWidth: { shell: "1200px", prose: "68ch" },
       keyframes: {

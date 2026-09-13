@@ -30,7 +30,9 @@ export default function RollingNumber({
       return;
     }
 
-    const start = () => requestAnimationFrame(() => setRolled(true));
+    // A short timeout (rather than an animation frame) lets the strips paint at 0
+    // first, and still fires in tabs where animation frames are paused.
+    const start = () => window.setTimeout(() => setRolled(true), 40);
 
     // Visible on load (the hero rail) — roll straight away rather than
     // sitting on zeros until the visitor scrolls.

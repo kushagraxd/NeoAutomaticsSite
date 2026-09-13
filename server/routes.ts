@@ -13,6 +13,7 @@ import {
   MAX_UPLOAD_BYTES,
   ACCEPTED_UPLOAD_MIME,
   ACCEPTED_UPLOAD_EXT,
+  SOURCING_LABELS,
   type RfqInput,
 } from '../shared/rfq';
 import { categoryById } from '../shared/catalog';
@@ -62,6 +63,7 @@ function formatEnquiry(data: RfqInput, ref: string, hasFile: string | null): str
     row('Company', data.company) +
     row('Email', data.email) +
     row('Phone / WhatsApp', data.phone) +
+    row('City / location', data.city) +
     row('Preferred contact', data.preferredContact) +
     `\nRequirement\n` +
     row('Category', category) +
@@ -70,6 +72,8 @@ function formatEnquiry(data: RfqInput, ref: string, hasFile: string | null): str
     row('Workpiece material', data.workpieceMaterial) +
     row('Quantity', data.quantity) +
     row('Enquiry list', data.enquiryList) +
+    row('Sharing', data.sourcingBasis ? SOURCING_LABELS[data.sourcingBasis] : '') +
+    row('Consent to reply', data.consent ? 'Given' : '') +
     `\n${data.requirement}\n\n` +
     (hasFile ? `Attachment: ${hasFile}\n` : 'No attachment provided\n') +
     `\nReceived: ${new Date().toISOString()}\n`
@@ -119,6 +123,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       await limitOrThrow(clientIp(req), 'rfq');
 
+      // Light spam protection that costs real visitors nothing: a hidden field
+      // that bots tend to fill, and a minimum time between the form rendering
+      // and being sent. Elapsed time is measured in the browser, so a skewed
+      // client clock cannot reject a genuine buyer.
+      if (typeof req.body.website === 'string' && req.body.website.trim() !== '') {
+        cleanup();
+        return res.status(400).json({ ok: false, message: 'We could not accept this submission. Please try again.' });
+      }
+      const elapsed = Number(req.body.formElapsedMs);
+      if (Number.isFinite(elapsed) && elapsed >= 0 && elapsed < 2500) {
+        cleanup();
+        return res.status(400).json({ ok: false, message: 'That was very quick — please check your details and send again.' });
+      }
+
       const data = rfqSchema.parse(req.body);
       const attachmentName = req.file?.originalname ?? null;
       persistEnquiry(ref, data, attachmentName);
@@ -133,7 +151,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           ok: false,
           reference: ref,
           message:
-            'We could not send your enquiry just now. Please email us your requirement, or try again shortly.',
+            'We could not send your enquiry just now. Your details are still in the form — please try again shortly.',
         });
       }
 
@@ -184,7 +202,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ok: false,
         reference: ref,
         message:
-          'We could not send your enquiry just now. Please try again shortly, or reach us directly.',
+          'We could not send your enquiry just now. Your details are still in the form — please try again shortly.',
       });
     }
   });

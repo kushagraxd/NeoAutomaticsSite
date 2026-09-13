@@ -16,11 +16,14 @@ export default function EnquiryTray() {
     if (!items.length) setOpen(false);
   }, [items.length]);
 
-  if (!items.length || location.startsWith('/quote')) return null;
+  if (!items.length || location === '/quote' || location === '/contact') return null;
 
   return (
+    <>
+      {/* Spacer so the last content on the page can scroll clear of the floating tray. */}
+      <div aria-hidden="true" className="h-24" />
     <div className="pointer-events-none fixed inset-x-0 bottom-4 z-40 flex justify-center px-3 sm:px-4">
-      <div className="pointer-events-auto w-full max-w-xl animate-rise overflow-hidden rounded-2xl border border-night-line bg-[rgba(9,9,11,0.94)] text-night-ink shadow-glow backdrop-blur-xl">
+      <div className="pointer-events-auto w-full max-w-xl animate-rise overflow-hidden rounded-2xl border border-night-line bg-[rgba(var(--night-rgb),0.94)] text-night-ink shadow-glow backdrop-blur-xl">
         {open && (
           <div className="border-b border-night-line">
             <div className="flex items-center justify-between px-5 pt-4">
@@ -69,13 +72,14 @@ export default function EnquiryTray() {
             <ChevronUp className={`ml-auto h-4 w-4 shrink-0 text-night-muted transition-transform ${open ? '' : 'rotate-180'}`} aria-hidden="true" />
           </button>
           <Link
-            href="/quote"
-            className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-[14px] font-semibold text-night transition-all hover:brightness-110 active:scale-[.98]"
+            href="/contact#enquiry"
+            className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-[14px] font-semibold text-white transition-all hover:bg-brand-hover active:scale-[.98]"
           >
             Request quote <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Link>
         </div>
       </div>
     </div>
+    </>
   );
 }

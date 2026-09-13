@@ -81,8 +81,8 @@ function FilterSelect({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={`cursor-pointer appearance-none rounded-full border py-2 pl-4 pr-9 text-[13.5px] font-medium transition-all focus:outline-none focus:ring-4 focus:ring-[rgba(9,9,11,0.07)] ${
-          active ? 'border-ink bg-ink text-white' : 'border-rule bg-white text-ink hover:border-ink'
+        className={`cursor-pointer appearance-none rounded-full border py-2 pl-4 pr-9 text-[13.5px] font-medium transition-all focus:outline-none focus:ring-4 focus:ring-[rgba(var(--brand-bright-rgb),0.18)] ${
+          active ? 'border-brand bg-brand text-white' : 'border-rule bg-surface-card text-ink hover:border-brand-bright'
         }`}
       >
         {options.map((o) => (
@@ -234,7 +234,7 @@ export default function ProductsPage() {
                 placeholder="Search a code — TNMG160408, APMT, 16ER…"
                 autoComplete="off"
                 spellCheck={false}
-                className="w-full rounded-2xl border border-white/10 bg-white/[.06] py-[1.1rem] pl-14 pr-16 font-mono text-[16px] text-night-ink backdrop-blur transition-all placeholder:text-[#71717a] focus:border-accent focus:bg-white/[.09] focus:outline-none focus:ring-4 focus:ring-[rgba(210,168,87,0.18)] [&::-webkit-search-cancel-button]:hidden"
+                className="w-full rounded-2xl border border-white/10 bg-white/[.06] py-[1.1rem] pl-14 pr-16 font-mono text-[16px] text-night-ink backdrop-blur transition-all placeholder:text-[#7684a0] focus:border-accent focus:bg-white/[.09] focus:outline-none focus:ring-4 focus:ring-[rgba(210,168,87,0.18)] [&::-webkit-search-cancel-button]:hidden"
               />
               <div className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center">
                 {filters.q ? (
@@ -289,7 +289,7 @@ export default function ProductsPage() {
       </section>
 
       {/* ---------------------------------------------------------- Toolbar */}
-      <div className="sticky top-[60px] z-30 border-b border-rule bg-[rgba(255,255,255,0.88)] backdrop-blur-xl">
+      <div className="sticky top-16 z-30 border-b border-rule bg-[rgba(var(--surface-rgb),0.86)] backdrop-blur-xl">
         <div className="shell">
           <div className="no-scrollbar -mx-5 flex items-center gap-2 overflow-x-auto px-5 py-3 sm:-mx-8 sm:px-8" role="group" aria-label="Category">
             <button
@@ -297,7 +297,7 @@ export default function ProductsPage() {
               className="pill"
               data-active={filters.category === 'all'}
               data-dark="true"
-              style={toneVars('9,9,11', '#ffffff')}
+              style={toneVars('47,74,168', '#ffffff')}
               onClick={() => setCategory('all')}
             >
               All <span className="pill-count">{searched.length}</span>
@@ -358,7 +358,7 @@ export default function ProductsPage() {
               <p className="hidden text-[13.5px] text-ink-muted md:block" aria-live="polite">
                 <span className="font-semibold text-ink tabnum">{results.length}</span> of {totalProductCount}
               </p>
-              <div role="group" aria-label="Layout" className="inline-flex rounded-full border border-rule bg-white p-1">
+              <div role="group" aria-label="Layout" className="inline-flex rounded-full border border-rule bg-surface-card p-1">
                 {(['grid', 'list'] as const).map((v) => (
                   <button
                     key={v}
@@ -366,7 +366,7 @@ export default function ProductsPage() {
                     aria-pressed={filters.view === v}
                     onClick={() => update({ view: v })}
                     className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[13px] font-medium transition-all ${
-                      filters.view === v ? 'bg-ink text-white shadow-xs' : 'text-ink-muted hover:text-ink'
+                      filters.view === v ? 'bg-brand text-white shadow-xs' : 'text-ink-muted hover:text-ink'
                     }`}
                   >
                     {v === 'grid' ? <LayoutGrid className="h-3.5 w-3.5" aria-hidden="true" /> : <List className="h-3.5 w-3.5" aria-hidden="true" />}
@@ -390,7 +390,7 @@ export default function ProductsPage() {
                   key={c.key}
                   type="button"
                   onClick={c.clear}
-                  className="group inline-flex items-center gap-1.5 rounded-full border border-rule bg-white py-1 pl-3 pr-2 text-[13px] font-medium text-ink shadow-xs transition-colors hover:border-ink"
+                  className="group inline-flex items-center gap-1.5 rounded-full border border-rule bg-surface-card py-1 pl-3 pr-2 text-[13px] font-medium text-ink shadow-xs transition-colors hover:border-brand-bright"
                   aria-label={`Remove filter ${c.label}`}
                 >
                   {c.label}
@@ -432,7 +432,7 @@ export default function ProductsPage() {
               ))}
             </ul>
           ) : (
-            <div className="overflow-hidden rounded-2xl border border-rule bg-white shadow-card">
+            <div className="overflow-hidden rounded-2xl border border-rule bg-surface-card shadow-card">
               <ProductRowHeader />
               <ul>
                 {visible.map((p) => (

@@ -28,7 +28,7 @@ export function EnquireButton({ product, size = 'sm' }: { product: Product; size
       aria-pressed={added}
       aria-label={added ? `Remove ${product.code} from enquiry` : `Add ${product.code} to enquiry`}
       className={`relative z-10 inline-flex shrink-0 items-center justify-center gap-1.5 rounded-full border font-semibold transition-all duration-200 active:scale-95 ${sizing} ${
-        added ? '' : 'border-rule-strong bg-white text-ink hover:border-ink hover:bg-ink hover:text-white'
+        added ? '' : 'border-rule-strong bg-surface-panel text-ink hover:border-brand hover:bg-brand hover:text-white'
       }`}
       style={added ? { background: tone.hex, borderColor: tone.hex, color: '#09090b' } : undefined}
     >
@@ -44,12 +44,12 @@ export default function ProductCard({ product }: { product: Product }) {
   const photo = productImage(product.code);
 
   return (
-    <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-rule bg-white transition-all duration-300 hover:-translate-y-1 hover:border-rule-strong hover:shadow-lift">
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-rule bg-surface-card transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(var(--brand-bright-rgb),0.4)] hover:shadow-lift motion-reduce:hover:translate-y-0">
       <div
         className="relative flex h-44 items-center justify-center overflow-hidden"
-        style={{ background: `radial-gradient(120% 90% at 50% 105%, rgba(${tone.rgb},.2), transparent 62%), #f6f6f7` }}
+        style={{ background: `radial-gradient(120% 90% at 50% 105%, rgba(${tone.rgb},.26), transparent 62%), radial-gradient(60% 55% at 50% 38%, rgba(255,255,255,.05), transparent 70%), var(--surface-stage)` }}
       >
-        <span className="absolute left-3 top-3 z-[1] inline-flex items-center gap-1.5 rounded-full bg-white/90 px-2.5 py-1 text-[11.5px] font-medium text-ink-soft shadow-xs backdrop-blur">
+        <span className="absolute left-3 top-3 z-[1] inline-flex items-center gap-1.5 rounded-full border border-rule bg-[rgba(var(--night-rgb),0.72)] px-2.5 py-1 text-[11.5px] font-medium text-ink-soft backdrop-blur">
           <span className="h-1.5 w-1.5 rounded-full" style={{ background: tone.hex }} aria-hidden="true" />
           {category?.short}
         </span>
@@ -69,7 +69,7 @@ export default function ProductCard({ product }: { product: Product }) {
         <h3 className="font-mono text-[15px] font-semibold tracking-tight text-ink">
           <Link
             href={productHref(product)}
-            className="rounded-2xl after:absolute after:inset-0 after:rounded-2xl after:content-[''] focus:outline-none focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-ink"
+            className="rounded-2xl after:absolute after:inset-0 after:rounded-2xl after:content-[''] focus:outline-none focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-[var(--brand-bright)]"
           >
             {product.code}
           </Link>

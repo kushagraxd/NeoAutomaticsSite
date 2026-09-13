@@ -99,7 +99,7 @@ export default function ProductPage() {
               <EnquireButton product={product} size="lg" />
             </div>
 
-            <dl className="mt-10 divide-y divide-rule overflow-hidden rounded-2xl border border-rule bg-white">
+            <dl className="mt-10 divide-y divide-rule overflow-hidden rounded-2xl border border-rule bg-surface-card">
               {specs.map(([k, v, mono]) => (
                 <div key={k} className="flex items-center justify-between gap-6 px-5 py-3.5">
                   <dt className="text-[14.5px] text-ink-muted">{k}</dt>
@@ -131,7 +131,7 @@ export default function ProductPage() {
             </p>
             <ol className="mt-9 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {decoded.map((s) => (
-                <li key={s.key} className="rounded-2xl border border-rule bg-white p-5 transition-all hover:-translate-y-0.5 hover:shadow-lift">
+                <li key={s.key} className="rounded-2xl border border-rule bg-surface-card p-5 transition-all hover:-translate-y-0.5 hover:border-[rgba(var(--brand-bright-rgb),0.35)] hover:shadow-lift motion-reduce:hover:translate-y-0">
                   <span
                     className="inline-block rounded-md px-2 py-1 font-mono text-[18px] font-semibold text-ink"
                     style={{ background: `${SEGMENT_COLOURS[s.key]}33`, boxShadow: `inset 0 -2px 0 ${SEGMENT_COLOURS[s.key]}` }}

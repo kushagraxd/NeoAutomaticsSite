@@ -5,6 +5,16 @@ export const categoryIds = categories.map((c) => c.id) as [string, ...string[]];
 
 export const contactMethods = ['email', 'phone', 'whatsapp'] as const;
 
+/** What the buyer is sharing to describe the requirement. Custom Sourcing pre-selects this. */
+export const sourcingBases = ['code', 'drawing', 'photo', 'sample'] as const;
+export type SourcingBasis = (typeof sourcingBases)[number];
+export const SOURCING_LABELS: Record<SourcingBasis, string> = {
+  code: 'A product code',
+  drawing: 'A technical drawing',
+  photo: 'A photograph',
+  sample: 'A physical sample',
+};
+
 /**
  * Enquiry schema shared by the browser form and the Express route, so the
  * client and server can never disagree about what a valid enquiry looks like.
@@ -19,6 +29,7 @@ export const rfqSchema = z.object({
     .min(7, 'Please enter a contact number')
     .max(24, 'That number looks too long'),
   preferredContact: z.enum(contactMethods).default('email'),
+  city: z.string().trim().max(120).optional().or(z.literal('')),
 
   productCategory: z.enum(categoryIds, {
     errorMap: () => ({ message: 'Please choose a product category' }),
@@ -29,6 +40,12 @@ export const rfqSchema = z.object({
   quantity: z.string().trim().max(80).optional().or(z.literal('')),
   /** Codes collected in the browser's enquiry list, sent alongside the message. */
   enquiryList: z.string().trim().max(2000).optional().or(z.literal('')),
+  sourcingBasis: z.enum(sourcingBases).optional().or(z.literal('')),
+  /** Browsers send checkbox state as a boolean; multipart submissions send it as text. */
+  consent: z.preprocess(
+    (v) => v === true || v === 'true' || v === 'on',
+    z.boolean().refine((v) => v, { message: 'Please confirm we may use these details to reply to you' }),
+  ),
 
   requirement: z
     .string()

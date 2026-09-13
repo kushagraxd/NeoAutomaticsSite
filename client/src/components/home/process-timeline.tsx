@@ -75,13 +75,13 @@ export default function ProcessTimeline() {
               <li key={s.title} className="relative flex gap-7 pb-12 last:pb-0">
                 <span
                   className={`relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-500 ${
-                    lit ? 'border-accent-ink bg-ink text-accent shadow-lift' : 'border-rule-strong bg-white text-ink-muted'
+                    lit ? 'border-brand-bright bg-brand text-white shadow-lift' : 'border-rule-strong bg-surface-card text-ink-muted'
                   }`}
                 >
                   <s.icon className="h-5 w-5" aria-hidden="true" />
                 </span>
                 <div
-                  className={`flex-1 rounded-2xl border bg-white p-6 transition-all duration-500 md:p-7 ${
+                  className={`flex-1 rounded-2xl border bg-surface-card p-6 transition-all duration-500 md:p-7 ${
                     lit ? 'translate-x-0 border-rule-strong opacity-100 shadow-card' : 'translate-x-2 border-rule opacity-45'
                   }`}
                 >

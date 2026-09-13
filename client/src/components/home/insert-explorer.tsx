@@ -29,7 +29,7 @@ export default function InsertExplorer() {
     : `/products?q=${encodeURIComponent(clean)}`;
 
   return (
-    <section className="relative overflow-hidden bg-surface py-24 md:py-32">
+    <section className="relative overflow-hidden border-y border-rule bg-surface-subtle py-24 md:py-32">
       <div className="shell">
         <Reveal>
           <p className="eyebrow mb-6">Insert explorer</p>
@@ -44,7 +44,7 @@ export default function InsertExplorer() {
         </Reveal>
 
         <Reveal delay={120}>
-          <div className="mt-14 grid overflow-hidden rounded-2xl border border-rule bg-white shadow-glow lg:grid-cols-[.9fr_1.1fr]">
+          <div className="mt-14 grid overflow-hidden rounded-2xl border border-rule bg-surface-card shadow-glow lg:grid-cols-[.9fr_1.1fr]">
             {/* Input side */}
             <div className="border-b border-rule p-7 md:p-10 lg:border-b-0 lg:border-r">
               <label htmlFor="iso-code" className="label text-ink-muted">Insert code</label>
@@ -56,7 +56,7 @@ export default function InsertExplorer() {
                   onChange={(e) => setCode(e.target.value)}
                   spellCheck={false}
                   autoComplete="off"
-                  className="w-full rounded-xl border border-rule-strong bg-surface-subtle py-4 pl-12 pr-4 font-mono text-[20px] font-medium uppercase tracking-tight text-ink transition-colors focus:border-ink focus:bg-white focus:outline-none focus:ring-4 focus:ring-[rgba(9,9,11,0.06)]"
+                  className="w-full rounded-xl border border-rule-strong bg-surface-subtle py-4 pl-12 pr-4 font-mono text-[20px] font-medium uppercase tracking-tight text-ink transition-colors focus:border-brand-bright focus:bg-surface-panel focus:outline-none focus:ring-4 focus:ring-[rgba(var(--brand-bright-rgb),0.18)]"
                 />
               </div>
 
@@ -68,7 +68,7 @@ export default function InsertExplorer() {
                       type="button"
                       onClick={() => setCode(s)}
                       className={`rounded-lg border px-3 py-1.5 font-mono text-[13px] transition-all ${
-                        clean === s ? 'border-ink bg-ink text-white' : 'border-rule bg-white text-ink-soft hover:border-ink hover:text-ink'
+                        clean === s ? 'border-brand bg-brand text-white' : 'border-rule bg-surface-panel text-ink-soft hover:border-brand-bright hover:text-ink'
                       }`}
                     >
                       {s}
@@ -78,7 +78,7 @@ export default function InsertExplorer() {
               </ul>
 
               <div className="mt-9 flex items-center gap-5 rounded-xl bg-surface-subtle p-5">
-                <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-lg bg-white shadow-xs">
+                <div className="stage flex h-24 w-24 shrink-0 items-center justify-center rounded-lg">
                   <InsertRender code={clean || 'CNMG120408'} category={match?.category ?? 'turning'} className="h-20 w-auto" />
                 </div>
                 <div className="min-w-0">

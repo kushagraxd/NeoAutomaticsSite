@@ -1,29 +1,20 @@
 /**
- * Background media for the hero.
+ * Homepage hero footage.
  *
- * The hero renders a looping video when one is configured, and an original
- * animated backdrop when it is not — so the section is never broken while
- * footage is being sourced.
+ * TEMPORARY DEVELOPMENT ASSET — the current clip is third-party footage
+ * (Tungaloy Corporation) and its publishing rights have not been confirmed.
+ * The files are gitignored so they are never pushed to the public repository.
+ * Replace with licensed or original footage before launch, then update the
+ * credit below (or remove it if the footage is your own).
  *
- * To switch the video on:
- *   1. Put the files in `client/public/media/`
- *        hero.mp4      H.264, 1920x1080 or 2560x1440, 8-15s seamless loop
- *        hero.webm     optional, VP9 — smaller, served first where supported
- *        hero-poster.jpg   first frame, shown while the video loads
- *   2. Set `enabled: true` below.
- *
- * Keep it under ~6 MB. The footage sits behind text, so prefer slow, dark,
- * low-contrast material — a turning operation, chip formation, an insert in
- * cut. Avoid anything with on-screen branding or text.
- *
- * Only use footage you have the right to use. Do not hot-link video from
- * another site.
+ * Files live in client/public/media/ and are served from /media/ in both
+ * development and production builds.
  */
 export const heroVideo = {
-  enabled: false,
-  webm: '/media/hero.webm',
-  mp4: '/media/hero.mp4',
-  poster: '/media/hero-poster.jpg',
-  /** 0-1. Raise if the footage is bright and the headline is hard to read. */
-  scrimOpacity: 0.62,
+  src: '/media/hero-machining.mp4',
+  poster: '/media/hero-machining-poster.jpg',
+  /** Seconds to start from, so autoplay opens on machining rather than the clip's white studio frames. The full clip still loops. */
+  startAt: 2.8,
+  description: 'Machining footage of indexable carbide inserts cutting metal',
+  credit: 'Footage: Tungaloy Corporation',
 } as const;

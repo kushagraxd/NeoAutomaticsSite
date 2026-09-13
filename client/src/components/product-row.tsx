@@ -22,7 +22,7 @@ export default function ProductRow({ product }: { product: Product }) {
     <li className="group relative grid grid-cols-[64px_1fr_auto] items-center gap-4 border-b border-rule px-4 py-3 transition-colors last:border-b-0 hover:bg-surface-subtle md:grid-cols-[72px_1.4fr_.7fr_1fr_.9fr_auto] md:px-5">
       <div
         className="flex h-14 items-center justify-center rounded-lg"
-        style={{ background: `radial-gradient(90% 80% at 50% 105%, rgba(${tone.rgb},.22), transparent 70%), #f4f4f5` }}
+        style={{ background: `radial-gradient(90% 80% at 50% 105%, rgba(${tone.rgb},.26), transparent 70%), var(--surface-stage)` }}
       >
         <InsertRender code={product.code} family={product.family} category={product.category} className="h-12 w-auto transition-transform duration-300 group-hover:scale-110" />
       </div>
