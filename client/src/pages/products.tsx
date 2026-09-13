@@ -1,476 +1,463 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useEffect } from 'react';
-import { useLocation } from 'wouter';
-import { Package, Car, Tractor, Factory, Zap, CheckCircle, Download, Target, Award } from 'lucide-react';
-import ProductQuoteModal from '../../../components/ProductQuoteModal';
-import { SemanticSearch } from '../../../components/SemanticSearch';
-import { usePageTitle } from '../lib/usePageTitle';
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { Link, useLocation, useSearch } from 'wouter';
+import { ArrowRight, ArrowUpRight, ChevronDown, LayoutGrid, List, Search, SlidersHorizontal, X } from 'lucide-react';
+import { usePageMeta } from '../lib/usePageMeta';
+import ProductCard from '../components/product-card';
+import ProductRow, { ProductRowHeader } from '../components/product-row';
+import InsertRender from '../components/insert-render';
+import { toneFor } from '../lib/category-tones';
+import {
+  categories, categoryById, productByCode, products, searchProducts,
+  totalFamilyCount, totalProductCount, type CategoryId, type Product,
+} from '../../../shared/catalog';
 
-// Type definitions
-interface Product {
-  name: string;
-  description: string;
-  specs: string[];
-  applications: string[];
+const PAGE = 36;
+const QUICK = ['TNMG', 'CNMG', 'WNMG', 'DNMG', 'APMT', 'SPMG', 'WCMX', 'MGMN', '16ER'];
+const SHOWCASE = ['TNMG160408-MA', 'APMT1135PDER-H2', 'WNMG080408-MA']
+  .map((c) => productByCode(c))
+  .filter((p): p is Product => Boolean(p));
+const SHOWCASE_POS = ['left-0 top-2', 'right-2 top-[5.5rem]', 'left-20 bottom-0'];
+
+const CAT_ORDER = new Map(categories.map((c, i) => [c.id, i]));
+const ORDERED = [...products].sort(
+  (a, b) =>
+    (CAT_ORDER.get(a.category) ?? 0) - (CAT_ORDER.get(b.category) ?? 0) ||
+    a.family.localeCompare(b.family) ||
+    a.code.localeCompare(b.code),
+);
+
+type View = 'grid' | 'list';
+type Sort = 'relevance' | 'code' | 'family';
+
+interface Filters {
+  q: string;
+  category: CategoryId | 'all';
+  shape: string;
+  family: string;
+  view: View;
+  sort: Sort;
 }
 
-interface ProductCategory {
-  id: string;
-  icon: any;
-  title: string;
-  description: string;
-  color: string;
-  stats: {
-    parts: string;
-    volume: string;
-    tolerance: string;
+function parse(search: string): Filters {
+  const p = new URLSearchParams(search);
+  const cat = p.get('category');
+  const sort = p.get('sort');
+  return {
+    q: p.get('q') ?? '',
+    category: categories.some((c) => c.id === cat) ? (cat as CategoryId) : 'all',
+    shape: p.get('shape') ?? 'all',
+    family: p.get('family') ?? 'all',
+    view: p.get('view') === 'list' ? 'list' : 'grid',
+    sort: sort === 'code' || sort === 'family' ? sort : 'relevance',
   };
-  products: Product[];
 }
 
-interface SelectedProductType {
-  name: string;
-  category: string;
-  image?: string;
-  description?: string;
-  specs?: string[];
-  applications?: string[];
+function serialise(f: Filters): string {
+  const p = new URLSearchParams();
+  if (f.q.trim()) p.set('q', f.q.trim());
+  if (f.category !== 'all') p.set('category', f.category);
+  if (f.shape !== 'all') p.set('shape', f.shape);
+  if (f.family !== 'all') p.set('family', f.family);
+  if (f.view !== 'grid') p.set('view', f.view);
+  if (f.sort !== 'relevance') p.set('sort', f.sort);
+  return p.toString();
 }
 
-const productCategories = [
-  {
-    id: 'automotive',
-    icon: Car,
-    title: 'Automotive Components',
-    description: 'Precision-engineered parts for automotive OEMs and Tier-1 suppliers',
-    color: 'amber',
-    stats: { parts: '15+', volume: '500K+', tolerance: '±0.005mm' },
-    products: [
-      {
-        name: 'Collars (RR Panel & RR Wheel Side)',
-        description: 'High-precision collars for rear panel and wheel side applications with superior surface finish',
-        specs: ['Material: Various steel grades', 'Tolerance: ±0.02mm', 'Surface finish: Ra 0.8-1.6', 'Heat treatment: As required'],
-        applications: ['Passenger vehicles', 'Commercial vehicles', 'Electric vehicles']
-      },
-      {
-        name: 'Ratchet Starter & Pinion Assemblies',
-        description: 'Critical starter system components with precise engagement characteristics',
-        specs: ['Material: High-strength alloy steel', 'Heat treatment: Induction hardening', 'Tolerance: ±0.01mm', 'Hardness: 58-62 HRC'],
-        applications: ['Engine starting systems', 'Automotive starters', 'Heavy-duty applications']
-      },
-      {
-        name: 'Rocker Arms',
-        description: 'Engine valve train components engineered for optimal performance and durability',
-        specs: ['Material: Case hardened steel', 'Tolerance: ±0.005mm', 'Surface treatment: Nitriding', 'Wear resistance: Enhanced'],
-        applications: ['Internal combustion engines', 'Valve train systems', 'Performance engines']
-      },
-      {
-        name: 'Engine Bushes (incl. 20x9)',
-        description: 'Precision bushes including specialized 20x9 configurations for critical engine applications',
-        specs: ['Material: Phosphor bronze/Steel', 'Size range: 8mm to 50mm', 'Standard: 20x9 specialist', 'Load capacity: High'],
-        applications: ['Engine assemblies', 'Suspension systems', 'Steering mechanisms']
-      }
-    ]
-  },
-  {
-    id: 'agricultural',
-    icon: Tractor,
-    title: 'Agricultural Components',
-    description: 'Durable precision parts for agricultural and farming equipment',
-    color: 'red',
-    stats: { parts: '12+', volume: '300K+', tolerance: '±0.01mm' },
-    products: [
-      {
-        name: 'Gear Blanks',
-        description: 'Precision blanks ready for gear tooth cutting operations with superior material properties',
-        specs: ['Material: Heat treated steel', 'Tolerance: ±0.02mm', 'Hardness: 25-35 HRC', 'Machinability: Excellent'],
-        applications: ['Transmission gears', 'Differential systems', 'Power take-off units']
-      },
-      {
-        name: 'Tractor Components',
-        description: 'Heavy-duty components designed for the demanding agricultural environment',
-        specs: ['Material: High-carbon steel', 'Weather resistant coating', 'Load capacity: 5000N+', 'Corrosion protection: Enhanced'],
-        applications: ['Farm tractors', 'Harvesting equipment', 'Planting machinery']
-      },
-      {
-        name: 'Hydraulic Components',
-        description: 'Precision hydraulic system parts engineered for reliable agricultural operations',
-        specs: ['Working pressure: up to 350 bar', 'Temperature range: -40°C to +120°C', 'Seal compatibility: Viton/NBR', 'Fatigue resistance: High'],
-        applications: ['Hydraulic cylinders', 'Control valves', 'Loader systems']
-      },
-      {
-        name: 'Sprockets & Chains',
-        description: 'Power transmission components for agricultural machinery drive systems',
-        specs: ['Material: Case hardened steel', 'Pitch: 15.875mm to 50.8mm', 'Teeth: 8 to 60', 'Chain compatibility: ANSI standard'],
-        applications: ['Conveyor systems', 'Drive mechanisms', 'Harvester chains']
-      }
-    ]
-  },
-  {
-    id: 'industrial',
-    icon: Factory,
-    title: 'Industrial Components',
-    description: 'High-strength components for industrial machinery and manufacturing systems',
-    color: 'amber',
-    stats: { parts: '20+', volume: '200K+', tolerance: '±0.02mm' },
-    products: [
-      {
-        name: 'Sprockets',
-        description: 'High-strength sprockets for industrial power transmission systems',
-        specs: ['Material: Heat treated steel', 'Pitch: 8mm to 32mm', 'Teeth: 8 to 120', 'Hub options: Various'],
-        applications: ['Conveyor systems', 'Manufacturing lines', 'Material handling']
-      },
-      {
-        name: 'Machine Tool Components',
-        description: 'Precision components for CNC machines and manufacturing equipment',
-        specs: ['Material: Tool steel/Stainless', 'Tolerance: ±0.005mm', 'Surface finish: Mirror polish', 'Hardness: 45-60 HRC'],
-        applications: ['CNC machining centers', 'Spindle assemblies', 'Tool holders']
-      },
-      {
-        name: 'Pump Components',
-        description: 'Critical components for industrial pumping systems and fluid handling',
-        specs: ['Material: Stainless steel/Bronze', 'Pressure rating: 250 PSI+', 'Corrosion resistance: Excellent', 'Precision: ±0.01mm'],
-        applications: ['Centrifugal pumps', 'Gear pumps', 'Hydraulic systems']
-      },
-      {
-        name: 'Custom Fixtures & Tooling',
-        description: 'Specialized manufacturing fixtures and tooling solutions',
-        specs: ['Material: Tool steel/Aluminum', 'Tolerance: ±0.005mm', 'Repeatability: ±0.002mm', 'Durability: Extended life'],
-        applications: ['Assembly fixtures', 'Inspection gauges', 'Production tooling']
-      }
-    ]
-  }
-];
+const toneVars = (rgb: string, activeInk?: string) =>
+  ({ '--tone': rgb, ...(activeInk ? { '--pill-active-ink': activeInk } : {}) }) as CSSProperties;
 
-const productBenefits = [
-  {
-    icon: Target,
-    title: 'Precision Excellence',
-    description: 'Tight tolerances down to ±0.005mm using advanced CNC technology',
-    metric: '±0.005mm'
-  },
-  {
-    icon: Award,
-    title: 'Quality Certified',
-    description: 'ISO 9001:2015 certified processes with comprehensive documentation',
-    metric: '99.8%'
-  },
-  {
-    icon: CheckCircle,
-    title: 'PPAP Ready',
-    description: 'Production Part Approval Process documentation for automotive suppliers',
-    metric: '100%'
-  },
-  {
-    icon: Zap,
-    title: 'Rapid Turnaround',
-    description: 'Quick prototyping and production with 30+ CNC machines',
-    metric: '30+'
-  }
-];
+function FilterSelect({
+  label, value, onChange, options,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  options: Array<{ value: string; label: string }>;
+}) {
+  const active = value !== 'all' && value !== 'relevance';
+  return (
+    <label className="relative inline-flex items-center">
+      <span className="sr-only">{label}</span>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className={`cursor-pointer appearance-none rounded-full border py-2 pl-4 pr-9 text-[13.5px] font-medium transition-all focus:outline-none focus:ring-4 focus:ring-[rgba(var(--brand-bright-rgb),0.18)] ${
+          active ? 'border-brand bg-brand text-white' : 'border-rule bg-surface-card text-ink hover:border-brand-bright'
+        }`}
+      >
+        {options.map((o) => (
+          <option key={o.value} value={o.value}>{o.label}</option>
+        ))}
+      </select>
+      <ChevronDown className={`pointer-events-none absolute right-3 h-4 w-4 ${active ? 'text-white' : 'text-ink-muted'}`} aria-hidden="true" />
+    </label>
+  );
+}
 
 export default function ProductsPage() {
-  usePageTitle('Products - Precision Machined Components', 'Explore our range of precision machined components for automotive, agriculture, and industrial applications including collars, rocker arms, and more.');
-  const [selectedProduct, setSelectedProduct] = useState<SelectedProductType | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [location] = useLocation();
+  usePageMeta(
+    'Products — Carbide Insert Catalogue',
+    'Search carbide inserts by ISO code, or filter by operation, shape and family. Turning, milling, drilling, grooving and threading inserts — supplied in India and internationally.',
+  );
 
-  // Parse query parameters and auto-open product modal
+  const search = useSearch();
+  const [, navigate] = useLocation();
+  const [filters, setFilters] = useState<Filters>(() => parse(search));
+  const [limit, setLimit] = useState(PAGE);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const sentinel = useRef<HTMLDivElement>(null);
+
+  const update = (patch: Partial<Filters>) => setFilters((f) => ({ ...f, ...patch }));
+  const setCategory = (category: Filters['category']) => update({ category, shape: 'all', family: 'all' });
+  const clearAll = () => setFilters((f) => ({ ...f, q: '', category: 'all', shape: 'all', family: 'all' }));
+
+  // Links elsewhere on the site (e.g. /products?q=TNMG) update the page in place.
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const productParam = params.get('product');
-    
-    if (productParam) {
-      // Find the product by name (case-insensitive, handle URL encoding)
-      const productName = decodeURIComponent(productParam).toLowerCase();
-      
-      for (const category of productCategories) {
-        const foundProduct = category.products.find(p => 
-          p.name.toLowerCase().includes(productName) || 
-          productName.includes(p.name.toLowerCase())
-        );
-        
-        if (foundProduct) {
-          const productWithImage: SelectedProductType = {
-            ...foundProduct,
-            category: category.title,
-            image: undefined // Add actual product images if available
-          };
-          setSelectedProduct(productWithImage);
-          setIsModalOpen(true);
-          break;
-        }
+    if (search !== serialise(filters)) setFilters(parse(search));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search]);
+
+  // Filters are reflected in the URL, so a filtered view can be shared or bookmarked.
+  useEffect(() => {
+    const next = serialise(filters);
+    if (next === search) return;
+    const t = window.setTimeout(() => navigate(next ? `/products?${next}` : '/products', { replace: true }), 250);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filters]);
+
+  // "/" jumps to search from anywhere on the page.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const t = e.target as HTMLElement;
+      if (e.key === '/' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(t.tagName)) {
+        e.preventDefault();
+        inputRef.current?.focus();
       }
-    }
-  }, [location]);
-
-  const openModal = (product: Product, category: ProductCategory) => {
-    const productWithImage: SelectedProductType = {
-      ...product,
-      category: category.title,
-      image: undefined // Add actual product images if available
     };
-    setSelectedProduct(productWithImage);
-    setIsModalOpen(true);
-    
-    // Update URL with product parameter for deep linking
-    const productParam = encodeURIComponent(product.name);
-    window.history.pushState(null, '', `?product=${productParam}`);
-  };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
-  const closeModal = () => {
-    setSelectedProduct(null);
-    setIsModalOpen(false);
-    
-    // Clear query parameter when closing modal
-    window.history.pushState(null, '', window.location.pathname);
-  };
+  const searched = useMemo(() => (filters.q.trim() ? searchProducts(filters.q, 1000) : ORDERED), [filters.q]);
+
+  const countFor = useMemo(() => {
+    const c: Partial<Record<CategoryId, number>> = {};
+    for (const p of searched) c[p.category] = (c[p.category] ?? 0) + 1;
+    return c;
+  }, [searched]);
+
+  const inCategory = useMemo(
+    () => (filters.category === 'all' ? searched : searched.filter((p) => p.category === filters.category)),
+    [searched, filters.category],
+  );
+
+  const shapeOptions = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const p of inCategory) m.set(p.shape ?? 'Other', (m.get(p.shape ?? 'Other') ?? 0) + 1);
+    return Array.from(m.entries()).sort((a, b) => b[1] - a[1]);
+  }, [inCategory]);
+
+  const familyOptions = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const p of inCategory) {
+      if (filters.shape !== 'all' && (p.shape ?? 'Other') !== filters.shape) continue;
+      m.set(p.family, (m.get(p.family) ?? 0) + 1);
+    }
+    return Array.from(m.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+  }, [inCategory, filters.shape]);
+
+  const results = useMemo(() => {
+    let r = inCategory;
+    if (filters.shape !== 'all') r = r.filter((p) => (p.shape ?? 'Other') === filters.shape);
+    if (filters.family !== 'all') r = r.filter((p) => p.family === filters.family);
+    if (filters.sort === 'code') r = [...r].sort((a, b) => a.code.localeCompare(b.code));
+    if (filters.sort === 'family') r = [...r].sort((a, b) => a.family.localeCompare(b.family) || a.code.localeCompare(b.code));
+    return r;
+  }, [inCategory, filters.shape, filters.family, filters.sort]);
+
+  useEffect(() => setLimit(PAGE), [filters.q, filters.category, filters.shape, filters.family, filters.sort]);
+
+  // Load the next batch as the visitor nears the end of the grid.
+  useEffect(() => {
+    const el = sentinel.current;
+    if (!el || limit >= results.length) return;
+    const io = new IntersectionObserver(([e]) => e.isIntersecting && setLimit((l) => l + PAGE), { rootMargin: '700px 0px' });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [limit, results.length]);
+
+  const visible = results.slice(0, limit);
+  const listed = categories.filter((c) => !c.enquiryOnly);
+  const enquiryOnly = categories.filter((c) => c.enquiryOnly);
+
+  const chips = [
+    filters.q.trim() && { key: 'q', label: `“${filters.q.trim()}”`, clear: () => update({ q: '' }) },
+    filters.category !== 'all' && { key: 'c', label: categoryById(filters.category)?.short ?? '', clear: () => setCategory('all') },
+    filters.shape !== 'all' && { key: 's', label: filters.shape, clear: () => update({ shape: 'all', family: 'all' }) },
+    filters.family !== 'all' && { key: 'f', label: filters.family, clear: () => update({ family: 'all' }) },
+  ].filter(Boolean) as Array<{ key: string; label: string; clear: () => void }>;
 
   return (
-    <div className="min-h-screen bg-base">
-      {/* Hero Section */}
-      <section className="relative py-28 overflow-hidden">
-        {/* Background Effects */}
-        <div className="absolute inset-0 aurora-bg opacity-10" />
-        <div className="geometric-shape geometric-shape-1" />
-        <div className="geometric-shape geometric-shape-2" />
-        
-        <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
-          >
-            <h1 className="text-4xl md:text-6xl font-display font-bold text-primary mb-6 tracking-tight leading-tight">
-              Product <span className="gradient-text">Portfolio</span>
+    <>
+      {/* ------------------------------------------------------------- Hero */}
+      <section className="relative overflow-hidden bg-night text-night-ink">
+        <div className="absolute inset-0 night-glow" aria-hidden="true" />
+        <div className="absolute inset-0 grid-lines opacity-50" aria-hidden="true" />
+
+        <div className="shell relative grid gap-12 py-14 md:py-20 lg:grid-cols-[1.2fr_.8fr] lg:items-center">
+          <div>
+            <p className="eyebrow-dark mb-6">
+              Catalogue · {totalProductCount} codes · {totalFamilyCount} ISO families
+            </p>
+            <h1 className="text-[clamp(2.5rem,5.6vw,4.5rem)] font-semibold leading-[1] tracking-[-0.045em]">
+              Find the insert <span className="accent-word text-accent">by its code</span>
             </h1>
-            <p className="text-xl md:text-2xl text-muted max-w-4xl mx-auto leading-relaxed">
-              Comprehensive range of precision-manufactured components serving
-              <span className="text-amber font-semibold"> automotive, agricultural, and industrial</span> sectors worldwide.
+            <p className="mt-5 max-w-xl text-[17px] leading-relaxed text-night-muted">
+              Search the designation printed on your insert box, or filter by operation, shape and family. Add inserts to an
+              enquiry and request one quotation for all of them.
             </p>
-            
-            {/* AI-Powered Search */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="max-w-2xl mx-auto mt-8"
-            >
-              <SemanticSearch
-                placeholder="Search for precision components (e.g., 'rocker arms for engine')"
-                onProductSelect={(product) => {
-                  // Find and open the product modal
-                  for (const category of productCategories) {
-                    const foundProduct = category.products.find(p => p.name === product);
-                    if (foundProduct) {
-                      openModal(foundProduct, category);
-                      break;
-                    }
-                  }
-                }}
-                onQuoteRequest={(product) => {
-                  // Find and open the product modal for quoting
-                  for (const category of productCategories) {
-                    const foundProduct = category.products.find(p => p.name === product);
-                    if (foundProduct) {
-                      openModal(foundProduct, category);
-                      break;
-                    }
-                  }
-                }}
+
+            <div className="group relative mt-9 max-w-2xl">
+              <Search
+                className="pointer-events-none absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-night-muted transition-colors group-focus-within:text-accent"
+                aria-hidden="true"
               />
-            </motion.div>
-          </motion.div>
+              <label htmlFor="catalogue-search" className="sr-only">Search by product code</label>
+              <input
+                ref={inputRef}
+                id="catalogue-search"
+                type="search"
+                value={filters.q}
+                onChange={(e) => update({ q: e.target.value })}
+                onKeyDown={(e) => e.key === 'Escape' && update({ q: '' })}
+                placeholder="Search a code — TNMG160408, APMT, 16ER…"
+                autoComplete="off"
+                spellCheck={false}
+                className="w-full rounded-2xl border border-white/10 bg-white/[.06] py-[1.1rem] pl-14 pr-16 font-mono text-[16px] text-night-ink backdrop-blur transition-all placeholder:text-[#7684a0] focus:border-accent focus:bg-white/[.09] focus:outline-none focus:ring-4 focus:ring-[rgba(210,168,87,0.18)] [&::-webkit-search-cancel-button]:hidden"
+              />
+              <div className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center">
+                {filters.q ? (
+                  <button
+                    type="button"
+                    onClick={() => { update({ q: '' }); inputRef.current?.focus(); }}
+                    className="rounded-lg p-2 text-night-muted transition-colors hover:bg-white/10 hover:text-night-ink"
+                    aria-label="Clear search"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                ) : (
+                  <kbd className="kbd" aria-hidden="true">/</kbd>
+                )}
+              </div>
+            </div>
 
-          {/* Product Benefits */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-20">
-            {productBenefits.map((benefit, index) => {
-              const IconComponent = benefit.icon;
-              return (
-                <motion.div
-                  key={benefit.title}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="text-center glass-card p-6 glow-hover group"
-                  data-testid={`product-benefit-${benefit.title.toLowerCase().replace(/[^a-z]/g, '-')}`}
-                >
-                  <IconComponent className="h-8 w-8 text-amber mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
-                  <div className="text-2xl font-display font-bold text-amber mb-2">{benefit.metric}</div>
-                  <h3 className="text-sm font-display font-semibold text-primary mb-2">{benefit.title}</h3>
-                  <p className="text-muted text-xs leading-relaxed">{benefit.description}</p>
-                </motion.div>
-              );
-            })}
+            <div className="mt-5 flex flex-wrap items-center gap-2">
+              <span className="mr-1 text-[13px] text-night-muted">Popular</span>
+              {QUICK.map((f) => {
+                const on = filters.q.trim().toUpperCase() === f;
+                return (
+                  <button
+                    key={f}
+                    type="button"
+                    onClick={() => update({ q: on ? '' : f })}
+                    aria-pressed={on}
+                    className={`rounded-full border px-3 py-1 font-mono text-[12.5px] transition-all ${
+                      on
+                        ? 'border-accent bg-accent text-night'
+                        : 'border-white/10 bg-white/[.03] text-night-muted hover:-translate-y-px hover:border-accent hover:text-accent'
+                    }`}
+                  >
+                    {f}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="relative hidden h-[330px] lg:block" aria-hidden="true">
+            {SHOWCASE.map((p, i) => (
+              <div key={p.code} className={`float absolute flex flex-col items-center ${SHOWCASE_POS[i]}`} style={{ animationDelay: `${i * -2.1}s` }}>
+                <div className="rounded-3xl border border-white/[.08] bg-white/[.03] p-4 shadow-glow backdrop-blur-sm">
+                  <InsertRender code={p.code} family={p.family} category={p.category} className="h-28 w-auto" />
+                </div>
+                <span className="mt-2 font-mono text-[11.5px] text-night-muted">{p.code}</span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Product Categories */}
-      <section className="py-20 md:py-28">
-        <div className="max-w-7xl mx-auto px-6 md:px-10">
-          <div className="space-y-32">
-            {productCategories.map((category, categoryIndex) => {
-              const IconComponent = category.icon;
-              const iconColor = category.color === 'amber' ? 'text-amber' : 'text-red';
-              const isReverse = categoryIndex % 2 === 1;
-              
-              return (
-                <motion.div
-                  key={category.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                  className="space-y-12"
-                  data-testid={`product-category-${category.id}`}
-                >
-                  {/* Category Header */}
-                  <div className="text-center">
-                    <IconComponent className={`h-16 w-16 ${iconColor} mx-auto mb-6`} />
-                    <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6 tracking-tight">
-                      {category.title}
-                    </h2>
-                    <p className="text-xl text-muted max-w-3xl mx-auto mb-8 leading-relaxed">
-                      {category.description}
-                    </p>
-
-                    {/* Category Stats */}
-                    <div className="flex justify-center gap-8 mb-12">
-                      <div className="text-center">
-                        <div className={`text-2xl font-display font-bold ${iconColor} mb-1`}>{category.stats.parts}</div>
-                        <div className="text-muted text-sm">Product Types</div>
-                      </div>
-                      <div className="text-center">
-                        <div className={`text-2xl font-display font-bold ${iconColor} mb-1`}>{category.stats.volume}</div>
-                        <div className="text-muted text-sm">Parts/Year</div>
-                      </div>
-                      <div className="text-center">
-                        <div className={`text-2xl font-display font-bold ${iconColor} mb-1`}>{category.stats.tolerance}</div>
-                        <div className="text-muted text-sm">Best Tolerance</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Products Grid */}
-                  <div className="grid md:grid-cols-2 gap-8">
-                    {category.products.map((product, productIndex) => (
-                      <motion.div
-                        key={product.name}
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: productIndex * 0.1 }}
-                        className="glass-card p-8 glow-hover group"
-                        data-testid={`product-${product.name.toLowerCase().replace(/[^a-z]/g, '-')}`}
-                      >
-                        <h3 className="text-xl font-display font-semibold text-primary mb-4 group-hover:text-amber transition-colors duration-300">
-                          {product.name}
-                        </h3>
-                        <p className="text-muted mb-6 leading-relaxed">{product.description}</p>
-                        
-                        {/* Specifications */}
-                        <div className="mb-6">
-                          <h4 className="text-sm font-display font-semibold text-primary mb-3">Specifications</h4>
-                          <ul className="space-y-2">
-                            {product.specs.map((spec, specIndex) => (
-                              <li key={specIndex} className="flex items-center text-sm text-muted">
-                                <CheckCircle className={`h-3 w-3 ${iconColor} mr-3 flex-shrink-0`} />
-                                {spec}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-
-                        {/* Applications */}
-                        <div>
-                          <h4 className="text-sm font-display font-semibold text-primary mb-3">Applications</h4>
-                          <div className="flex flex-wrap gap-2">
-                            {product.applications.map((app, appIndex) => (
-                              <span
-                                key={appIndex}
-                                className={`px-3 py-1 text-xs rounded-full border ${
-                                  category.color === 'amber' 
-                                    ? 'border-amber/30 bg-amber/10 text-amber' 
-                                    : 'border-red/30 bg-red/10 text-red'
-                                }`}
-                              >
-                                {app}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                        
-                        {/* View Details Button */}
-                        <button
-                          onClick={() => openModal(product, category)}
-                          className="w-full mt-6 btn-primary magnetic-btn group inline-flex items-center justify-center"
-                          data-testid={`button-view-details-${product.name.toLowerCase().replace(/[^a-z]/g, '-')}`}
-                        >
-                          <Package className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
-                          View Details & Quote
-                        </button>
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 md:py-28 bg-elevated">
-        <div className="max-w-4xl mx-auto px-6 md:px-10 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6 tracking-tight">
-              Custom Solutions for Your <span className="gradient-text">Requirements</span>
-            </h2>
-            <p className="text-xl text-muted mb-12 leading-relaxed">
-              Don't see exactly what you need? Our engineering team specializes in custom component development.
-            </p>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="flex flex-col sm:flex-row gap-6 justify-center"
+      {/* ---------------------------------------------------------- Toolbar */}
+      <div className="sticky top-16 z-30 border-b border-rule bg-[rgba(var(--surface-rgb),0.86)] backdrop-blur-xl">
+        <div className="shell">
+          <div className="no-scrollbar -mx-5 flex items-center gap-2 overflow-x-auto px-5 py-3 sm:-mx-8 sm:px-8" role="group" aria-label="Category">
+            <button
+              type="button"
+              className="pill"
+              data-active={filters.category === 'all'}
+              data-dark="true"
+              style={toneVars('47,74,168', '#ffffff')}
+              onClick={() => setCategory('all')}
             >
-              <a 
-                href="/contact" 
-                className="btn-primary magnetic-btn group inline-flex items-center justify-center"
-                data-testid="cta-request-custom-quote"
-              >
-                <Zap className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
-                Request Custom Quote
-              </a>
-              <a 
-                href="/neo-product-catalog.pdf" 
-                className="btn-secondary magnetic-btn inline-flex items-center justify-center"
-                data-testid="cta-download-catalog"
-                download
-              >
-                <Download className="mr-2 h-5 w-5" />
-                Download Product Catalog
-              </a>
-            </motion.div>
-          </motion.div>
+              All <span className="pill-count">{searched.length}</span>
+            </button>
+            {listed.map((c) => {
+              const n = countFor[c.id] ?? 0;
+              return (
+                <button
+                  key={c.id}
+                  type="button"
+                  className="pill"
+                  data-active={filters.category === c.id}
+                  disabled={n === 0 && filters.category !== c.id}
+                  style={toneVars(toneFor(c.id).rgb)}
+                  onClick={() => setCategory(filters.category === c.id ? 'all' : c.id)}
+                >
+                  <span className="pill-dot" aria-hidden="true" />
+                  {c.short}
+                  <span className="pill-count">{n}</span>
+                </button>
+              );
+            })}
+            <span className="mx-1 h-6 w-px shrink-0 bg-rule" aria-hidden="true" />
+            {enquiryOnly.map((c) => (
+              <Link key={c.id} href={`/products/${c.slug}`} className="pill" style={toneVars('161,161,170')}>
+                {c.short}
+                <ArrowUpRight className="h-3.5 w-3.5 text-ink-muted" aria-hidden="true" />
+              </Link>
+            ))}
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2 border-t border-rule py-2.5">
+            <SlidersHorizontal className="mr-1 hidden h-4 w-4 text-ink-muted sm:block" aria-hidden="true" />
+            <FilterSelect
+              label="Shape"
+              value={filters.shape}
+              onChange={(v) => update({ shape: v, family: 'all' })}
+              options={[{ value: 'all', label: 'All shapes' }, ...shapeOptions.map(([s, n]) => ({ value: s, label: `${s} (${n})` }))]}
+            />
+            <FilterSelect
+              label="Family"
+              value={filters.family}
+              onChange={(v) => update({ family: v })}
+              options={[{ value: 'all', label: 'All families' }, ...familyOptions.map(([f, n]) => ({ value: f, label: `${f} (${n})` }))]}
+            />
+            <FilterSelect
+              label="Sort"
+              value={filters.sort}
+              onChange={(v) => update({ sort: v as Sort })}
+              options={[
+                { value: 'relevance', label: filters.q.trim() ? 'Best match' : 'By category' },
+                { value: 'code', label: 'Code A–Z' },
+                { value: 'family', label: 'Family A–Z' },
+              ]}
+            />
+
+            <div className="ml-auto flex items-center gap-3">
+              <p className="hidden text-[13.5px] text-ink-muted md:block" aria-live="polite">
+                <span className="font-semibold text-ink tabnum">{results.length}</span> of {totalProductCount}
+              </p>
+              <div role="group" aria-label="Layout" className="inline-flex rounded-full border border-rule bg-surface-card p-1">
+                {(['grid', 'list'] as const).map((v) => (
+                  <button
+                    key={v}
+                    type="button"
+                    aria-pressed={filters.view === v}
+                    onClick={() => update({ view: v })}
+                    className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[13px] font-medium transition-all ${
+                      filters.view === v ? 'bg-brand text-white shadow-xs' : 'text-ink-muted hover:text-ink'
+                    }`}
+                  >
+                    {v === 'grid' ? <LayoutGrid className="h-3.5 w-3.5" aria-hidden="true" /> : <List className="h-3.5 w-3.5" aria-hidden="true" />}
+                    <span className="hidden sm:inline">{v === 'grid' ? 'Grid' : 'List'}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ---------------------------------------------------------- Results */}
+      <section className="min-h-[60vh] bg-surface-subtle pb-28 pt-8">
+        <div className="shell">
+          {chips.length > 0 && (
+            <div className="mb-6 flex flex-wrap items-center gap-2">
+              <span className="text-[13px] text-ink-muted">Filtered by</span>
+              {chips.map((c) => (
+                <button
+                  key={c.key}
+                  type="button"
+                  onClick={c.clear}
+                  className="group inline-flex items-center gap-1.5 rounded-full border border-rule bg-surface-card py-1 pl-3 pr-2 text-[13px] font-medium text-ink shadow-xs transition-colors hover:border-brand-bright"
+                  aria-label={`Remove filter ${c.label}`}
+                >
+                  {c.label}
+                  <X className="h-3.5 w-3.5 text-ink-muted group-hover:text-ink" aria-hidden="true" />
+                </button>
+              ))}
+              <button type="button" onClick={clearAll} className="ml-1 text-[13px] font-medium text-accent-ink hover:underline">
+                Clear all
+              </button>
+            </div>
+          )}
+
+          {results.length === 0 ? (
+            <div className="relative overflow-hidden rounded-3xl bg-night px-6 py-16 text-center text-night-ink md:py-20">
+              <div className="absolute inset-0 night-glow" aria-hidden="true" />
+              <div className="relative">
+                <InsertRender code="XNEX080608" category="special" className="float mx-auto h-36 w-auto" />
+                <h2 className="mt-6 text-[clamp(1.5rem,3vw,2rem)] font-semibold tracking-[-0.03em]">
+                  No listed code matches
+                  {filters.q.trim() ? <> “<span className="font-mono text-accent">{filters.q.trim()}</span>”</> : ' these filters'}
+                </h2>
+                <p className="mx-auto mt-3 max-w-md text-[16px] leading-relaxed text-night-muted">
+                  That doesn’t mean we can’t supply it — much of what we source starts as a specific request.
+                </p>
+                <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+                  <Link href={`/quote${filters.q.trim() ? `?code=${encodeURIComponent(filters.q.trim())}` : ''}`} className="btn-onDark btn-lg">
+                    Ask for availability <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                  </Link>
+                  <button type="button" onClick={clearAll} className="btn-ghostDark btn-lg">Clear filters</button>
+                </div>
+              </div>
+            </div>
+          ) : filters.view === 'grid' ? (
+            <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {visible.map((p, i) => (
+                <li key={p.code} className="animate-rise" style={{ animationDelay: `${(i % PAGE) * 16}ms` }}>
+                  <ProductCard product={p} />
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="overflow-hidden rounded-2xl border border-rule bg-surface-card shadow-card">
+              <ProductRowHeader />
+              <ul>
+                {visible.map((p) => (
+                  <ProductRow key={p.code} product={p} />
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {visible.length < results.length && (
+            <div ref={sentinel} className="mt-10 flex justify-center">
+              <button type="button" onClick={() => setLimit((l) => l + PAGE)} className="btn-outline">
+                Show more <span className="text-ink-muted">({results.length - visible.length} remaining)</span>
+              </button>
+            </div>
+          )}
+
+          {results.length > 0 && visible.length >= results.length && (
+            <p className="mt-12 text-center text-[14.5px] text-ink-muted">
+              That’s all {results.length}. Can’t see the code you need?{' '}
+              <Link href="/quote" className="font-medium text-accent-ink hover:underline">Ask us to source it</Link>.
+            </p>
+          )}
         </div>
       </section>
-
-      {/* Product Quote Modal */}
-      <ProductQuoteModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        product={selectedProduct || undefined}
-      />
-    </div>
+    </>
   );
 }

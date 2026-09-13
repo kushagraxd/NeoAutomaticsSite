@@ -1,58 +1,60 @@
-import { Switch, Route } from "wouter";
-import { queryClient } from "./lib/queryClient";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import HomePage from "./pages/home";
-import ContactPage from "./pages/contact";
-import CapabilitiesPage from "./pages/capabilities";
-import IndustriesPage from "./pages/industries";
-import QualityPage from "./pages/quality";
-import ProductsPage from "./pages/products";
-import AboutPage from "./pages/about";
-import PrivacyPage from "./pages/privacy";
-import TermsPage from "./pages/terms";
-import CareersPage from "./pages/careers";
-import NotFound from "./pages/not-found";
-import Navigation from "../../components/ui/navigation";
-import Footer from "../../components/ui/footer";
-import { AskNeoWidget } from "../../components/AskNeoWidget";
+import { useEffect } from 'react';
+import { Switch, Route, useLocation } from 'wouter';
+import SiteHeader from './components/layout/site-header';
+import SiteFooter from './components/layout/site-footer';
+import EnquiryTray from './components/enquiry-tray';
+import { InsertRenderDefs } from './components/insert-render';
+import { EnquiryProvider } from './lib/enquiry-list';
+import HomePage from './pages/home';
+import ProductsPage from './pages/products';
+import CategoryPage from './pages/category';
+import ProductPage from './pages/product';
+import CustomSourcingPage from './pages/custom-sourcing';
+import AboutPage from './pages/about';
+import ContactPage from './pages/contact';
+import PrivacyPage from './pages/privacy';
+import NotFound from './pages/not-found';
 
-function Router() {
-  return (
-    <Switch>
-      <Route path="/" component={HomePage} />
-      <Route path="/capabilities" component={CapabilitiesPage} />
-      <Route path="/industries" component={IndustriesPage} />
-      <Route path="/quality" component={QualityPage} />
-      <Route path="/products" component={ProductsPage} />
-      <Route path="/about" component={AboutPage} />
-      <Route path="/contact" component={ContactPage} />
-      <Route path="/privacy" component={PrivacyPage} />
-      <Route path="/terms" component={TermsPage} />
-      <Route path="/careers" component={CareersPage} />
-      {/* Fallback to 404 */}
-      <Route component={NotFound} />
-    </Switch>
-  );
+/** Returns to the top on route change, except for in-page anchors and filter-only URL updates. */
+function ScrollToTop() {
+  const [location] = useLocation();
+  useEffect(() => {
+    if (window.location.hash) return;
+    window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+  }, [location]);
+  return null;
 }
 
-function App() {
+export default function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <div className="font-sans antialiased bg-background text-foreground">
-          <Navigation />
-          <main>
-            <Router />
-          </main>
-          <Footer />
-          <AskNeoWidget />
-          <Toaster />
-        </div>
-      </TooltipProvider>
-    </QueryClientProvider>
+    <EnquiryProvider>
+      <div className="flex min-h-screen flex-col bg-surface">
+        <InsertRenderDefs />
+        <ScrollToTop />
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:bg-brand focus:px-4 focus:py-2 focus:text-white"
+        >
+          Skip to content
+        </a>
+        <SiteHeader />
+        <main id="main" className="flex-1">
+          <Switch>
+            <Route path="/" component={HomePage} />
+            <Route path="/products" component={ProductsPage} />
+            <Route path="/products/:slug" component={CategoryPage} />
+            <Route path="/products/:slug/:code" component={ProductPage} />
+            <Route path="/custom-sourcing" component={CustomSourcingPage} />
+            <Route path="/about" component={AboutPage} />
+            <Route path="/quote" component={ContactPage} />
+            <Route path="/contact" component={ContactPage} />
+            <Route path="/privacy" component={PrivacyPage} />
+            <Route component={NotFound} />
+          </Switch>
+        </main>
+        <SiteFooter />
+        <EnquiryTray />
+      </div>
+    </EnquiryProvider>
   );
 }
-
-export default App;

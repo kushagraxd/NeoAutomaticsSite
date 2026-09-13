@@ -1,503 +1,348 @@
-import { motion } from 'framer-motion';
-import { usePageTitle } from '../lib/usePageTitle';
-import { Users, Target, Lightbulb, Award, Factory, Clock, Shield, Zap, CheckCircle } from 'lucide-react';
-import { getCompanyUnits, formatPhoneForTel } from '../../../shared/company';
+import type { CSSProperties } from 'react';
+import { Link } from 'wouter';
+import {
+  ArrowRight, ArrowUpRight, ClipboardList, Factory, PackageCheck, Receipt, Search, Users, Wrench, type LucideIcon,
+} from 'lucide-react';
+import { usePageMeta } from '../lib/usePageMeta';
+import Reveal from '../components/reveal';
+import RollingNumber from '../components/rolling-number';
+import BrandLogo from '../components/brand-logo';
+import { toneFor } from '../lib/category-tones';
+import { categories, countsByCategory, familiesIn, totalFamilyCount, totalProductCount } from '../../../shared/catalog';
+import { company } from '../../../shared/company';
 
-const companyValues = [
-  {
-    icon: Users,
-    title: "Expert Team",
-    description: "20+ years of combined experience in precision manufacturing and engineering excellence",
-    color: "amber"
-  },
-  {
-    icon: Target,
-    title: "Precision Focus",
-    description: "Committed to delivering components that exceed specifications with uncompromising quality",
-    color: "red"
-  },
-  {
-    icon: Lightbulb,
-    title: "Innovation",
-    description: "Continuous improvement and adoption of cutting-edge manufacturing technologies",
-    color: "amber"
-  },
-  {
-    icon: Shield,
-    title: "Quality Assurance",
-    description: "ISO 9001:2015 certified processes ensuring consistent excellence in every component",
-    color: "red"
-  }
+const regions = company.sourcingRegions.join(' and ');
+
+const WHAT_WE_DO: Array<{ icon: LucideIcon; title: string; body: string }> = [
+  { icon: Search, title: 'Source', body: `We work with established producers in ${regions} to find carbide inserts and cutting tools that match the job.` },
+  { icon: PackageCheck, title: 'Import & supply', body: 'We handle import and supply against confirmed orders for manufacturers and workshops across India.' },
+  { icon: Receipt, title: 'Quote to requirement', body: 'We price against your actual grade, quantity and lead time rather than a published list.' },
 ];
 
-const companyStats = [
-  { value: "2005", label: "Founded", icon: Clock },
-  { value: "30+", label: "CNC Machines", icon: Factory },
-  { value: "3", label: "Manufacturing Units", icon: Award },
-  { value: "99.8%", label: "On-Time Delivery", icon: Target }
+const WHO: Array<{ icon: LucideIcon; title: string; body: string }> = [
+  { icon: Wrench, title: 'Machining workshops & job shops', body: 'Turning, milling and drilling work where the right insert keeps a machine productive.' },
+  { icon: Factory, title: 'Component manufacturers', body: 'Production that relies on a steady supply of the geometries already running on the line.' },
+  { icon: ClipboardList, title: 'Tool rooms & maintenance', body: 'Replacements for worn, uncommon or discontinued inserts, matched from a code or a sample.' },
+  { icon: Users, title: 'Purchase & procurement teams', body: 'One point of contact for quotation, sourcing and import, instead of several overseas suppliers.' },
 ];
 
-const milestones = [
-  {
-    year: "2005",
-    title: "Company Founded",
-    description: "Neo Automatics established with a focus on precision manufacturing"
-  },
-  {
-    year: "2010",
-    title: "ISO Certification",
-    description: "Achieved ISO 9001:2008 certification, demonstrating commitment to quality"
-  },
-  {
-    year: "2015",
-    title: "Facility Expansion",
-    description: "Expanded to 3 manufacturing units with advanced CNC capabilities"
-  },
-  {
-    year: "2018",
-    title: "Automotive Focus",
-    description: "Specialized in automotive components with PPAP Level 3 readiness"
-  },
-  {
-    year: "2020",
-    title: "ISO 9001:2015",
-    description: "Upgraded to ISO 9001:2015 with enhanced quality management systems"
-  },
-  {
-    year: "2024",
-    title: "Digital Transformation",
-    description: "Implemented advanced manufacturing technologies and digital quality systems"
-  }
-];
+/** China and Taiwan feed into ShreeRaj Tools in India, which supplies the shop floor. */
+function SourcingRoute() {
+  const text = { fill: 'var(--ink)', fontFamily: 'Geist, system-ui, sans-serif', fontSize: 15, fontWeight: 600 } as const;
+  const sub = { fill: 'var(--ink-muted)', fontFamily: "'Geist Mono', ui-monospace, monospace", fontSize: 11.5 } as const;
+  const route = { stroke: 'rgba(var(--brand-bright-rgb),0.7)' } as const;
 
-const leadership = [
-  {
-    name: "Engineering Team",
-    role: "Technical Leadership",
-    description: "Expert engineers with decades of experience in precision manufacturing and quality systems",
-    expertise: ["CNC Programming", "Quality Systems", "Process Engineering", "Materials Science"]
-  },
-  {
-    name: "Operations Team",
-    role: "Manufacturing Excellence",
-    description: "Skilled operators and supervisors ensuring consistent production quality and efficiency",
-    expertise: ["CNC Operations", "Quality Control", "Production Planning", "Continuous Improvement"]
-  },
-  {
-    name: "Quality Team",
-    role: "Quality Assurance",
-    description: "Certified quality professionals maintaining ISO standards and customer satisfaction",
-    expertise: ["ISO 9001:2015", "PPAP Documentation", "Statistical Analysis", "Supplier Quality"]
-  }
-];
+  return (
+    <svg viewBox="0 0 680 240" className="w-full" role="img" aria-label="Sourcing route: China and Taiwan, to ShreeRaj Tools in India, to your workshop">
+      <g fill="none" strokeWidth="1.5" className="route-dash" style={route}>
+        <path d="M130 70 C 230 70, 250 120, 338 120" />
+        <path d="M130 170 C 230 170, 250 120, 338 120" />
+        <path d="M402 120 H 540" />
+      </g>
+      {[{ y: 70, label: 'China' }, { y: 170, label: 'Taiwan' }].map((n) => (
+        <g key={n.label}>
+          <circle cx="112" cy={n.y} r="18" style={{ fill: 'var(--surface-panel)', stroke: 'rgba(var(--brand-bright-rgb),0.55)' }} strokeWidth="1.5" />
+          <circle cx="112" cy={n.y} r="5" style={{ fill: 'rgb(var(--brand-bright-rgb))' }} />
+          <text x="112" y={n.y + 40} textAnchor="middle" style={text}>{n.label}</text>
+        </g>
+      ))}
+      <g>
+        <circle cx="370" cy="120" r="34" style={{ fill: 'var(--surface-panel)', stroke: 'rgba(var(--gold-rgb),0.6)' }} strokeWidth="1.5" />
+        <circle cx="370" cy="120" r="24" style={{ fill: 'rgba(var(--brand-rgb),0.35)', stroke: 'rgba(var(--brand-bright-rgb),0.6)' }} strokeWidth="1" />
+        <text x="370" y="182" textAnchor="middle" style={text}>ShreeRaj Tools</text>
+        <text x="370" y="200" textAnchor="middle" style={sub}>INDIA</text>
+      </g>
+      <g>
+        <rect x="540" y="98" width="44" height="44" rx="10" style={{ fill: 'var(--surface-panel)', stroke: 'rgba(var(--brand-bright-rgb),0.55)' }} strokeWidth="1.5" />
+        <path d="M552 128 L562 112 L572 128 Z" fill="none" style={{ stroke: 'rgb(var(--brand-bright-rgb))' }} strokeWidth="1.5" strokeLinejoin="round" />
+        <text x="562" y="170" textAnchor="middle" style={text}>Your workshop</text>
+      </g>
+    </svg>
+  );
+}
 
 export default function AboutPage() {
-  usePageTitle('About Us - 20+ Years of Manufacturing Excellence', 'Learn about Neo Automatics, a family-run ISO 9001:2015 certified manufacturer with 20+ years of experience in precision machined components.');
+  usePageMeta(
+    'About ShreeRaj Tools',
+    'ShreeRaj Tools is an India-based importer and supplier of carbide inserts and cutting tools, sourced from established producers in China and Taiwan.',
+  );
+
+  const counts = countsByCategory();
+  const listed = categories.filter((c) => !c.enquiryOnly);
+
   return (
-    <div className="min-h-screen bg-base">
-      {/* Hero Section */}
-      <section className="relative py-28 overflow-hidden">
-        {/* Background Effects */}
-        <div className="absolute inset-0 aurora-bg opacity-10" />
-        <div className="geometric-shape geometric-shape-1" />
-        <div className="geometric-shape geometric-shape-2" />
-        
-        <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
-          >
-            <h1 className="text-4xl md:text-6xl font-display font-bold text-primary mb-6 tracking-tight leading-tight">
-              About <span className="gradient-text">Neo Automatics</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-muted max-w-4xl mx-auto mb-8 leading-relaxed">
-              Leading precision manufacturing company specializing in high-quality components
-              for <span className="text-amber font-semibold">automotive, agriculture, and industrial</span> applications.
-            </p>
-            <p className="text-lg text-muted max-w-4xl mx-auto leading-relaxed">
-              With over 20 years of manufacturing excellence, Neo Automatics has established
-              itself as a trusted partner for OEMs and Tier-1 suppliers. Our state-of-the-art
-              facility houses <span className="text-red font-semibold">30+ CNC machines</span> and maintains ISO 9001:2015 certification.
-            </p>
-          </motion.div>
-
-          {/* Company Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-20">
-            {companyStats.map((stat, index) => {
-              const IconComponent = stat.icon;
-              return (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="text-center glass-card p-6 glow-hover group"
-                  data-testid={`company-stat-${stat.label.toLowerCase().replace(/[^a-z]/g, '-')}`}
-                >
-                  <IconComponent className="h-8 w-8 text-amber mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
-                  <div className="text-3xl font-display font-bold text-amber mb-2">{stat.value}</div>
-                  <div className="text-muted font-medium">{stat.label}</div>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Company Values */}
-      <section className="py-20 md:py-28 bg-elevated">
-        <div className="max-w-7xl mx-auto px-6 md:px-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6 tracking-tight">
-              Our <span className="gradient-text">Values</span>
-            </h2>
-            <p className="text-xl text-muted max-w-3xl mx-auto leading-relaxed">
-              The core principles that drive our commitment to manufacturing excellence and customer satisfaction.
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {companyValues.map((value, index) => {
-              const IconComponent = value.icon;
-              const iconColor = value.color === 'amber' ? 'text-amber' : 'text-red';
-              
-              return (
-                <motion.div
-                  key={value.title}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="glass-card p-8 glow-hover group text-center"
-                  data-testid={`value-${value.title.toLowerCase().replace(/[^a-z]/g, '-')}`}
-                >
-                  <IconComponent className={`h-12 w-12 ${iconColor} mx-auto mb-6 group-hover:scale-110 transition-transform duration-300`} />
-                  <h3 className="text-lg font-display font-semibold text-primary mb-4">
-                    {value.title}
-                  </h3>
-                  <p className="text-muted leading-relaxed">{value.description}</p>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Company Timeline */}
-      <section className="py-20 md:py-28">
-        <div className="max-w-7xl mx-auto px-6 md:px-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6 tracking-tight">
-              Our <span className="gradient-text">Journey</span>
-            </h2>
-            <p className="text-xl text-muted max-w-3xl mx-auto leading-relaxed">
-              Two decades of continuous growth and innovation in precision manufacturing.
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {milestones.map((milestone, index) => (
-              <motion.div
-                key={milestone.year}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="glass-card p-6 glow-hover group"
-                data-testid={`milestone-${milestone.year}`}
-              >
-                <div className="text-2xl font-display font-bold gradient-text mb-3 group-hover:scale-105 transition-transform duration-300">
-                  {milestone.year}
-                </div>
-                <h3 className="text-lg font-display font-semibold text-primary mb-3">
-                  {milestone.title}
-                </h3>
-                <p className="text-muted leading-relaxed">{milestone.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Leadership Team */}
-      <section className="py-20 md:py-28 bg-elevated">
-        <div className="max-w-7xl mx-auto px-6 md:px-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6 tracking-tight">
-              Expert <span className="gradient-text">Leadership</span>
-            </h2>
-            <p className="text-xl text-muted max-w-3xl mx-auto leading-relaxed">
-              Experienced professionals leading innovation and excellence in precision manufacturing.
-            </p>
-          </motion.div>
-
-          <div className="grid lg:grid-cols-3 gap-8">
-            {leadership.map((leader, index) => (
-              <motion.div
-                key={leader.name}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="glass-card p-8 glow-hover group"
-              >
-                <div className="mb-6">
-                  <h3 className="text-xl font-display font-semibold text-primary mb-2 group-hover:text-amber transition-colors duration-300">
-                    {leader.name}
-                  </h3>
-                  <div className="text-red font-medium mb-4">{leader.role}</div>
-                  <p className="text-muted leading-relaxed mb-6">{leader.description}</p>
-                </div>
-
-                <div>
-                  <h4 className="text-sm font-display font-semibold text-primary mb-3">Expertise</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {leader.expertise.map((skill, skillIndex) => (
-                      <span
-                        key={skillIndex}
-                        className="px-3 py-1 text-xs rounded-full border border-amber/30 bg-amber/10 text-amber"
-                      >
-                        {skill}
-                      </span>
-                    ))}
+    <>
+      {/* ------------------------------------------------------- 1. Introduction */}
+      <section className="relative overflow-hidden bg-night">
+        <div className="pointer-events-none absolute inset-0 blueprint" aria-hidden="true" />
+        <div className="pointer-events-none absolute inset-0 glow-brand" aria-hidden="true" />
+        <div className="shell relative grid items-center gap-14 py-16 md:py-24 lg:grid-cols-[1.1fr_0.9fr]">
+          <div>
+            <Reveal>
+              <p className="eyebrow">About ShreeRaj Tools</p>
+            </Reveal>
+            <Reveal delay={80}>
+              <h1 className="mt-6 text-[clamp(2.6rem,5.6vw,4.6rem)] font-semibold leading-[1] tracking-[-0.045em] text-ink">
+                Carbide tooling, <span className="accent-word text-brand-bright">sourced to specification</span>
+              </h1>
+            </Reveal>
+            <Reveal delay={160}>
+              <p className="mt-7 max-w-xl text-[18px] leading-relaxed text-ink-soft">{company.summary}</p>
+            </Reveal>
+            <Reveal delay={240}>
+              <dl className="mt-10 grid max-w-lg grid-cols-3 gap-6 border-t border-rule pt-7">
+                {[
+                  { value: totalProductCount, label: 'Codes listed' },
+                  { value: totalFamilyCount, label: 'ISO families' },
+                  { value: listed.length, label: 'Operations' },
+                ].map((s) => (
+                  <div key={s.label} className="flex flex-col">
+                    <dd>
+                      <RollingNumber value={s.value} className="text-[34px] font-semibold tracking-[-0.04em] text-ink" />
+                    </dd>
+                    <dt className="label mt-2 text-ink-muted">{s.label}</dt>
                   </div>
-                </div>
-              </motion.div>
-            ))}
+                ))}
+              </dl>
+            </Reveal>
           </div>
-        </div>
-      </section>
 
-      {/* Leadership Message */}
-      <section className="py-20 md:py-28">
-        <div className="max-w-7xl mx-auto px-6 md:px-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6 tracking-tight">
-              Message from <span className="gradient-text">Leadership</span>
-            </h2>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="glass-card p-12 glow-hover"
-            data-testid="leadership-message"
-          >
-            <div className="flex items-start gap-8 max-w-4xl mx-auto">
-              <div className="flex-shrink-0">
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-amber/20 to-red/20 flex items-center justify-center">
-                  <span className="text-2xl font-display font-bold text-amber">RD</span>
-                </div>
-              </div>
-              <div className="flex-1">
-                <blockquote className="text-lg md:text-xl text-muted leading-relaxed italic mb-6">
-                  "At Neo Automatics, we believe precision is not just about meeting specifications – it's about exceeding expectations. 
-                  For over two decades, our team has been dedicated to pushing the boundaries of manufacturing excellence. Every component 
-                  we produce carries with it our commitment to quality, innovation, and the success of our partners. As we look towards 
-                  the future, we remain focused on delivering solutions that drive the automotive, agricultural, and industrial sectors forward."
-                </blockquote>
-                <div className="flex items-center gap-2">
-                  <div>
-                    <div className="text-lg font-display font-semibold text-primary">Raj Dhingra</div>
-                    <div className="text-amber font-medium">Founder & Managing Director</div>
-                  </div>
-                </div>
+          <Reveal delay={120}>
+            <div className="relative mx-auto aspect-square w-full max-w-[440px]" aria-hidden="true">
+              <div className="absolute inset-[10%] rounded-full glow-brand" />
+              <svg viewBox="0 0 400 400" className="orbit absolute inset-0 h-full w-full">
+                <circle cx="200" cy="200" r="190" fill="none" strokeWidth="1" strokeDasharray="2 9" style={{ stroke: 'rgba(var(--brand-bright-rgb),0.5)' }} />
+                <circle cx="200" cy="200" r="160" fill="none" strokeWidth="1" style={{ stroke: 'rgba(var(--line-rgb),0.16)' }} />
+                <circle cx="200" cy="200" r="130" fill="none" strokeWidth="1" strokeDasharray="44 14" style={{ stroke: 'rgba(var(--gold-rgb),0.38)' }} />
+                {Array.from({ length: 36 }, (_, i) => {
+                  const a = (i * 10 * Math.PI) / 180;
+                  const r1 = i % 3 === 0 ? 170 : 176;
+                  return (
+                    <line
+                      key={i}
+                      x1={200 + Math.cos(a) * r1}
+                      y1={200 + Math.sin(a) * r1}
+                      x2={200 + Math.cos(a) * 182}
+                      y2={200 + Math.sin(a) * 182}
+                      strokeWidth="1"
+                      style={{ stroke: 'rgba(var(--line-rgb),0.3)' }}
+                    />
+                  );
+                })}
+              </svg>
+              <div className="emblem-plate absolute inset-[24%]">
+                <BrandLogo variant="emblem" size={150} className="drop-shadow-[0_10px_30px_rgba(0,0,0,0.55)]" />
               </div>
             </div>
-          </motion.div>
+          </Reveal>
         </div>
       </section>
 
-      {/* Manufacturing Units Map */}
-      <section className="py-20 md:py-28 bg-elevated">
-        <div className="max-w-7xl mx-auto px-6 md:px-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6 tracking-tight">
-              Our Manufacturing <span className="gradient-text">Network</span>
+      {/* ------------------------------------------------------- 2. What we do */}
+      <section className="bg-surface py-20 md:py-28">
+        <div className="shell">
+          <Reveal>
+            <p className="eyebrow">What we do</p>
+            <h2 className="mt-5 max-w-2xl text-[clamp(2rem,4vw,3.25rem)] font-semibold leading-[1.05] tracking-[-0.04em] text-ink">
+              A supplier, <span className="accent-word text-brand-bright">not a manufacturer</span>
             </h2>
-            <p className="text-xl text-muted max-w-3xl mx-auto leading-relaxed">
-              Three strategically located manufacturing units in Rohtak, Haryana, ensuring optimal production capacity and logistics.
+            <p className="mt-5 max-w-2xl text-[16.5px] leading-relaxed text-ink-muted">
+              We don’t make inserts. We find the right ones, confirm the specification, and bring them to you.
             </p>
-          </motion.div>
-
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Map SVG */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="glass-card p-8"
-              data-testid="manufacturing-units-map"
-            >
-              <h3 className="text-xl font-display font-semibold text-primary mb-6 text-center">Rohtak Manufacturing Hub</h3>
-              <svg viewBox="0 0 400 300" className="w-full h-auto">
-                {/* Background */}
-                <rect width="400" height="300" fill="currentColor" className="text-elevated opacity-50" />
-                
-                {/* Pune city outline (simplified) */}
-                <path
-                  d="M80 120 L120 100 L180 110 L240 105 L280 120 L320 140 L300 180 L280 220 L220 240 L160 235 L100 220 L70 180 Z"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  className="text-amber opacity-60"
-                />
-                
-                {/* Unit locations */}
-                <g className="text-amber">
-                  {/* Unit 1 */}
-                  <circle cx="140" cy="150" r="8" fill="currentColor" />
-                  <text x="140" y="145" textAnchor="middle" className="text-xs font-semibold" fill="currentColor">1</text>
-                  
-                  {/* Unit 2 */}
-                  <circle cx="200" cy="170" r="8" fill="currentColor" />
-                  <text x="200" y="165" textAnchor="middle" className="text-xs font-semibold" fill="currentColor">2</text>
-                  
-                  {/* Unit 3 */}
-                  <circle cx="240" cy="140" r="8" fill="currentColor" />
-                  <text x="240" y="135" textAnchor="middle" className="text-xs font-semibold" fill="currentColor">3</text>
-                </g>
-                
-                {/* Connection lines */}
-                <g stroke="currentColor" strokeWidth="1" className="text-red opacity-40">
-                  <line x1="140" y1="150" x2="200" y2="170" strokeDasharray="5,5" />
-                  <line x1="200" y1="170" x2="240" y2="140" strokeDasharray="5,5" />
-                  <line x1="240" y1="140" x2="140" y2="150" strokeDasharray="5,5" />
-                </g>
-                
-                {/* Title */}
-                <text x="200" y="40" textAnchor="middle" className="text-lg font-display font-semibold" fill="currentColor">
-                  Rohtak, Haryana
-                </text>
-              </svg>
-            </motion.div>
-
-            {/* Unit Details */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="space-y-6"
-            >
-              {getCompanyUnits().map((unit, index) => (
-                <motion.div
-                  key={unit.name}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  className="glass-card p-6 glow-hover group"
-                  data-testid={`unit-${index + 1}`}
-                >
-                  <div className="flex items-start gap-4">
-                    <div className={`w-8 h-8 rounded-full ${index % 2 === 0 ? 'bg-amber' : 'bg-red'} flex items-center justify-center text-base font-bold text-black`}>
-                      {index + 1}
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="text-lg font-display font-semibold text-primary mb-2">{unit.name}</h4>
-                      <div className="space-y-2 text-sm text-muted">
-                        <div><span className="text-amber font-medium">Address:</span> {unit.address}</div>
-                        <div className="flex flex-wrap gap-2">
-                          <span className="text-amber font-medium">Phone:</span>
-                          {unit.phones.map((phone: string, i: number) => (
-                            <span key={i}>
-                              <a href={`tel:${formatPhoneForTel(phone)}`} className="text-accent-primary hover:underline">
-                                +91 {phone}
-                              </a>
-                              {i < unit.phones.length - 1 && ', '}
-                            </span>
-                          ))}
-                        </div>
-                        <div className="flex flex-wrap gap-2">
-                          <span className="text-amber font-medium">Email:</span>
-                          {unit.emails.map((email: string, i: number) => (
-                            <span key={i}>
-                              <a href={`mailto:${email}`} className="text-accent-primary hover:underline">
-                                {email}
-                              </a>
-                              {i < unit.emails.length - 1 && ', '}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
+          </Reveal>
+          <ul className="mt-12 grid gap-4 md:grid-cols-3">
+            {WHAT_WE_DO.map((item, i) => (
+              <Reveal key={item.title} as="li" delay={i * 80}>
+                <div className="card h-full p-7">
+                  <span className="icon-badge"><item.icon className="h-5 w-5" aria-hidden="true" /></span>
+                  <h3 className="mt-6 text-[21px] font-semibold tracking-[-0.02em] text-ink">{item.title}</h3>
+                  <p className="mt-2.5 text-[15.5px] leading-relaxed text-ink-muted">{item.body}</p>
+                </div>
+              </Reveal>
+            ))}
+          </ul>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 md:py-28">
-        <div className="max-w-4xl mx-auto px-6 md:px-10 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6 tracking-tight">
-              Partner with <span className="gradient-text">Excellence</span>
+      {/* ------------------------------------------ 3. Product and sourcing focus */}
+      <section className="relative overflow-hidden border-y border-rule bg-surface-subtle py-20 md:py-28">
+        <div className="pointer-events-none absolute inset-0 blueprint opacity-40" aria-hidden="true" />
+        <div className="shell relative grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+          <Reveal>
+            <p className="eyebrow">Product focus</p>
+            <h2 className="mt-5 text-[clamp(2rem,4vw,3.25rem)] font-semibold leading-[1.05] tracking-[-0.04em] text-ink">
+              Five operations, <span className="accent-word text-brand-bright">searchable by code</span>
             </h2>
-            <p className="text-xl text-muted mb-12 leading-relaxed">
-              Join the leading OEMs who trust Neo Automatics for their critical component manufacturing needs.
+            <p className="mt-5 max-w-md text-[16.5px] leading-relaxed text-ink-muted">
+              Our catalogue covers the geometries that come up most often, listed by their ISO designation. Mining, tube-scraper and
+              special-design inserts are sourced on enquiry.
             </p>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="flex flex-col sm:flex-row gap-6 justify-center"
-            >
-              <a 
-                href="/contact" 
-                className="btn-primary magnetic-btn group inline-flex items-center justify-center"
-                data-testid="cta-start-partnership"
-              >
-                <Zap className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
-                Start Your Partnership
-              </a>
-              <a 
-                href="/capabilities" 
-                className="btn-secondary magnetic-btn inline-flex items-center justify-center"
-                data-testid="cta-view-capabilities"
-              >
-                View Our Capabilities
-              </a>
-            </motion.div>
-          </motion.div>
+            <Link href="/products" className="btn-outline mt-8">
+              Browse the catalogue <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+          </Reveal>
+          <ul className="grid gap-3 sm:grid-cols-2">
+            {listed.map((c, i) => {
+              const tone = toneFor(c.id);
+              return (
+                <Reveal key={c.id} as="li" delay={i * 60}>
+                  <Link
+                    href={`/products/${c.slug}`}
+                    className="card-interactive group flex h-full items-center gap-4 p-5"
+                    style={{ '--tone': tone.rgb } as CSSProperties}
+                  >
+                    <span className="h-11 w-1.5 shrink-0 rounded-full" style={{ background: tone.hex }} aria-hidden="true" />
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-[16px] font-semibold text-ink">{c.name}</span>
+                      <span className="mt-0.5 block text-[13.5px] text-ink-muted">
+                        {familiesIn(c.id).length} families · {counts[c.id]} codes listed
+                      </span>
+                    </span>
+                    <ArrowUpRight className="h-4 w-4 shrink-0 text-ink-muted transition-colors group-hover:text-brand-bright" aria-hidden="true" />
+                  </Link>
+                </Reveal>
+              );
+            })}
+          </ul>
         </div>
       </section>
-    </div>
+
+      {/* -------------------------------------------------- 4. Sourcing network */}
+      <section className="bg-surface py-20 md:py-28">
+        <div className="shell grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+          <Reveal>
+            <p className="eyebrow">Sourcing network</p>
+            <h2 className="mt-5 text-[clamp(2rem,4vw,3.25rem)] font-semibold leading-[1.05] tracking-[-0.04em] text-ink">
+              China and Taiwan, <span className="accent-word text-brand-bright">one point of contact</span>
+            </h2>
+            <p className="mt-5 max-w-lg text-[16.5px] leading-relaxed text-ink-muted">
+              We source from established producers in {regions}. You deal with us for the specification, the quotation and the import —
+              rather than coordinating with overseas suppliers yourself.
+            </p>
+          </Reveal>
+          <Reveal delay={120}>
+            <div className="card relative overflow-hidden p-6 md:p-8">
+              <div className="pointer-events-none absolute inset-0 blueprint-fine opacity-70" aria-hidden="true" />
+              <div className="relative hidden sm:block">
+                <SourcingRoute />
+              </div>
+              <ol className="relative space-y-3 sm:hidden">
+                {['China & Taiwan — established producers', 'ShreeRaj Tools, India — specification, quote & import', 'Your workshop — supplied against your order'].map((step, i) => (
+                  <li key={step} className="flex items-center gap-3">
+                    <span className="step-dot">{i + 1}</span>
+                    <span className="text-[15px] text-ink-soft">{step}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ------------------------------------------------------ 5. Who we supply */}
+      <section className="relative overflow-hidden border-y border-rule bg-surface-subtle py-20 md:py-28">
+        <div className="shell">
+          <Reveal>
+            <p className="eyebrow">Who we supply in India</p>
+            <h2 className="mt-5 max-w-2xl text-[clamp(2rem,4vw,3.25rem)] font-semibold leading-[1.05] tracking-[-0.04em] text-ink">
+              Built for the people <span className="accent-word text-brand-bright">who run the machines</span>
+            </h2>
+          </Reveal>
+          <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {WHO.map((w, i) => (
+              <Reveal key={w.title} as="li" delay={i * 70}>
+                <div className="card h-full p-6">
+                  <span className="icon-badge"><w.icon className="h-5 w-5" aria-hidden="true" /></span>
+                  <h3 className="mt-5 text-[17.5px] font-semibold leading-snug tracking-[-0.015em] text-ink">{w.title}</h3>
+                  <p className="mt-2 text-[14.5px] leading-relaxed text-ink-muted">{w.body}</p>
+                </div>
+              </Reveal>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* ------------------------------------------------ 6. Custom sourcing */}
+      <section className="bg-surface py-20 md:py-28">
+        <div className="shell">
+          <Reveal>
+            <div className="card relative overflow-hidden p-8 md:p-12">
+              <div className="pointer-events-none absolute inset-0 blueprint opacity-50" aria-hidden="true" />
+              <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full glow-brand" aria-hidden="true" />
+              <div className="relative grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+                <div>
+                  <p className="eyebrow">Custom sourcing</p>
+                  <h2 className="mt-5 text-[clamp(1.9rem,3.6vw,2.9rem)] font-semibold leading-[1.05] tracking-[-0.04em] text-ink">
+                    When it isn’t in the catalogue, <span className="accent-word text-brand-bright">we look for it</span>
+                  </h2>
+                  <p className="mt-5 max-w-lg text-[16.5px] leading-relaxed text-ink-muted">
+                    Uncommon sizes, special geometries and discontinued part numbers. Send a code, drawing, photograph or sample and we
+                    work back to a specification — and tell you plainly if we can’t source it.
+                  </p>
+                  <Link href="/custom-sourcing" className="btn-primary mt-8">
+                    How custom sourcing works <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                  </Link>
+                </div>
+                <ul className="grid grid-cols-2 gap-3">
+                  {['Product code', 'Technical drawing', 'Photograph', 'Physical sample'].map((t) => (
+                    <li key={t} className="rounded-xl border border-rule bg-surface-subtle px-4 py-5 text-center text-[14.5px] font-medium text-ink-soft">
+                      {t}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ------------------------------------------------- 7. Family background */}
+      <section className="bg-surface pb-20 md:pb-28">
+        <div className="shell">
+          <Reveal>
+            <div className="grid items-center gap-8 rounded-3xl border border-rule bg-surface-subtle p-8 md:grid-cols-[auto_1fr] md:p-12">
+              <div className="emblem-plate mx-auto h-36 w-36 md:mx-0">
+                <BrandLogo variant="emblem" size={84} />
+              </div>
+              <div>
+                <p className="eyebrow">Our background</p>
+                <h2 className="mt-4 text-[clamp(1.75rem,3.2vw,2.5rem)] font-semibold leading-[1.1] tracking-[-0.035em] text-ink">
+                  A family business with <span className="accent-word text-gold">roots in industry</span>
+                </h2>
+                <p className="mt-4 max-w-2xl text-[16.5px] leading-relaxed text-ink-soft">
+                  {company.parentFirm.relationship} That background shapes how we work: practical, specification-first and
+                  straightforward with the people we supply.
+                </p>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ------------------------------------------------------------ 8. CTA */}
+      <section className="bg-surface pb-24 md:pb-28">
+        <div className="shell">
+          <Reveal>
+            <div className="cta-band">
+              <div className="pointer-events-none absolute inset-0 blueprint opacity-60" aria-hidden="true" />
+              <div className="relative flex flex-col items-start gap-8 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <h2 className="text-[clamp(1.9rem,3.6vw,2.8rem)] font-semibold leading-[1.05] tracking-[-0.04em] text-ink">
+                    Start with a requirement
+                  </h2>
+                  <p className="mt-3 max-w-xl text-[16.5px] leading-relaxed text-ink-soft">
+                    Send a code or a drawing and see how we respond.
+                  </p>
+                </div>
+                <Link href="/contact#enquiry" className="btn-primary btn-lg group shrink-0">
+                  Request a Quote
+                  <ArrowRight className="h-[18px] w-[18px] transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
+                </Link>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+    </>
   );
 }

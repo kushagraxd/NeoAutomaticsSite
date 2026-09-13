@@ -1,100 +1,69 @@
 import companyData from '../data/company.json';
 
-export interface CompanyMachine {
-  [key: string]: number | string;
+/**
+ * A contact field that is only rendered publicly once the owner confirms it.
+ * Until then the UI must fall back to the enquiry form rather than print a
+ * placeholder — no fake phone numbers or addresses reach the page.
+ */
+export interface ConfirmableField {
+  value: string | null;
+  confirmed: boolean;
+  needs: string;
 }
 
-export interface CompanyUnit {
+export interface CompanyContact {
+  email: ConfirmableField;
+  phone: ConfirmableField;
+  whatsapp: ConfirmableField;
+  address: ConfirmableField;
+  city: ConfirmableField;
+  gstin: ConfirmableField;
+  iec: ConfirmableField;
+  domain: ConfirmableField;
+  hours: ConfirmableField;
+}
+
+export interface Company {
   name: string;
-  address: string;
-  phones: string[];
-  emails: string[];
+  displayName: string;
+  wordmark: { first: string; second: string };
+  tagline: string;
+  descriptor: string;
+  summary: string;
+  shortSummary: string;
+  basedIn: string;
+  country: string;
+  sourcingRegions: string[];
+  marketNote: string;
+  parentFirm: { name: string; relationship: string; note: string };
+  contact: CompanyContact;
+  claims: {
+    certifications: string[];
+    yearsExperience: number | null;
+    customerCount: number | null;
+    countriesServed: number | null;
+    authorisedDistributorFor: string[];
+    partnerships: string[];
+  };
 }
 
-export interface CompanyData {
-  name: string;
-  email: string;
-  phone: string;
-  owner: string;
-  units: CompanyUnit[];
-  // Legacy fields for compatibility
-  tagline?: string;
-  hq?: string;
-  certifications?: string[];
-  strengths?: string[];
-  machines?: CompanyMachine;
-  heat_treatment?: string[];
-  inspection?: string[];
-  products?: string[];
-  industries?: string[];
+export const company = companyData.company as unknown as Company;
+
+/** Returns the value only when the owner has confirmed it, otherwise null. */
+export function confirmed(field: ConfirmableField): string | null {
+  return field.confirmed && field.value ? field.value : null;
 }
 
-export const getCompanyData = (): CompanyData => {
-  return companyData.company as CompanyData;
-};
+/** Every contact detail still awaiting confirmation — surfaced in the admin note. */
+export function pendingContactFields(): Array<{ key: string; needs: string }> {
+  return (Object.entries(company.contact) as Array<[string, ConfirmableField]>)
+    .filter(([, f]) => !f.confirmed || !f.value)
+    .map(([key, f]) => ({ key, needs: f.needs }));
+}
 
-// Helper functions for common data access
-export const getCompanyInfo = () => {
-  const data = getCompanyData();
-  return {
-    name: data.name,
-    email: data.email,
-    phone: data.phone,
-    owner: data.owner,
-    units: data.units,
-    // Legacy compatibility
-    tagline: data.tagline || 'End-to-end machining, heat treatment & QA—delivered at scale',
-    hq: data.hq || 'Rohtak, Haryana, India',
-  };
-};
+export function telHref(phone: string): string {
+  const cleaned = phone.replace(/[\s\-()]/g, '');
+  return cleaned.startsWith('+') ? `tel:${cleaned}` : `tel:+91${cleaned}`;
+}
 
-// Helper for company name display with gradient styling
-export const formatCompanyName = (name: string) => {
-  const words = name.split(' ');
-  if (words.length >= 2) {
-    return {
-      firstWord: words[0],
-      restOfName: words.slice(1).join(' ')
-    };
-  }
-  return {
-    firstWord: name,
-    restOfName: ''
-  };
-};
-
-export const getManufacturingCapabilities = () => {
-  const data = getCompanyData();
-  return {
-    units: data.units,
-    machines: data.machines,
-    certifications: data.certifications,
-    strengths: data.strengths,
-  };
-};
-
-export const getContactInfo = () => {
-  const data = getCompanyData();
-  return {
-    email: data.email,
-    phone: data.phone,
-    units: data.units,
-    hq: data.hq || 'Rohtak, Haryana, India',
-  };
-};
-
-// Helper to get all company units with contact info
-export const getCompanyUnits = () => {
-  const data = getCompanyData();
-  return data.units;
-};
-
-// Helper to format phone numbers for tel: links
-export const formatPhoneForTel = (phone: string) => {
-  // Remove any spaces, dashes, or parentheses and ensure it starts with +91
-  const cleaned = phone.replace(/[\s\-\(\)]/g, '');
-  if (cleaned.startsWith('+91')) {
-    return cleaned;
-  }
-  return `+91${cleaned}`;
-};
+export const SITE_NAME = company.displayName;

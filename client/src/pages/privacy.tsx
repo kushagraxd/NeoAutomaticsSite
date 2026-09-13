@@ -1,142 +1,62 @@
-import { motion } from 'framer-motion';
-import { Shield, Lock, Eye, FileText } from 'lucide-react';
-import { getCompanyInfo } from '../../../shared/company';
-import { usePageTitle } from '../lib/usePageTitle';
+import { usePageMeta } from '../lib/usePageMeta';
+import { company, confirmed } from '../../../shared/company';
 
 export default function PrivacyPage() {
-  usePageTitle('Privacy Policy - Data Protection & Privacy', 'Learn how Neo Automatics protects your personal information and maintains privacy in accordance with applicable data protection laws.');
-  
-  const companyInfo = getCompanyInfo();
+  usePageMeta('Privacy Policy', 'How ShreeRaj Tools handles the information you share through the website enquiry form.');
+  const email = confirmed(company.contact.email);
+
+  const sections: Array<[string, string[]]> = [
+    ['What we collect', [
+      'When you send an enquiry we collect the name, company, email address and phone number you enter, along with the requirement details and any file you attach.',
+      'We do not use advertising trackers or third-party analytics profiling on this site.',
+    ]],
+    ['Why we collect it', [
+      'Solely to respond to your enquiry: to prepare a quotation, confirm a specification and arrange supply.',
+      'We do not sell your information, and we do not share it with anyone except where it is necessary to source the product you asked about.',
+    ]],
+    ['Files you attach', [
+      'Drawings and specifications you upload are used only to understand and quote your requirement. They are stored on our server and are not published anywhere on this website.',
+    ]],
+    ['How long we keep it', [
+      'Enquiries are retained for as long as needed to handle the request and any resulting supply, and for the record-keeping period required of a business in India.',
+    ]],
+    ['Your choices', [
+      'You can ask us what information we hold about you, ask for it to be corrected, or ask us to delete it. Contact us using the details on this site and we will action it.',
+    ]],
+  ];
 
   return (
-    <div className="min-h-screen bg-base">
-      {/* Hero Section */}
-      <section className="relative py-20 md:py-32 overflow-hidden">
-        <div className="absolute inset-0 hero-bg opacity-30" />
-        <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
-          >
-            <Shield className="h-16 w-16 text-amber mx-auto mb-6" />
-            <h1 className="text-4xl md:text-6xl font-display font-bold text-primary mb-6 tracking-tight">
-              Privacy <span className="gradient-text">Policy</span>
-            </h1>
-            <p className="text-xl text-muted max-w-3xl mx-auto leading-relaxed">
-              Your privacy and the confidentiality of your technical information is our top priority.
-            </p>
-            <p className="text-sm text-muted/70 mt-4">
-              Last updated: September 2025
-            </p>
-          </motion.div>
+    <>
+      <section className="bg-night py-14 text-night-ink">
+        <div className="shell max-w-3xl">
+          <span className="accent-rule-dark mb-5" />
+          <h1 className="text-h1">Privacy Policy</h1>
+          <p className="mt-4 text-[16px] text-night-muted">
+            How {company.displayName} handles the information you share through this website.
+          </p>
         </div>
       </section>
 
-      {/* Privacy Content */}
-      <section className="py-20 md:py-28 bg-elevated">
-        <div className="max-w-4xl mx-auto px-6 md:px-10">
-          <div className="space-y-8">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="glass-card p-8 glow-hover"
-              data-testid="privacy-section-information-collection"
-            >
-              <div className="flex items-start space-x-4">
-                <Eye className="h-8 w-8 text-amber flex-shrink-0 mt-1" />
-                <div className="flex-1">
-                  <h2 className="text-2xl font-display font-semibold text-primary mb-4">
-                    Information We Collect
-                  </h2>
-                  <ul className="space-y-3 text-muted">
-                    <li>• Contact information when you submit RFQ forms</li>
-                    <li>• Technical drawings and specifications you upload</li>
-                    <li>• Company information and project details</li>
-                    <li>• Website usage data for service improvement</li>
-                  </ul>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="glass-card p-8 glow-hover"
-              data-testid="privacy-section-data-protection"
-            >
-              <div className="flex items-start space-x-4">
-                <Lock className="h-8 w-8 text-red flex-shrink-0 mt-1" />
-                <div className="flex-1">
-                  <h2 className="text-2xl font-display font-semibold text-primary mb-4">
-                    Data Protection
-                  </h2>
-                  <ul className="space-y-3 text-muted">
-                    <li>• All technical drawings are kept strictly confidential</li>
-                    <li>• Industry-standard encryption for data transmission</li>
-                    <li>• Access limited to authorized personnel only</li>
-                    <li>• Physical and digital security measures in place</li>
-                  </ul>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="glass-card p-8 glow-hover"
-              data-testid="privacy-section-information-sharing"
-            >
-              <div className="flex items-start space-x-4">
-                <FileText className="h-8 w-8 text-amber flex-shrink-0 mt-1" />
-                <div className="flex-1">
-                  <h2 className="text-2xl font-display font-semibold text-primary mb-4">
-                    Information Sharing
-                  </h2>
-                  <ul className="space-y-3 text-muted">
-                    <li>• We do not sell or share your personal information</li>
-                    <li>• Information only shared to fulfill manufacturing requests</li>
-                    <li>• May disclose information if required by law</li>
-                    <li>• All partners sign confidentiality agreements</li>
-                  </ul>
-                </div>
-              </div>
-            </motion.div>
+      <section className="py-14 md:py-20">
+        <div className="shell max-w-3xl">
+          {sections.map(([title, paras]) => (
+            <div key={title} className="mb-10">
+              <h2 className="text-h3">{title}</h2>
+              {paras.map((p) => (
+                <p key={p} className="mt-3 text-[16px] leading-relaxed text-ink-soft">{p}</p>
+              ))}
+            </div>
+          ))}
+          <div className="rounded-lg border border-rule bg-surface-subtle p-6">
+            <h2 className="text-h3">Questions</h2>
+            <p className="mt-2 text-[16px] leading-relaxed text-ink-soft">
+              {email
+                ? <>Write to us at <a href={`mailto:${email}`} className="text-accent-ink hover:underline">{email}</a>.</>
+                : 'Please use the enquiry form and we will respond directly.'}
+            </p>
           </div>
         </div>
       </section>
-
-      {/* Contact Section */}
-      <section className="py-20 md:py-28">
-        <div className="max-w-4xl mx-auto px-6 md:px-10 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="glass-card p-8 glow-hover"
-          >
-            <h2 className="text-2xl font-display font-semibold text-primary mb-4">
-              Questions About Privacy?
-            </h2>
-            <p className="text-muted mb-6 leading-relaxed">
-              If you have any questions about this Privacy Policy, please contact us.
-            </p>
-            <a 
-              href={`mailto:${companyInfo.email}`}
-              className="text-amber hover:text-amber/80 font-semibold transition-colors"
-              data-testid="link-privacy-contact"
-            >
-              {companyInfo.email}
-            </a>
-          </motion.div>
-        </div>
-      </section>
-    </div>
+    </>
   );
 }

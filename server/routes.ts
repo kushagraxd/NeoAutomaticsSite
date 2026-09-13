@@ -1,716 +1,211 @@
-import type { Express } from "express";
-import multer from "multer";
-import { createServer, type Server } from "http";
-import { storage } from "./storage";
-import nodemailer from "nodemailer";
-import { z } from "zod";
-import fs from "fs";
-import path from "path";
-import { v4 as uuidv4 } from 'uuid';
-import pdfParse from 'pdf-parse';
-import { getClient, moderate, trimTokens, estimateTokens } from '../lib/openai';
-import { limitOrThrow } from '../lib/ratelimit';
-import { logger, createRequestLogger, logAiUsage } from '../lib/logger';
-import { formatCapabilitiesForAI } from '../lib/company';
-import { nearestProducts } from '../lib/embeddings';
+import type { Express, Request } from 'express';
+import { createServer, type Server } from 'http';
+import multer from 'multer';
+import nodemailer from 'nodemailer';
+import { z } from 'zod';
+import fs from 'fs';
+import path from 'path';
+import { randomUUID } from 'crypto';
+import { logger } from './lib/logger';
+import { limitOrThrow, RateLimitError } from './lib/ratelimit';
+import {
+  rfqSchema,
+  MAX_UPLOAD_BYTES,
+  ACCEPTED_UPLOAD_MIME,
+  ACCEPTED_UPLOAD_EXT,
+  SOURCING_LABELS,
+  type RfqInput,
+} from '../shared/rfq';
+import { categoryById } from '../shared/catalog';
 
-// RFQ form validation schema - updated to match ProductQuoteModal fields
-const rfqSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  company: z.string().min(2, "Company name is required"),
-  email: z.string().email("Invalid email address"),
-  phone: z.string().min(10, "Phone number must be at least 10 digits"),
-  product: z.string().min(1, "Product selection is required"),
-  annualVolume: z.string().min(1, "Annual volume is required"),
-  material: z.string().optional(),
-  surfaceFinish: z.string().optional(),
-  targetPrice: z.string().optional(),
-  message: z.string().optional(),
-  // Additional fields from modal
-  productCategory: z.string().optional(),
-  productDescription: z.string().optional(),
-  // AI-generated summary
-  aiSummary: z.string().optional(),
-});
+const UPLOAD_DIR = 'uploads';
+const ENQUIRY_LOG_DIR = path.join('uploads', 'enquiries');
 
-// Configure multer for RFQ form with strict security
 const upload = multer({
-  dest: 'uploads/',
-  limits: {
-    fileSize: 10 * 1024 * 1024, // 10MB limit to match frontend
-  },
-  fileFilter: (req, file, cb) => {
-    // Strict file type validation - matches frontend validation
-    const allowedTypes = [
-      'application/pdf',
-      'application/vnd.ms-excel',
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      'image/jpeg',
-      'image/png',
-    ];
-    
-    const allowedExtensions = ['.dwg', '.dxf', '.step', '.stp'];
-    const hasAllowedExtension = allowedExtensions.some(ext => 
-      file.originalname.toLowerCase().endsWith(ext)
-    );
-    
-    if (allowedTypes.includes(file.mimetype) || hasAllowedExtension) {
-      cb(null, true);
-    } else {
-      cb(new Error(`Invalid file type: ${file.mimetype}. Only PDF, Excel, Images, DWG, DXF, and STEP files are allowed.`));
+  dest: UPLOAD_DIR,
+  limits: { fileSize: MAX_UPLOAD_BYTES, files: 1 },
+  fileFilter: (_req, file, cb) => {
+    const ext = path.extname(file.originalname).toLowerCase();
+    const ok =
+      ACCEPTED_UPLOAD_MIME.includes(file.mimetype) || ACCEPTED_UPLOAD_EXT.includes(ext);
+    if (!ok) {
+      cb(new Error('Unsupported file type'));
+      return;
     }
-  }
+    cb(null, true);
+  },
 });
+
+const clientIp = (req: Request): string =>
+  (req.ip || req.socket.remoteAddress || 'unknown').toString();
+
+/** True only when every SMTP variable needed to actually deliver mail is set. */
+function mailConfig() {
+  const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, RFQ_TO_EMAIL } = process.env;
+  if (!SMTP_HOST || !SMTP_PORT || !SMTP_USER || !SMTP_PASS || !RFQ_TO_EMAIL) return null;
+  return {
+    host: SMTP_HOST,
+    port: Number.parseInt(SMTP_PORT, 10),
+    user: SMTP_USER,
+    pass: SMTP_PASS,
+    to: RFQ_TO_EMAIL,
+  };
+}
+
+function formatEnquiry(data: RfqInput, ref: string, hasFile: string | null): string {
+  const category = categoryById(data.productCategory as never)?.name ?? data.productCategory;
+  const row = (label: string, value?: string) =>
+    value && value.trim() ? `${label}: ${value.trim()}\n` : '';
+
+  return (
+    `New enquiry — reference ${ref}\n\n` +
+    row('Name', data.name) +
+    row('Company', data.company) +
+    row('Email', data.email) +
+    row('Phone / WhatsApp', data.phone) +
+    row('City / location', data.city) +
+    row('Preferred contact', data.preferredContact) +
+    `\nRequirement\n` +
+    row('Category', category) +
+    row('Product code', data.productCode) +
+    row('Grade / coating', data.gradeOrCoating) +
+    row('Workpiece material', data.workpieceMaterial) +
+    row('Quantity', data.quantity) +
+    row('Enquiry list', data.enquiryList) +
+    row('Sharing', data.sourcingBasis ? SOURCING_LABELS[data.sourcingBasis] : '') +
+    row('Consent to reply', data.consent ? 'Given' : '') +
+    `\n${data.requirement}\n\n` +
+    (hasFile ? `Attachment: ${hasFile}\n` : 'No attachment provided\n') +
+    `\nReceived: ${new Date().toISOString()}\n`
+  );
+}
+
+/**
+ * Persist every enquiry to disk before attempting delivery, so a mail failure
+ * never means a lost enquiry. The folder is gitignored.
+ */
+function persistEnquiry(ref: string, data: RfqInput, attachment: string | null) {
+  try {
+    fs.mkdirSync(ENQUIRY_LOG_DIR, { recursive: true });
+    fs.writeFileSync(
+      path.join(ENQUIRY_LOG_DIR, `${ref}.json`),
+      JSON.stringify({ ref, receivedAt: new Date().toISOString(), attachment, ...data }, null, 2),
+    );
+  } catch (error) {
+    logger.error({ err: error, ref }, 'Could not persist enquiry to disk');
+  }
+}
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // put application routes here
-  // prefix all routes with /api
+  app.get('/api/health', (_req, res) => {
+    res.json({ ok: true, mailConfigured: mailConfig() !== null });
+  });
 
-  // RFQ form submission endpoint with file upload support
-  app.post('/api/rfq', upload.single('drawing'), async (req, res) => {
+  app.post('/api/rfq', (req, res, next) => {
+    upload.single('attachment')(req, res, (err) => {
+      if (!err) return next();
+      const message =
+        err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE'
+          ? 'That file is larger than 10 MB. Please attach a smaller file.'
+          : 'That file type is not supported. Please attach a PDF, image, spreadsheet or CAD drawing.';
+      res.status(400).json({ ok: false, message });
+    });
+  }, async (req, res) => {
+    const ref = `RFQ-${new Date().toISOString().slice(0, 10).replace(/-/g, '')}-${randomUUID().slice(0, 6).toUpperCase()}`;
+    const tempPath = req.file?.path;
+
+    const cleanup = () => {
+      if (tempPath && fs.existsSync(tempPath)) {
+        try { fs.unlinkSync(tempPath); } catch { /* best effort */ }
+      }
+    };
+
     try {
-      console.log('RFQ submission received:', {
-        body: req.body,
-        file: req.file ? { 
-          filename: req.file.filename, 
-          originalName: req.file.originalname, 
-          size: req.file.size, 
-          mimetype: req.file.mimetype 
-        } : null
-      });
+      await limitOrThrow(clientIp(req), 'rfq');
 
-      // Validate data using Zod schema
-      const validatedData = rfqSchema.parse({
-        name: req.body.name,
-        company: req.body.company,
-        email: req.body.email,
-        phone: req.body.phone,
-        product: req.body.product,
-        annualVolume: req.body.annualVolume,
-        material: req.body.material || '',
-        surfaceFinish: req.body.surfaceFinish || '',
-        targetPrice: req.body.targetPrice || '',
-        message: req.body.message || '',
-        productCategory: req.body.productCategory || '',
-        productDescription: req.body.productDescription || '',
-        aiSummary: req.body.aiSummary || '',
-      });
-
-      // Handle file attachment
-      let attachment = null;
-      if (req.file) {
-        const buffer = fs.readFileSync(req.file.path);
-        attachment = {
-          filename: req.file.originalname,
-          content: buffer,
-        };
-        // Clean up temporary file
-        fs.unlinkSync(req.file.path);
+      // Light spam protection that costs real visitors nothing: a hidden field
+      // that bots tend to fill, and a minimum time between the form rendering
+      // and being sent. Elapsed time is measured in the browser, so a skewed
+      // client clock cannot reject a genuine buyer.
+      if (typeof req.body.website === 'string' && req.body.website.trim() !== '') {
+        cleanup();
+        return res.status(400).json({ ok: false, message: 'We could not accept this submission. Please try again.' });
+      }
+      const elapsed = Number(req.body.formElapsedMs);
+      if (Number.isFinite(elapsed) && elapsed >= 0 && elapsed < 2500) {
+        cleanup();
+        return res.status(400).json({ ok: false, message: 'That was very quick — please check your details and send again.' });
       }
 
-      // Email configuration
-      const toEmail = process.env.TO_EMAIL || 'quotes@neoautomatics.com';
-      
-      // Try Nodemailer first (if SMTP config is available)
-      const smtpHost = process.env.SMTP_HOST;
-      const smtpPort = process.env.SMTP_PORT;
-      const smtpUser = process.env.SMTP_USER;
-      const smtpPass = process.env.SMTP_PASS;
+      const data = rfqSchema.parse(req.body);
+      const attachmentName = req.file?.originalname ?? null;
+      persistEnquiry(ref, data, attachmentName);
 
-      let emailSent = false;
-
-      if (smtpHost && smtpPort && smtpUser && smtpPass) {
-        try {
-          console.log('Attempting to send email via Nodemailer...');
-          const transporter = nodemailer.createTransport({
-            host: smtpHost,
-            port: parseInt(smtpPort),
-            secure: parseInt(smtpPort) === 465,
-            auth: {
-              user: smtpUser,
-              pass: smtpPass,
-            },
-          });
-
-          const emailContent = `${validatedData.aiSummary ? `
-=== AI SUMMARY FOR SALES TEAM ===
-${validatedData.aiSummary}
-======================================
-
-` : ''}New RFQ Request from ${validatedData.name}
-
-Company: ${validatedData.company}
-Email: ${validatedData.email}
-Phone: ${validatedData.phone}
-
-Product Details:
-- Product: ${validatedData.product}${validatedData.productCategory ? ` (${validatedData.productCategory})` : ''}
-- Annual Volume: ${validatedData.annualVolume}
-${validatedData.material ? `- Material: ${validatedData.material}` : ''}
-${validatedData.surfaceFinish ? `- Surface Finish: ${validatedData.surfaceFinish}` : ''}
-${validatedData.targetPrice ? `- Target Price: ${validatedData.targetPrice}` : ''}
-
-${validatedData.message ? `Additional Message:\n${validatedData.message}` : ''}
-
-${attachment ? `\nTechnical drawing attached: ${attachment.filename}` : 'No technical drawing provided'}
-
----
-Submitted: ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}
-`;
-
-          const mailOptions = {
-            from: `"Neo Automatics RFQ" <${smtpUser}>`,
-            to: toEmail,
-            replyTo: validatedData.email,
-            subject: `New RFQ Request from ${validatedData.company} - ${validatedData.product}`,
-            text: emailContent,
-            attachments: attachment ? [attachment] : [],
-          };
-
-          await transporter.sendMail(mailOptions);
-          console.log('Email sent successfully via Nodemailer');
-          emailSent = true;
-
-        } catch (nodemailerError) {
-          console.error('Nodemailer failed:', nodemailerError);
-        }
-      }
-
-      // Fallback to Formspree if Nodemailer failed or isn't configured
-      if (!emailSent) {
-        const formspreeUrl = process.env.FORMSPREE_URL;
-        
-        // Only attempt Formspree if a valid URL is configured
-        if (formspreeUrl && !formspreeUrl.includes('YOUR_FORM_ID')) {
-          try {
-            console.log('Attempting to send email via Formspree fallback...');
-            
-            const formData = new FormData();
-            formData.append('name', validatedData.name);
-            formData.append('company', validatedData.company);
-            formData.append('email', validatedData.email);
-            formData.append('phone', validatedData.phone);
-            formData.append('product', validatedData.product);
-            formData.append('annualVolume', validatedData.annualVolume);
-            formData.append('material', validatedData.material || '');
-            formData.append('message', validatedData.message || '');
-            if (validatedData.aiSummary) {
-              formData.append('aiSummary', validatedData.aiSummary);
-            }
-            formData.append('submittedAt', new Date().toISOString());
-            
-            if (attachment) {
-              formData.append('drawing', new Blob([attachment.content]), attachment.filename);
-            }
-
-            const response = await fetch(formspreeUrl, {
-              method: 'POST',
-              body: formData,
-              headers: {
-                'Accept': 'application/json'
-              }
-            });
-
-            if (response.ok) {
-              console.log('Email sent successfully via Formspree');
-              emailSent = true;
-            } else {
-              console.error('Formspree failed:', await response.text());
-            }
-
-          } catch (formspreeError) {
-            console.error('Formspree fallback failed:', formspreeError);
-          }
-        } else {
-          console.log('Formspree not configured - skipping email fallback in development');
-        }
-      }
-
-      // In development mode, always treat as successful for testing purposes
-      if (!emailSent && process.env.NODE_ENV === 'development') {
-        console.log('Development mode: simulating successful email delivery for testing');
-        emailSent = true;
-        
-        // Log the RFQ details for development debugging
-        console.log('=== RFQ SUBMISSION (Development) ===');
-        if (validatedData.aiSummary) {
-          console.log(`AI Summary: ${validatedData.aiSummary}`);
-          console.log('-------------------------------------');
-        }
-        console.log(`From: ${validatedData.name} (${validatedData.company})`);
-        console.log(`Email: ${validatedData.email} | Phone: ${validatedData.phone}`);
-        console.log(`Product: ${validatedData.product}`);
-        console.log(`Annual Volume: ${validatedData.annualVolume}`);
-        if (validatedData.material) console.log(`Material: ${validatedData.material}`);
-        if (validatedData.surfaceFinish) console.log(`Surface Finish: ${validatedData.surfaceFinish}`);
-        if (validatedData.targetPrice) console.log(`Target Price: ${validatedData.targetPrice}`);
-        if (validatedData.message) console.log(`Message: ${validatedData.message}`);
-        if (attachment) console.log(`File: ${attachment.filename} (${attachment.content.length} bytes)`);
-        console.log('===================================');
-      }
-
-      // Return response based on email delivery success
-      if (emailSent) {
-        res.json({
-          success: true,
-          message: 'Quote request submitted successfully. We\'ll contact you within 24 hours.',
-          data: {
-            submittedAt: new Date().toISOString(),
-            company: validatedData.company,
-            product: validatedData.product,
-            emailSent: true
-          }
-        });
-      } else {
-        console.error('All email delivery methods failed');
-        return res.status(500).json({
-          success: false,
-          message: 'Failed to send quote request. Please try again or contact us directly at quotes@neoautomatics.com',
-          data: {
-            submittedAt: new Date().toISOString(),
-            company: validatedData.company,
-            product: validatedData.product,
-            emailSent: false
-          }
+      const mail = mailConfig();
+      if (!mail) {
+        // No credentials configured. The enquiry is saved, but we must not
+        // tell the customer it was delivered when it was not.
+        logger.warn({ ref }, 'Enquiry received but SMTP is not configured — saved to disk only');
+        cleanup();
+        return res.status(503).json({
+          ok: false,
+          reference: ref,
+          message:
+            'We could not send your enquiry just now. Your details are still in the form — please try again shortly.',
         });
       }
 
+      const transporter = nodemailer.createTransport({
+        host: mail.host,
+        port: mail.port,
+        secure: mail.port === 465,
+        auth: { user: mail.user, pass: mail.pass },
+      });
+
+      await transporter.sendMail({
+        from: `"ShreeRaj Tools — Website Enquiry" <${mail.user}>`,
+        to: mail.to,
+        replyTo: data.email,
+        subject: `Enquiry from ${data.company} — ${data.productCode || categoryById(data.productCategory as never)?.name || 'General'} [${ref}]`,
+        text: formatEnquiry(data, ref, attachmentName),
+        attachments:
+          tempPath && attachmentName
+            ? [{ filename: attachmentName, content: fs.readFileSync(tempPath) }]
+            : [],
+      });
+
+      logger.info({ ref }, 'Enquiry delivered');
+      cleanup();
+      return res.json({
+        ok: true,
+        reference: ref,
+        message: 'Thank you — your enquiry has been sent. We will get back to you shortly.',
+      });
     } catch (error) {
-      console.error('RFQ submission error:', error);
-      
-      // Handle Zod validation errors
+      cleanup();
+
+      if (error instanceof RateLimitError) {
+        res.setHeader('Retry-After', String(error.retryAfter));
+        return res.status(429).json({ ok: false, message: error.message });
+      }
+
       if (error instanceof z.ZodError) {
         return res.status(400).json({
-          success: false,
-          message: 'Validation error',
-          errors: error.errors
+          ok: false,
+          message: 'Please check the highlighted fields and try again.',
+          errors: error.errors.map((e) => ({ field: e.path.join('.'), message: e.message })),
         });
       }
 
-      res.status(500).json({
-        success: false,
-        message: 'Internal server error'
+      logger.error({ err: error, ref }, 'Enquiry submission failed');
+      return res.status(502).json({
+        ok: false,
+        reference: ref,
+        message:
+          'We could not send your enquiry just now. Your details are still in the form — please try again shortly.',
       });
     }
   });
 
-  // AI API Routes
-  
-  // Helper function to get client IP
-  const getClientIP = (req: any) => {
-    return req.ip || req.connection.remoteAddress || req.socket.remoteAddress || 
-           (req.connection.socket ? req.connection.socket.remoteAddress : null) || '127.0.0.1';
-  };
-
-  // AI Chat endpoint
-  app.post('/api/ai/chat', async (req, res) => {
-    const startTime = Date.now();
-    const requestId = uuidv4();
-    const clientLogger = logger.child({ requestId });
-    
-    try {
-      const ip = getClientIP(req);
-      await limitOrThrow(ip, 'chat');
-
-      const schema = z.object({
-        messages: z.array(z.object({
-          role: z.enum(['user', 'assistant', 'system']),
-          content: z.string().min(1).max(4000)
-        })).min(1).max(20),
-        context: z.object({
-          product: z.string().optional()
-        }).optional()
-      });
-
-      const { messages, context } = schema.parse(req.body);
-
-      // Moderate user messages
-      const userMessages = messages.filter(m => m.role === 'user');
-      for (const msg of userMessages) {
-        await moderate(msg.content);
-      }
-
-      const companyContext = formatCapabilitiesForAI();
-      const systemPrompt = `You are "Neo AI", a procurement assistant for ${companyContext}. 
-Answer concisely for buyers. If details are missing, ask for: annual volume, material grade, tolerance, surface finish, drawing. 
-Offer to open the RFQ modal for quotes. Never invent capabilities we don't list.`;
-
-      const completion = await getClient().chat.completions.create({
-        model: 'gpt-4o-mini',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          ...messages.map(m => ({ role: m.role, content: trimTokens(m.content) }))
-        ],
-        temperature: 0.3,
-        max_tokens: 500,
-      });
-
-      const reply = completion.choices[0]?.message?.content || 'I apologize, but I cannot provide a response at this time.';
-      
-      // Generate suggestions based on context
-      const suggestions = context?.product 
-        ? [`What's the lead time for ${context.product}?`, 'Can you share tolerance specs?', 'Request a quote for this part']
-        : ['What products do you manufacture?', 'Tell me about your capabilities', 'How do I request a quote?'];
-
-      logAiUsage({
-        requestId,
-        endpoint: '/api/ai/chat',
-        model: 'gpt-4o-mini',
-        promptTokens: completion.usage?.prompt_tokens,
-        completionTokens: completion.usage?.completion_tokens,
-        totalTokens: completion.usage?.total_tokens,
-        duration: Date.now() - startTime,
-        success: true,
-      });
-
-      res.json({ reply, suggestions });
-
-    } catch (error: any) {
-      clientLogger.error({ error: error.message }, 'AI chat error');
-      
-      logAiUsage({
-        requestId,
-        endpoint: '/api/ai/chat',
-        model: 'gpt-4o-mini',
-        duration: Date.now() - startTime,
-        success: false,
-        error: error.message,
-      });
-
-      if (error.message.includes('Rate limit exceeded') || error.message.includes('Content flagged')) {
-        return res.status(400).json({ error: error.message, id: requestId });
-      }
-
-      res.status(500).json({ error: 'Something went wrong', id: requestId });
-    }
-  });
-
-  // RFQ Helper endpoint
-  app.post('/api/ai/rfq-helper', async (req, res) => {
-    const startTime = Date.now();
-    const requestId = uuidv4();
-    const clientLogger = logger.child({ requestId });
-    
-    try {
-      const ip = getClientIP(req);
-      await limitOrThrow(ip, 'rfq-helper');
-
-      const schema = z.object({
-        product: z.string().min(1).max(200),
-        annualVolume: z.string().optional(),
-        material: z.string().optional(),
-        finish: z.string().optional(),
-        notes: z.string().optional(),
-      });
-
-      const data = schema.parse(req.body);
-
-      // Moderate inputs
-      const textToModerate = [data.product, data.material, data.finish, data.notes].filter(Boolean).join(' ');
-      await moderate(textToModerate);
-
-      const companyContext = formatCapabilitiesForAI();
-      const prompt = `Based on ${companyContext}, provide RFQ suggestions for "${data.product}". 
-      Current input: Volume: ${data.annualVolume || 'not specified'}, Material: ${data.material || 'not specified'}, Finish: ${data.finish || 'not specified'}.
-      
-      Respond with JSON only:
-      {
-        "suggested": {
-          "annualVolume": "volume range recommendation",
-          "material": "specific grade recommendation",
-          "finish": "surface finish recommendation", 
-          "leadTimeWeeks": number
-        },
-        "checklist": ["question1", "question2", "question3"],
-        "cautions": ["caution1 if any"]
-      }`;
-
-      const completion = await getClient().chat.completions.create({
-        model: 'gpt-4o-mini',
-        messages: [{ role: 'user', content: prompt }],
-        temperature: 0.2,
-        max_tokens: 400,
-      });
-
-      let response;
-      try {
-        response = JSON.parse(completion.choices[0]?.message?.content || '{}');
-      } catch {
-        response = {
-          suggested: {
-            annualVolume: "1,000-10,000 units",
-            material: "EN8 or equivalent",
-            finish: "Black oxide coating",
-            leadTimeWeeks: 4
-          },
-          checklist: ["PPAP level required?", "Drawing with tolerances?", "Surface roughness specs?"],
-          cautions: ["Verify material compatibility with application"]
-        };
-      }
-
-      logAiUsage({
-        requestId,
-        endpoint: '/api/ai/rfq-helper',
-        model: 'gpt-4o-mini',
-        promptTokens: completion.usage?.prompt_tokens,
-        completionTokens: completion.usage?.completion_tokens,
-        totalTokens: completion.usage?.total_tokens,
-        duration: Date.now() - startTime,
-        success: true,
-      });
-
-      res.json(response);
-
-    } catch (error: any) {
-      clientLogger.error({ error: error.message }, 'RFQ helper error');
-      
-      logAiUsage({
-        requestId,
-        endpoint: '/api/ai/rfq-helper',
-        model: 'gpt-4o-mini',
-        duration: Date.now() - startTime,
-        success: false,
-        error: error.message,
-      });
-
-      if (error.message.includes('Rate limit exceeded') || error.message.includes('Content flagged')) {
-        return res.status(400).json({ error: error.message, id: requestId });
-      }
-
-      res.status(500).json({ error: 'Something went wrong', id: requestId });
-    }
-  });
-
-  // PDF Extract endpoint
-  app.post('/api/ai/extract', upload.single('file'), async (req, res) => {
-    const startTime = Date.now();
-    const requestId = uuidv4();
-    const clientLogger = logger.child({ requestId });
-    
-    try {
-      const ip = getClientIP(req);
-      await limitOrThrow(ip, 'extract');
-
-      if (!req.file) {
-        return res.status(400).json({ error: 'PDF file is required' });
-      }
-
-      if (req.file.mimetype !== 'application/pdf') {
-        return res.status(400).json({ error: 'Only PDF files are supported' });
-      }
-
-      if (req.file.size > 10 * 1024 * 1024) { // 10MB
-        return res.status(400).json({ error: 'File size must be less than 10MB' });
-      }
-
-      // Parse PDF
-      const pdfBuffer = fs.readFileSync(req.file.path);
-      const pdfData = await pdfParse(pdfBuffer);
-      
-      // Clean up uploaded file
-      fs.unlinkSync(req.file.path);
-
-      // Extract first 12k characters
-      const content = trimTokens(pdfData.text, 12000);
-
-      const prompt = `Extract likely specs from this technical drawing/document. Focus on dimensions (mm), material grade, tolerance, finish, quantity.
-      
-      Document content:
-      ${content}
-      
-      Respond with JSON only:
-      {
-        "summary": "brief summary of what was found",
-        "fields": {
-          "material": "extracted material if found",
-          "dimensions": "key dimensions if found",
-          "tolerance": "tolerance specs if found",
-          "finish": "surface finish if found",
-          "quantity": "quantity if found"
-        }
-      }`;
-
-      const completion = await getClient().chat.completions.create({
-        model: 'gpt-4o-mini',
-        messages: [{ role: 'user', content: prompt }],
-        temperature: 0.2,
-        max_tokens: 300,
-      });
-
-      let response;
-      try {
-        response = JSON.parse(completion.choices[0]?.message?.content || '{}');
-      } catch {
-        response = {
-          summary: "PDF processed but no specific manufacturing specs found",
-          fields: {}
-        };
-      }
-
-      logAiUsage({
-        requestId,
-        endpoint: '/api/ai/extract',
-        model: 'gpt-4o-mini',
-        promptTokens: completion.usage?.prompt_tokens,
-        completionTokens: completion.usage?.completion_tokens,
-        totalTokens: completion.usage?.total_tokens,
-        duration: Date.now() - startTime,
-        success: true,
-      });
-
-      res.json(response);
-
-    } catch (error: any) {
-      clientLogger.error({ error: error.message }, 'PDF extract error');
-      
-      // Clean up file if exists
-      if (req.file && fs.existsSync(req.file.path)) {
-        fs.unlinkSync(req.file.path);
-      }
-
-      logAiUsage({
-        requestId,
-        endpoint: '/api/ai/extract',
-        model: 'gpt-4o-mini',
-        duration: Date.now() - startTime,
-        success: false,
-        error: error.message,
-      });
-
-      if (error.message.includes('Rate limit exceeded') || error.message.includes('Content flagged')) {
-        return res.status(400).json({ error: error.message, id: requestId });
-      }
-
-      res.status(500).json({ error: 'Something went wrong', id: requestId });
-    }
-  });
-
-  // Semantic Search endpoint
-  app.post('/api/ai/search', async (req, res) => {
-    const startTime = Date.now();
-    const requestId = uuidv4();
-    const clientLogger = logger.child({ requestId });
-    
-    try {
-      const ip = getClientIP(req);
-      await limitOrThrow(ip, 'search');
-
-      const schema = z.object({
-        q: z.string().min(1).max(200),
-      });
-
-      const { q } = schema.parse(req.body);
-
-      await moderate(q);
-
-      const results = await nearestProducts(q, 5);
-
-      logAiUsage({
-        requestId,
-        endpoint: '/api/ai/search',
-        model: 'semantic-search',
-        duration: Date.now() - startTime,
-        success: true,
-      });
-
-      res.json({ results });
-
-    } catch (error: any) {
-      clientLogger.error({ error: error.message }, 'Semantic search error');
-      
-      logAiUsage({
-        requestId,
-        endpoint: '/api/ai/search',
-        model: 'semantic-search',
-        duration: Date.now() - startTime,
-        success: false,
-        error: error.message,
-      });
-
-      if (error.message.includes('Rate limit exceeded') || error.message.includes('Content flagged')) {
-        return res.status(400).json({ error: error.message, id: requestId });
-      }
-
-      res.status(500).json({ error: 'Something went wrong', id: requestId });
-    }
-  });
-
-  // Summary endpoint for internal mail
-  app.post('/api/ai/summary', async (req, res) => {
-    const startTime = Date.now();
-    const requestId = uuidv4();
-    const clientLogger = logger.child({ requestId });
-    
-    try {
-      const ip = getClientIP(req);
-      await limitOrThrow(ip, 'summary');
-
-      // Accept RFQ data structure
-      const rfqData = req.body;
-
-      const prompt = `Create a 5-bullet summary for sales team from this RFQ:
-      
-      Company: ${rfqData.company}
-      Contact: ${rfqData.name} (${rfqData.email})
-      Product: ${rfqData.product}
-      Volume: ${rfqData.annualVolume}
-      Material: ${rfqData.material || 'Not specified'}
-      
-      Additional details: ${rfqData.message || 'None'}
-      
-      Format as:
-      • Company & Contact info
-      • Product & Volume requirements  
-      • Material & Technical specs
-      • Key Requirements/Notes
-      • Recommended Next Steps`;
-
-      const completion = await getClient().chat.completions.create({
-        model: 'gpt-4o-mini',
-        messages: [{ role: 'user', content: prompt }],
-        temperature: 0.2,
-        max_tokens: 200,
-      });
-
-      const summary = completion.choices[0]?.message?.content || 'Unable to generate summary';
-
-      logAiUsage({
-        requestId,
-        endpoint: '/api/ai/summary',
-        model: 'gpt-4o-mini',
-        promptTokens: completion.usage?.prompt_tokens,
-        completionTokens: completion.usage?.completion_tokens,
-        totalTokens: completion.usage?.total_tokens,
-        duration: Date.now() - startTime,
-        success: true,
-      });
-
-      res.json({ summary });
-
-    } catch (error: any) {
-      clientLogger.error({ error: error.message }, 'Summary generation error');
-      
-      logAiUsage({
-        requestId,
-        endpoint: '/api/ai/summary',
-        model: 'gpt-4o-mini',
-        duration: Date.now() - startTime,
-        success: false,
-        error: error.message,
-      });
-
-      if (error.message.includes('Rate limit exceeded') || error.message.includes('Content flagged')) {
-        return res.status(400).json({ error: error.message, id: requestId });
-      }
-
-      res.status(500).json({ error: 'Something went wrong', id: requestId });
-    }
-  });
-
-  // use storage to perform CRUD operations on the storage interface
-  // e.g. storage.insertUser(user) or storage.getUserByUsername(username)
-
-  const httpServer = createServer(app);
-
-  return httpServer;
+  return createServer(app);
 }

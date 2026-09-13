@@ -1,80 +1,83 @@
 {
+  "_note": "Single source of truth for company identity. Fields marked confirmed:false are NOT rendered publicly — the UI shows an enquiry-led fallback instead. Do not set confirmed:true until the owner supplies the real value.",
   "company": {
-    "name": "Neo Automatics",
-    "tagline": "Precision. Reliability. Performance.",
-    "email": "neo.automatics@gmail.com",
-    "phone": "+91 88130 79855",
-    "owner": "Raj Dhingra",
-    "hq": "Rohtak, Haryana, India",
-    "units": [
-      {
-        "name": "Unit - I · Neo Automatics",
-        "address": "Plot No.101 & 102, Sainik Colony, Hissar Road, Rohtak – 124001 (Haryana), India",
-        "phones": ["9896251170", "9896277161"],
-        "emails": ["neo.automatics@gmail.com"]
-      },
-      {
-        "name": "Unit - II · Kitchen Tools",
-        "address": "Dobh, Bhiwani Road, Rohtak (Haryana)",
-        "phones": ["9416050367"],
-        "emails": ["rkmal123@gmail.com"]
-      },
-      {
-        "name": "Unit - III · Neo Turner",
-        "address": "Plot No.-10, Sector 31, B, IMT, Rohtak (Haryana)",
-        "phones": ["9896251170"],
-        "emails": ["neo.automatics@gmail.com"]
-      }
-    ],
-    "certifications": ["ISO 9001:2015", "PPAP Ready"],
-    "strengths": [
-      "High volume, low cost supplier",
-      "End-to-end in-house: machining, heat treatment, QA",
-      "Backup capacity across multiple units",
-      "Quick development cycles & PPAP support",
-      "Preferred source to OEMs & Tier-1s"
-    ],
-    "machines": {
-      "CNC": 30,
-      "TRAUB_A30_A25": 15,
-      "TRAUB_A42_A60": 9,
-      "Centerless_Grinder": 2,
-      "Drill_Machines": 6,
-      "Straightening": 1,
-      "Serration_Rolling": 2,
-      "Surface_Grinding": 1,
-      "Tapping_Drill": 2,
-      "Milling": 2,
-      "Lathe": 2,
-      "Air_Compressor": 2,
-      "Diesel_Genset": "150kVA + 85kVA + 45kVA"
+    "name": "ShreeRaj Tools",
+    "displayName": "ShreeRaj Tools",
+    "wordmark": {
+      "first": "ShreeRaj",
+      "second": "Tools"
     },
-    "heat_treatment": [
-      "Sealed Quench Furnace",
-      "Mesh Belt Furnace"
+    "tagline": "Carbide inserts and cutting tools, sourced from China and Taiwan and supplied across India",
+    "descriptor": "Importer and supplier of carbide inserts and cutting tools",
+    "summary": "ShreeRaj Tools supplies carbide inserts and cutting tools sourced from established producers in China and Taiwan. We serve manufacturers and machining workshops across India — standard geometries from our catalogue, and uncommon or special designs sourced to your requirement.",
+    "shortSummary": "Carbide inserts and cutting tools, sourced from China and Taiwan and supplied to manufacturers across India.",
+    "basedIn": "India",
+    "country": "India",
+    "sourcingRegions": [
+      "China",
+      "Taiwan"
     ],
-    "inspection": [
-      "Rockwell Hardness Tester",
-      "Surface Roughness Tester",
-      "Profile Projector",
-      "Digital Micrometers & Verniers",
-      "Air Ring/Plug Gauges",
-      "Metallurgical Microscope",
-      "Height Gauges"
-    ],
-    "products": [
-      "Collars (RR Panel, RR Wheel Side)",
-      "Ratchet Starter & Pinion Assemblies",
-      "Rocker Arms",
-      "Engine Bushes (incl. 20x9)",
-      "Sprockets",
-      "Gear Blanks"
-    ],
-    "industries": [
-      "Automotive (2W/4W/Commercial)",
-      "Agriculture Machinery",
-      "Industrial Equipment",
-      "Kitchen Tools"
-    ]
+    "marketNote": "We supply customers across India.",
+    "parentFirm": {
+      "name": "Neo Automatics",
+      "relationship": "ShreeRaj Tools is a new venture from a family with an existing background in industry through Neo Automatics.",
+      "note": "Neo Automatics is a separate, established business."
+    },
+    "contact": {
+      "email": {
+        "value": null,
+        "confirmed": false,
+        "needs": "Business email address for enquiries and RFQ delivery"
+      },
+      "phone": {
+        "value": null,
+        "confirmed": false,
+        "needs": "Public business phone number"
+      },
+      "whatsapp": {
+        "value": null,
+        "confirmed": false,
+        "needs": "WhatsApp business number"
+      },
+      "address": {
+        "value": null,
+        "confirmed": false,
+        "needs": "Public business address"
+      },
+      "city": {
+        "value": null,
+        "confirmed": false,
+        "needs": "City / state to display"
+      },
+      "gstin": {
+        "value": null,
+        "confirmed": false,
+        "needs": "GSTIN, if it should be displayed"
+      },
+      "iec": {
+        "value": null,
+        "confirmed": false,
+        "needs": "Import Export Code, if it should be displayed"
+      },
+      "domain": {
+        "value": null,
+        "confirmed": false,
+        "needs": "Final website domain"
+      },
+      "hours": {
+        "value": null,
+        "confirmed": false,
+        "needs": "Business hours, if you want them shown"
+      }
+    },
+    "claims": {
+      "_note": "Deliberately empty. No certifications, years of experience, customer counts, delivery statistics, factories, machines or partnerships are asserted anywhere on this site.",
+      "certifications": [],
+      "yearsExperience": null,
+      "customerCount": null,
+      "countriesServed": null,
+      "authorisedDistributorFor": [],
+      "partnerships": []
+    }
   }
 }

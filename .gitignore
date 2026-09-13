@@ -4,3 +4,31 @@ dist
 server/public
 vite.config.ts.*
 *.tar.gz
+
+# Environment / secrets — never commit
+.env
+.env.*
+!.env.example
+
+# Runtime upload folder (customer RFQ attachments)
+uploads/
+.cache/
+
+# Private commercial documents (invoices, quotations, price lists)
+private/
+*.invoice.*
+*proforma*
+*Proforma*
+*QUOTATION*
+*Pricelist*
+*pricelist*
+
+# Local debug artefacts
+*.png
+!public/**/*.png
+!client/public/**/*.png
+
+# Temporary third-party hero footage (publishing rights not confirmed).
+# Kept out of the public repository; the site falls back gracefully without it.
+client/public/media/hero-machining.mp4
+client/public/media/hero-machining-poster.jpg
