@@ -1,0 +1,41 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+#
+# Deploy: Render dashboard -> New -> Blueprint -> pick this repository.
+# Every value marked `sync: false` must be typed into the Render dashboard;
+# secrets are never stored in this file.
+services:
+  - type: web
+    name: shreeraj-tools
+    runtime: node
+    plan: free # free instances sleep after 15 min idle and have no persistent disk — see LAUNCH.md
+    region: singapore
+    branch: main
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: 20.11.1
+      - key: NODE_ENV
+        value: production
+      # Enquiry email delivery. Until all five are set, enquiries are stored
+      # server-side and the customer is told honestly that sending failed.
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: RFQ_TO_EMAIL
+        sync: false
+      # Absolute site URL, used for sitemap.xml. Set once the domain is live.
+      - key: SITE_URL
+        sync: false
+    # Uncomment on a paid instance to keep the saved copies of enquiries across
+    # deploys. Disks are not available on the free plan.
+    # disk:
+    #   name: uploads
+    #   mountPath: /opt/render/project/src/uploads
+    #   sizeGB: 1
