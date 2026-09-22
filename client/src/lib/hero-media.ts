@@ -1,20 +1,35 @@
 /**
- * Homepage hero footage.
+ * Homepage hero media.
  *
- * TEMPORARY DEVELOPMENT ASSET — the current clip is third-party footage
- * (Tungaloy Corporation) and its publishing rights have not been confirmed.
- * The files are gitignored so they are never pushed to the public repository.
- * Replace with licensed or original footage before launch, then update the
- * credit below (or remove it if the footage is your own).
+ * The hero renders an illustration we own (see HeroShowcase in hero-video.tsx).
+ * Video is opt-in and off by default.
  *
- * Files live in client/public/media/ and are served from /media/ in both
- * development and production builds.
+ * The only clip currently on disk is third-party footage (Tungaloy Corporation)
+ * kept as a TEMPORARY development asset — the files are gitignored and the flag
+ * below is deliberately unset in production, so unlicensed footage cannot be
+ * published by accident. To preview it locally, put VITE_HERO_VIDEO=on in .env.
+ *
+ * When licensed or original footage is available: drop it in client/public/media/,
+ * update the entry below (including `credit`), remove the gitignore lines for the
+ * files and set VITE_HERO_VIDEO=on in the host's environment.
  */
-export const heroVideo = {
+export interface HeroClip {
+  src: string;
+  poster: string;
+  /** Seconds to start from, so autoplay opens mid-cut rather than on the clip's opening frames. The clip still loops in full. */
+  startAt: number;
+  description: string;
+  /** Shown over the video. Required for third-party footage; empty for our own. */
+  credit: string;
+}
+
+const developmentClip: HeroClip = {
   src: '/media/hero-machining.mp4',
   poster: '/media/hero-machining-poster.jpg',
-  /** Seconds to start from, so autoplay opens on machining rather than the clip's white studio frames. The full clip still loops. */
   startAt: 2.8,
   description: 'Machining footage of indexable carbide inserts cutting metal',
   credit: 'Footage: Tungaloy Corporation',
-} as const;
+};
+
+export const heroVideo: HeroClip | null =
+  import.meta.env.VITE_HERO_VIDEO === 'on' ? developmentClip : null;
