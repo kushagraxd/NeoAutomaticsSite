@@ -2,7 +2,8 @@ import { useRef, useState, type ReactNode } from 'react';
 import { Link } from 'wouter';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AlertTriangle, CheckCircle2, ChevronDown, FileText, Loader2, Upload, X } from 'lucide-react';
+import { AlertCircle, AlertTriangle, CheckCircle2, ChevronDown, FileText, Upload, X } from 'lucide-react';
+import { CtaButton } from './cta';
 import {
   rfqSchema,
   sourcingBases,
@@ -35,6 +36,8 @@ const REPLY_OPTIONS = [
   { value: 'whatsapp', label: 'WhatsApp' },
 ] as const;
 
+const FORMATS = 'PDF, XLS/XLSX, JPG/PNG, DWG, DXF, STEP/STP';
+
 const formatBytes = (n: number) =>
   n < 1024 * 1024 ? `${Math.max(1, Math.round(n / 1024))} KB` : `${(n / (1024 * 1024)).toFixed(1)} MB`;
 
@@ -55,15 +58,30 @@ function Field({
         {label}
         {required && (
           <>
-            <span className="ml-0.5 text-gold" aria-hidden="true">*</span>
+            <span className="req" aria-hidden="true">*</span>
             <span className="sr-only"> (required)</span>
           </>
         )}
-        {hint && <span className="ml-1.5 font-normal text-ink-muted">{hint}</span>}
+        {hint && <span className="field-hint">{hint}</span>}
       </label>
       {children}
-      {error && <p id={`err-${htmlFor}`} className="field-error">{error}</p>}
+      {error && (
+        <p id={`err-${htmlFor}`} className="field-error">
+          <AlertCircle className="mt-[3px] h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+          {error}
+        </p>
+      )}
     </div>
+  );
+}
+
+/** Numbered group heading. Sits inside a <legend> so the group keeps its accessible name. */
+function Section({ step, children }: { step: number; children: ReactNode }) {
+  return (
+    <span className="form-section">
+      <span className="form-step" aria-hidden="true">{step}</span>
+      {children}
+    </span>
   );
 }
 
@@ -186,16 +204,16 @@ export default function RfqForm({
 
   if (status.kind === 'sent') {
     return (
-      <div className="card p-8 text-center sm:p-10" role="status" aria-live="polite">
-        <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[rgba(var(--success-rgb),0.14)]">
+      <div className="panel p-8 text-center shadow-paper sm:p-10" role="status" aria-live="polite">
+        <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[rgba(var(--success-rgb),0.1)]">
           <CheckCircle2 className="h-7 w-7 text-success" aria-hidden="true" />
         </span>
-        <h3 className="mt-5 text-[22px] font-semibold tracking-[-0.02em] text-ink">Enquiry sent</h3>
-        <p className="mx-auto mt-2 max-w-md text-[15px] leading-relaxed text-ink-soft">{status.message}</p>
+        <h3 className="t-h3 mt-5 text-[22px]">Enquiry sent</h3>
+        <p className="mx-auto mt-2 max-w-md text-[15.5px] leading-relaxed text-ink-soft">{status.message}</p>
         {status.reference && <p className="mt-3 font-mono text-[13px] text-ink-muted">Reference {status.reference}</p>}
-        <button type="button" className="btn-outline mt-7" onClick={() => setStatus({ kind: 'idle' })}>
+        <CtaButton variant="secondary" size="md" className="mt-7" onClick={() => setStatus({ kind: 'idle' })}>
           Send another enquiry
-        </button>
+        </CtaButton>
       </div>
     );
   }
@@ -203,12 +221,12 @@ export default function RfqForm({
   const sending = status.kind === 'sending';
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate className="card relative p-6 sm:p-8" aria-busy={sending}>
-      <div className="flex flex-wrap items-start justify-between gap-3 border-b border-rule pb-6">
+    <form onSubmit={handleSubmit(onSubmit)} noValidate className="panel relative p-6 shadow-paper sm:p-8" aria-busy={sending} aria-labelledby="rfq-title">
+      <div className="flex flex-wrap items-start justify-between gap-3 border-b border-rule-soft pb-6">
         <div>
-          <h2 className="text-[22px] font-semibold tracking-[-0.02em] text-ink">Enquiry &amp; quotation request</h2>
-          <p className="mt-1 text-[14px] text-ink-muted">
-            Fields marked <span className="text-gold">*</span> are required. We reply with pricing and availability.
+          <h2 id="rfq-title" className="t-h3 text-[22px]">Enquiry &amp; quotation request</h2>
+          <p className="mt-1.5 text-[14px] text-ink-muted">
+            Fields marked <span className="font-bold text-bronze-text">*</span> are required. Everything else helps us quote more precisely.
           </p>
         </div>
         {enquiryCodes && enquiryCodes.length > 0 && (
@@ -219,9 +237,11 @@ export default function RfqForm({
         )}
       </div>
 
-      <fieldset className="mt-7">
-        <legend className="form-section">Your details</legend>
-        <div className="mt-4 grid gap-5 sm:grid-cols-2">
+      <fieldset className="mt-8">
+        <legend className="w-full">
+          <Section step={1}>Your details</Section>
+        </legend>
+        <div className="mt-5 grid gap-5 sm:grid-cols-2">
           <Field label="Full name" htmlFor="name" required error={err('name')}>
             <input id="name" className="field" autoComplete="name" {...a11y('name')} {...register('name')} />
           </Field>
@@ -235,7 +255,7 @@ export default function RfqForm({
             <input id="phone" type="tel" className="field" autoComplete="tel" inputMode="tel" {...a11y('phone')} {...register('phone')} />
           </Field>
           <Field label="City or location" htmlFor="city" hint="(optional)" error={err('city')}>
-            <input id="city" className="field" autoComplete="address-level2" placeholder="e.g. Rohtak, Haryana" {...register('city')} />
+            <input id="city" className="field" autoComplete="address-level2" placeholder="e.g. Rohtak, Haryana" {...a11y('city')} {...register('city')} />
           </Field>
           <fieldset>
             <legend className="field-label">Preferred reply</legend>
@@ -251,9 +271,11 @@ export default function RfqForm({
         </div>
       </fieldset>
 
-      <fieldset className="mt-9">
-        <legend className="form-section">Your requirement</legend>
-        <div className="mt-4 grid gap-5 sm:grid-cols-2">
+      <fieldset className="mt-10 border-t border-rule-soft pt-8">
+        <legend className="w-full">
+          <Section step={2}>Your requirement</Section>
+        </legend>
+        <div className="mt-5 grid gap-5 sm:grid-cols-2">
           <Field label="Product category" htmlFor="productCategory" required error={err('productCategory')}>
             <SelectWrap>
               <select id="productCategory" className="field appearance-none pr-10" {...a11y('productCategory')} {...register('productCategory')}>
@@ -292,7 +314,9 @@ export default function RfqForm({
 
           <details className="disclosure sm:col-span-2">
             <summary>
-              More technical detail <span className="font-normal text-ink-muted">(optional)</span>
+              <span>
+                More technical detail <span className="font-normal text-ink-muted">(optional)</span>
+              </span>
               <ChevronDown className="disclosure-icon h-4 w-4" aria-hidden="true" />
             </summary>
             <div className="grid gap-5 pt-5 sm:grid-cols-2">
@@ -307,38 +331,59 @@ export default function RfqForm({
         </div>
       </fieldset>
 
-      <div className="mt-9">
-        <p className="form-section" id="attachment-label">Drawing, photo or specification <span className="font-normal normal-case tracking-normal text-ink-muted">(optional)</span></p>
+      <div className="mt-10 border-t border-rule-soft pt-8">
+        <p id="attachment-label">
+          <Section step={3}>
+            Drawing, photo or specification <span className="text-[15px] font-normal text-ink-muted">(optional)</span>
+          </Section>
+        </p>
         <div
-          className={`dropzone mt-4 ${dragging ? 'is-dragging' : ''}`}
+          className={`dropzone mt-5 ${dragging ? 'is-dragging' : ''} ${fileError ? 'has-error' : ''}`}
           onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
           onDragLeave={() => setDragging(false)}
           onDrop={(e) => { e.preventDefault(); setDragging(false); pickFile(e.dataTransfer.files?.[0] ?? null); }}
         >
           {file ? (
-            <div className="flex items-center gap-3 px-4 py-3.5">
-              <span className="icon-badge h-10 w-10"><FileText className="h-5 w-5" aria-hidden="true" /></span>
+            <div className="flex flex-wrap items-center gap-3 px-4 py-3.5">
+              <span className="icon-tile h-10 w-10 bg-surface-card"><FileText className="h-5 w-5" aria-hidden="true" /></span>
               <div className="min-w-0 flex-1">
-                <p className="truncate font-mono text-[13.5px] text-ink">{file.name}</p>
-                <p className="text-[12.5px] text-ink-muted">{formatBytes(file.size)}</p>
+                <p className="truncate font-mono text-[13.5px] font-semibold text-ink">{file.name}</p>
+                <p className="text-[12.5px] text-ink-muted">{formatBytes(file.size)} · attached</p>
               </div>
-              <button type="button" onClick={() => fileInput.current?.click()} className="text-[13.5px] font-medium text-brand-bright hover:underline">
-                Replace
-              </button>
-              <button type="button" onClick={() => setFile(null)} className="rounded-md p-1.5 text-ink-muted transition-colors hover:bg-surface-panel hover:text-ink" aria-label={`Remove ${file.name}`}>
-                <X className="h-4 w-4" />
-              </button>
+              <div className="flex items-center gap-1">
+                <button type="button" onClick={() => fileInput.current?.click()} className="rounded-md px-2.5 py-1.5 text-[13.5px] font-semibold text-ink underline-offset-4 hover:underline">
+                  Replace
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFile(null)}
+                  className="inline-flex items-center gap-1 rounded-md px-2.5 py-1.5 text-[13.5px] font-semibold text-ink-muted transition-colors hover:bg-surface-subtle hover:text-ink"
+                  aria-label={`Remove ${file.name}`}
+                >
+                  <X className="h-4 w-4" aria-hidden="true" /> Remove
+                </button>
+              </div>
             </div>
           ) : (
             <button
               type="button"
               onClick={() => fileInput.current?.click()}
-              aria-describedby="attachment-label attachment-hint"
-              className="flex w-full flex-col items-center gap-2 rounded-xl px-4 py-8 text-center"
+              aria-describedby={`attachment-label attachment-hint${fileError ? ' attachment-error' : ''}`}
+              className="group flex w-full flex-col items-center gap-2.5 rounded-xl px-4 py-8 text-center"
             >
-              <span className="icon-badge"><Upload className="h-5 w-5" aria-hidden="true" /></span>
-              <span className="text-[15px] text-ink"><span className="font-semibold text-brand-bright">Choose a file</span> or drag it here</span>
-              <span id="attachment-hint" className="text-[13px] text-ink-muted">{UPLOAD_HINT} · PDF, XLS/XLSX, JPG/PNG, DWG, DXF, STEP/STP</span>
+              <span className="icon-tile bg-surface-card group-hover:border-accent-line group-hover:text-accent-ink"><Upload className="h-5 w-5" aria-hidden="true" /></span>
+              <span className="text-[15px] text-ink">
+                {dragging ? (
+                  <span className="font-bold">Drop the file to attach it</span>
+                ) : (
+                  <>
+                    <span className="font-bold text-accent-ink underline decoration-accent-line underline-offset-4">Choose a file</span> or drag it here
+                  </>
+                )}
+              </span>
+              <span id="attachment-hint" className="text-[13px] text-ink-muted">
+                <span className="font-mono">{FORMATS}</span> · up to {Math.round(MAX_UPLOAD_BYTES / (1024 * 1024))} MB
+              </span>
             </button>
           )}
           <input
@@ -351,7 +396,13 @@ export default function RfqForm({
             onChange={(e) => { pickFile(e.target.files?.[0] ?? null); e.target.value = ''; }}
           />
         </div>
-        {fileError && <p className="field-error" role="alert">{fileError}</p>}
+        {fileError && (
+          <p id="attachment-error" className="field-error" role="alert">
+            <AlertCircle className="mt-[3px] h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+            {fileError}
+          </p>
+        )}
+        <p className="mt-2 text-[12.5px] text-ink-muted">{UPLOAD_HINT}. One file per enquiry.</p>
       </div>
 
       {/* Spam trap — hidden from people and assistive technology, tempting to bots. */}
@@ -362,16 +413,22 @@ export default function RfqForm({
         </label>
       </div>
 
-      <div className="mt-8">
+      <div className="mt-8 rounded-xl border border-rule-soft bg-surface px-4 py-4">
         <label className="flex cursor-pointer items-start gap-3 text-[14.5px] leading-relaxed text-ink-soft">
-          <input type="checkbox" className="mt-1 h-4 w-4 shrink-0 accent-[var(--brand)]" {...a11y('consent')} {...register('consent')} />
+          <input type="checkbox" className="checkbox" {...a11y('consent')} {...register('consent')} />
           <span>
-            I agree that ShreeRaj Tools may use these details to reply to this enquiry.{' '}
+            I agree that Sreeraj Tools may use these details to reply to this enquiry.{' '}
             <span className="text-ink-muted">They won’t be used for anything else.</span>
-            <span className="ml-0.5 text-gold" aria-hidden="true">*</span>
+            <span className="req" aria-hidden="true">*</span>
+            <span className="sr-only"> (required)</span>
           </span>
         </label>
-        {err('consent') && <p id="err-consent" className="field-error">{err('consent')}</p>}
+        {err('consent') && (
+          <p id="err-consent" className="field-error">
+            <AlertCircle className="mt-[3px] h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+            {err('consent')}
+          </p>
+        )}
       </div>
 
       {status.kind === 'failed' && (
@@ -381,19 +438,13 @@ export default function RfqForm({
         </div>
       )}
 
-      <div className="mt-8 flex flex-col-reverse gap-4 border-t border-rule pt-6 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mt-8 flex flex-col-reverse gap-4 border-t border-rule-soft pt-6 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-[13px] text-ink-muted">
-          Read how we handle enquiries in our <Link href="/privacy" className="text-ink-soft underline decoration-rule-strong underline-offset-2 hover:text-ink">privacy policy</Link>.
+          How we handle enquiries: <Link href="/privacy" className="font-semibold text-ink-soft underline decoration-rule-strong underline-offset-2 hover:text-ink">privacy policy</Link>.
         </p>
-        <button type="submit" className="btn-primary btn-lg" disabled={sending}>
-          {sending ? (
-            <>
-              <Loader2 className="h-[18px] w-[18px] animate-spin" aria-hidden="true" /> Sending…
-            </>
-          ) : (
-            'Send enquiry'
-          )}
-        </button>
+        <CtaButton type="submit" arrow="tile" loading={sending} loadingLabel="Sending…" className="w-full sm:w-auto">
+          Send Enquiry
+        </CtaButton>
       </div>
     </form>
   );

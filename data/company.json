@@ -1,15 +1,15 @@
 {
   "_note": "Single source of truth for company identity. Fields marked confirmed:false are NOT rendered publicly — the UI shows an enquiry-led fallback instead. Do not set confirmed:true until the owner supplies the real value.",
   "company": {
-    "name": "ShreeRaj Tools",
-    "displayName": "ShreeRaj Tools",
+    "name": "Sreeraj Tools",
+    "displayName": "Sreeraj Tools",
     "wordmark": {
-      "first": "ShreeRaj",
+      "first": "Sreeraj",
       "second": "Tools"
     },
     "tagline": "Carbide inserts and cutting tools, sourced from China and Taiwan and supplied across India",
     "descriptor": "Importer and supplier of carbide inserts and cutting tools",
-    "summary": "ShreeRaj Tools supplies carbide inserts and cutting tools sourced from established producers in China and Taiwan. We serve manufacturers and machining workshops across India — standard geometries from our catalogue, and uncommon or special designs sourced to your requirement.",
+    "summary": "Sreeraj Tools supplies carbide inserts and cutting tools sourced from established producers in China and Taiwan. We serve manufacturers and machining workshops across India — standard geometries from our catalogue, and uncommon or special designs sourced to your requirement.",
     "shortSummary": "Carbide inserts and cutting tools, sourced from China and Taiwan and supplied to manufacturers across India.",
     "basedIn": "India",
     "country": "India",
@@ -20,7 +20,7 @@
     "marketNote": "We supply customers across India.",
     "parentFirm": {
       "name": "Neo Automatics",
-      "relationship": "ShreeRaj Tools is a new venture from a family with an existing background in industry through Neo Automatics.",
+      "relationship": "Sreeraj Tools is a new venture from a family with an existing background in industry through Neo Automatics.",
       "note": "Neo Automatics is a separate, established business."
     },
     "contact": {

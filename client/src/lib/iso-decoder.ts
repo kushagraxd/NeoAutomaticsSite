@@ -15,17 +15,6 @@ export interface Segment {
   meaning: string;
 }
 
-export const SEGMENT_COLOURS: Record<SegmentKey, string> = {
-  shape: '#E3B55F',
-  clearance: '#4FC7B6',
-  tolerance: '#6E9BFF',
-  type: '#A98BF5',
-  size: '#F07E9A',
-  thickness: '#F59E5B',
-  corner: '#9BD35A',
-  geometry: '#A1A1AA',
-};
-
 const SHAPE: Record<string, string> = {
   C: 'Rhombic, 80° corner',
   D: 'Rhombic, 55° corner',

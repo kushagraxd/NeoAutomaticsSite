@@ -47,28 +47,3 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>(rootMargin = '
 
   return { ref, shown };
 }
-
-/** Scroll progress of the document, 0 at top, used for hero parallax. */
-export function useScrollY() {
-  const [y, setY] = useState(0);
-
-  useEffect(() => {
-    if (prefersReducedMotion()) return;
-    let frame = 0;
-    const onScroll = () => {
-      if (frame) return;
-      frame = requestAnimationFrame(() => {
-        setY(window.scrollY);
-        frame = 0;
-      });
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-      if (frame) cancelAnimationFrame(frame);
-    };
-  }, []);
-
-  return y;
-}

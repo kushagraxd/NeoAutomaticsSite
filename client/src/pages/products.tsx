@@ -1,22 +1,22 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { Link, useLocation, useSearch } from 'wouter';
-import { ArrowRight, ArrowUpRight, ChevronDown, LayoutGrid, List, Search, SlidersHorizontal, X } from 'lucide-react';
+import { ArrowUpRight, ChevronDown, LayoutGrid, List, Search, SearchX, X } from 'lucide-react';
 import { usePageMeta } from '../lib/usePageMeta';
 import ProductCard from '../components/product-card';
 import ProductRow, { ProductRowHeader } from '../components/product-row';
-import InsertRender from '../components/insert-render';
+import PageHero from '../components/page-hero';
+import { InsertMacroBackdrop } from '../components/hero-backdrops';
+import { CtaButton, CtaLink } from '../components/cta';
 import { toneFor } from '../lib/category-tones';
 import {
-  categories, categoryById, productByCode, products, searchProducts,
-  totalFamilyCount, totalProductCount, type CategoryId, type Product,
+  categories, categoryById, products, searchProducts,
+  totalFamilyCount, totalProductCount, type CategoryId,
 } from '../../../shared/catalog';
 
 const PAGE = 36;
 const QUICK = ['TNMG', 'CNMG', 'WNMG', 'DNMG', 'APMT', 'SPMG', 'WCMX', 'MGMN', '16ER'];
-const SHOWCASE = ['TNMG160408-MA', 'APMT1135PDER-H2', 'WNMG080408-MA']
-  .map((c) => productByCode(c))
-  .filter((p): p is Product => Boolean(p));
-const SHOWCASE_POS = ['left-0 top-2', 'right-2 top-[5.5rem]', 'left-20 bottom-0'];
+/** Listed codes composed behind the hero — different from the homepage footage. */
+const BACKDROP = ['TNMG160408-MA', 'RDMW1604M0', 'SPMG090408-DG', 'VNMG160404-MA'];
 
 const CAT_ORDER = new Map(categories.map((c, i) => [c.id, i]));
 const ORDERED = [...products].sort(
@@ -63,8 +63,7 @@ function serialise(f: Filters): string {
   return p.toString();
 }
 
-const toneVars = (rgb: string, activeInk?: string) =>
-  ({ '--tone': rgb, ...(activeInk ? { '--pill-active-ink': activeInk } : {}) }) as CSSProperties;
+const toneVar = (rgb: string) => ({ '--tone': rgb }) as CSSProperties;
 
 function FilterSelect({
   label, value, onChange, options,
@@ -78,18 +77,12 @@ function FilterSelect({
   return (
     <label className="relative inline-flex items-center">
       <span className="sr-only">{label}</span>
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className={`cursor-pointer appearance-none rounded-full border py-2 pl-4 pr-9 text-[13.5px] font-medium transition-all focus:outline-none focus:ring-4 focus:ring-[rgba(var(--brand-bright-rgb),0.18)] ${
-          active ? 'border-brand bg-brand text-white' : 'border-rule bg-surface-card text-ink hover:border-brand-bright'
-        }`}
-      >
+      <select value={value} onChange={(e) => onChange(e.target.value)} className="select-pill" data-active={active}>
         {options.map((o) => (
           <option key={o.value} value={o.value}>{o.label}</option>
         ))}
       </select>
-      <ChevronDown className={`pointer-events-none absolute right-3 h-4 w-4 ${active ? 'text-white' : 'text-ink-muted'}`} aria-hidden="true" />
+      <ChevronDown className="pointer-events-none absolute right-3 h-4 w-4 text-ink-muted" aria-hidden="true" />
     </label>
   );
 }
@@ -97,7 +90,7 @@ function FilterSelect({
 export default function ProductsPage() {
   usePageMeta(
     'Products — Carbide Insert Catalogue',
-    'Search carbide inserts by ISO code, or filter by operation, shape and family. Turning, milling, drilling, grooving and threading inserts — supplied in India and internationally.',
+    'Search carbide inserts by ISO code, or filter by operation, shape and family. Turning, milling, drilling, grooving and threading inserts, supplied across India.',
   );
 
   const search = useSearch();
@@ -200,104 +193,78 @@ export default function ProductsPage() {
 
   return (
     <>
-      {/* ------------------------------------------------------------- Hero */}
-      <section className="relative overflow-hidden bg-night text-night-ink">
-        <div className="absolute inset-0 night-glow" aria-hidden="true" />
-        <div className="absolute inset-0 grid-lines opacity-50" aria-hidden="true" />
-
-        <div className="shell relative grid gap-12 py-14 md:py-20 lg:grid-cols-[1.2fr_.8fr] lg:items-center">
-          <div>
-            <p className="eyebrow-dark mb-6">
-              Catalogue · {totalProductCount} codes · {totalFamilyCount} ISO families
-            </p>
-            <h1 className="text-[clamp(2.5rem,5.6vw,4.5rem)] font-semibold leading-[1] tracking-[-0.045em]">
-              Find the insert <span className="accent-word text-accent">by its code</span>
-            </h1>
-            <p className="mt-5 max-w-xl text-[17px] leading-relaxed text-night-muted">
-              Search the designation printed on your insert box, or filter by operation, shape and family. Add inserts to an
-              enquiry and request one quotation for all of them.
-            </p>
-
-            <div className="group relative mt-9 max-w-2xl">
-              <Search
-                className="pointer-events-none absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-night-muted transition-colors group-focus-within:text-accent"
-                aria-hidden="true"
-              />
-              <label htmlFor="catalogue-search" className="sr-only">Search by product code</label>
-              <input
-                ref={inputRef}
-                id="catalogue-search"
-                type="search"
-                value={filters.q}
-                onChange={(e) => update({ q: e.target.value })}
-                onKeyDown={(e) => e.key === 'Escape' && update({ q: '' })}
-                placeholder="Search a code — TNMG160408, APMT, 16ER…"
-                autoComplete="off"
-                spellCheck={false}
-                className="w-full rounded-2xl border border-white/10 bg-white/[.06] py-[1.1rem] pl-14 pr-16 font-mono text-[16px] text-night-ink backdrop-blur transition-all placeholder:text-[#7684a0] focus:border-accent focus:bg-white/[.09] focus:outline-none focus:ring-4 focus:ring-[rgba(210,168,87,0.18)] [&::-webkit-search-cancel-button]:hidden"
-              />
-              <div className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center">
-                {filters.q ? (
-                  <button
-                    type="button"
-                    onClick={() => { update({ q: '' }); inputRef.current?.focus(); }}
-                    className="rounded-lg p-2 text-night-muted transition-colors hover:bg-white/10 hover:text-night-ink"
-                    aria-label="Clear search"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                ) : (
-                  <kbd className="kbd" aria-hidden="true">/</kbd>
-                )}
-              </div>
-            </div>
-
-            <div className="mt-5 flex flex-wrap items-center gap-2">
-              <span className="mr-1 text-[13px] text-night-muted">Popular</span>
-              {QUICK.map((f) => {
-                const on = filters.q.trim().toUpperCase() === f;
-                return (
-                  <button
-                    key={f}
-                    type="button"
-                    onClick={() => update({ q: on ? '' : f })}
-                    aria-pressed={on}
-                    className={`rounded-full border px-3 py-1 font-mono text-[12.5px] transition-all ${
-                      on
-                        ? 'border-accent bg-accent text-night'
-                        : 'border-white/10 bg-white/[.03] text-night-muted hover:-translate-y-px hover:border-accent hover:text-accent'
-                    }`}
-                  >
-                    {f}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          <div className="relative hidden h-[330px] lg:block" aria-hidden="true">
-            {SHOWCASE.map((p, i) => (
-              <div key={p.code} className={`float absolute flex flex-col items-center ${SHOWCASE_POS[i]}`} style={{ animationDelay: `${i * -2.1}s` }}>
-                <div className="rounded-3xl border border-white/[.08] bg-white/[.03] p-4 shadow-glow backdrop-blur-sm">
-                  <InsertRender code={p.code} family={p.family} category={p.category} className="h-28 w-auto" />
-                </div>
-                <span className="mt-2 font-mono text-[11.5px] text-night-muted">{p.code}</span>
-              </div>
-            ))}
+      <PageHero
+        id="products-title"
+        eyebrow={`Product catalogue · ${totalProductCount} codes · ${totalFamilyCount} ISO families`}
+        title="Find the insert by its ISO code"
+        lead="Search the designation printed on the insert box, or filter the catalogue by operation, shape and family."
+        media={<InsertMacroBackdrop codes={BACKDROP} />}
+        size="md"
+      >
+        <div className="group relative mx-auto max-w-2xl">
+          <Search
+            className="pointer-events-none absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-ink-muted transition-colors group-focus-within:text-accent-ink"
+            aria-hidden="true"
+          />
+          <label htmlFor="catalogue-search" className="sr-only">Search by product code</label>
+          <input
+            ref={inputRef}
+            id="catalogue-search"
+            type="search"
+            value={filters.q}
+            onChange={(e) => update({ q: e.target.value })}
+            onKeyDown={(e) => e.key === 'Escape' && update({ q: '' })}
+            placeholder="TNMG160408, APMT, 16ER…"
+            autoComplete="off"
+            spellCheck={false}
+            className="field h-16 rounded-2xl pl-14 pr-16 font-mono text-[16px] shadow-paper [&::-webkit-search-cancel-button]:hidden"
+          />
+          <div className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center">
+            {filters.q ? (
+              <button
+                type="button"
+                onClick={() => { update({ q: '' }); inputRef.current?.focus(); }}
+                className="rounded-lg p-2 text-ink-muted transition-colors hover:bg-surface-subtle hover:text-ink"
+                aria-label="Clear search"
+              >
+                <X className="h-4 w-4" aria-hidden="true" />
+              </button>
+            ) : (
+              <kbd className="kbd" aria-hidden="true">/</kbd>
+            )}
           </div>
         </div>
-      </section>
+
+        <div className="mx-auto mt-5 flex max-w-2xl flex-wrap items-center justify-center gap-2">
+          <span className="mr-1 text-[13.5px] font-semibold text-ink-muted">Popular families</span>
+          {QUICK.map((f) => {
+            const on = filters.q.trim().toUpperCase() === f;
+            return (
+              <button
+                key={f}
+                type="button"
+                onClick={() => update({ q: on ? '' : f })}
+                aria-pressed={on}
+                className={`h-8 rounded-md border px-2.5 font-mono text-[12.5px] font-medium transition-colors ${
+                  on ? 'border-accent bg-accent text-ivory' : 'border-rule bg-surface-card text-ink-soft hover:border-accent-line hover:text-accent-ink'
+                }`}
+              >
+                {f}
+              </button>
+            );
+          })}
+        </div>
+      </PageHero>
 
       {/* ---------------------------------------------------------- Toolbar */}
-      <div className="sticky top-16 z-30 border-b border-rule bg-[rgba(var(--surface-rgb),0.86)] backdrop-blur-xl">
+      <div className="sticky top-16 z-30 border-b border-rule bg-[rgba(var(--surface-rgb),0.94)] backdrop-blur-xl">
         <div className="shell">
           <div className="no-scrollbar -mx-5 flex items-center gap-2 overflow-x-auto px-5 py-3 sm:-mx-8 sm:px-8" role="group" aria-label="Category">
             <button
               type="button"
               className="pill"
               data-active={filters.category === 'all'}
-              data-dark="true"
-              style={toneVars('47,74,168', '#ffffff')}
+              aria-pressed={filters.category === 'all'}
               onClick={() => setCategory('all')}
             >
               All <span className="pill-count">{searched.length}</span>
@@ -310,8 +277,9 @@ export default function ProductsPage() {
                   type="button"
                   className="pill"
                   data-active={filters.category === c.id}
+                  aria-pressed={filters.category === c.id}
                   disabled={n === 0 && filters.category !== c.id}
-                  style={toneVars(toneFor(c.id).rgb)}
+                  style={toneVar(toneFor(c.id).rgb)}
                   onClick={() => setCategory(filters.category === c.id ? 'all' : c.id)}
                 >
                   <span className="pill-dot" aria-hidden="true" />
@@ -322,15 +290,14 @@ export default function ProductsPage() {
             })}
             <span className="mx-1 h-6 w-px shrink-0 bg-rule" aria-hidden="true" />
             {enquiryOnly.map((c) => (
-              <Link key={c.id} href={`/products/${c.slug}`} className="pill" style={toneVars('161,161,170')}>
+              <Link key={c.id} href={`/products/${c.slug}`} className="pill font-medium">
                 {c.short}
                 <ArrowUpRight className="h-3.5 w-3.5 text-ink-muted" aria-hidden="true" />
               </Link>
             ))}
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 border-t border-rule py-2.5">
-            <SlidersHorizontal className="mr-1 hidden h-4 w-4 text-ink-muted sm:block" aria-hidden="true" />
+          <div className="flex flex-wrap items-center gap-2 border-t border-rule-soft py-2.5">
             <FilterSelect
               label="Shape"
               value={filters.shape}
@@ -356,21 +323,14 @@ export default function ProductsPage() {
 
             <div className="ml-auto flex items-center gap-3">
               <p className="hidden text-[13.5px] text-ink-muted md:block" aria-live="polite">
-                <span className="font-semibold text-ink tabnum">{results.length}</span> of {totalProductCount}
+                <span className="tabnum font-bold text-ink">{results.length}</span> of {totalProductCount} codes
               </p>
-              <div role="group" aria-label="Layout" className="inline-flex rounded-full border border-rule bg-surface-card p-1">
+              <div role="group" aria-label="Layout" className="segmented">
                 {(['grid', 'list'] as const).map((v) => (
-                  <button
-                    key={v}
-                    type="button"
-                    aria-pressed={filters.view === v}
-                    onClick={() => update({ view: v })}
-                    className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[13px] font-medium transition-all ${
-                      filters.view === v ? 'bg-brand text-white shadow-xs' : 'text-ink-muted hover:text-ink'
-                    }`}
-                  >
+                  <button key={v} type="button" aria-pressed={filters.view === v} onClick={() => update({ view: v })}>
                     {v === 'grid' ? <LayoutGrid className="h-3.5 w-3.5" aria-hidden="true" /> : <List className="h-3.5 w-3.5" aria-hidden="true" />}
                     <span className="hidden sm:inline">{v === 'grid' ? 'Grid' : 'List'}</span>
+                    <span className="sr-only sm:hidden">{v === 'grid' ? 'Grid view' : 'List view'}</span>
                   </button>
                 ))}
               </div>
@@ -380,47 +340,48 @@ export default function ProductsPage() {
       </div>
 
       {/* ---------------------------------------------------------- Results */}
-      <section className="min-h-[60vh] bg-surface-subtle pb-28 pt-8">
+      <section className="min-h-[60vh] bg-surface pb-24 pt-8" aria-label="Results">
         <div className="shell">
           {chips.length > 0 && (
             <div className="mb-6 flex flex-wrap items-center gap-2">
-              <span className="text-[13px] text-ink-muted">Filtered by</span>
+              <span className="text-[13.5px] font-semibold text-ink-muted">Filtered by</span>
               {chips.map((c) => (
                 <button
                   key={c.key}
                   type="button"
                   onClick={c.clear}
-                  className="group inline-flex items-center gap-1.5 rounded-full border border-rule bg-surface-card py-1 pl-3 pr-2 text-[13px] font-medium text-ink shadow-xs transition-colors hover:border-brand-bright"
+                  className="group inline-flex h-8 items-center gap-1.5 rounded-full border border-rule bg-surface-card pl-3 pr-2 text-[13px] font-semibold text-ink transition-colors hover:border-accent-line"
                   aria-label={`Remove filter ${c.label}`}
                 >
                   {c.label}
                   <X className="h-3.5 w-3.5 text-ink-muted group-hover:text-ink" aria-hidden="true" />
                 </button>
               ))}
-              <button type="button" onClick={clearAll} className="ml-1 text-[13px] font-medium text-accent-ink hover:underline">
+              <button type="button" onClick={clearAll} className="ml-1 rounded-sm text-[13.5px] font-semibold text-accent-ink underline-offset-4 hover:underline">
                 Clear all
               </button>
             </div>
           )}
 
           {results.length === 0 ? (
-            <div className="relative overflow-hidden rounded-3xl bg-night px-6 py-16 text-center text-night-ink md:py-20">
-              <div className="absolute inset-0 night-glow" aria-hidden="true" />
-              <div className="relative">
-                <InsertRender code="XNEX080608" category="special" className="float mx-auto h-36 w-auto" />
-                <h2 className="mt-6 text-[clamp(1.5rem,3vw,2rem)] font-semibold tracking-[-0.03em]">
-                  No listed code matches
-                  {filters.q.trim() ? <> “<span className="font-mono text-accent">{filters.q.trim()}</span>”</> : ' these filters'}
-                </h2>
-                <p className="mx-auto mt-3 max-w-md text-[16px] leading-relaxed text-night-muted">
-                  That doesn’t mean we can’t supply it — much of what we source starts as a specific request.
-                </p>
-                <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-                  <Link href={`/quote${filters.q.trim() ? `?code=${encodeURIComponent(filters.q.trim())}` : ''}`} className="btn-onDark btn-lg">
-                    Ask for availability <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                  </Link>
-                  <button type="button" onClick={clearAll} className="btn-ghostDark btn-lg">Clear filters</button>
-                </div>
+            <div className="panel px-6 py-14 text-center md:py-16">
+              <span className="icon-tile mx-auto h-14 w-14">
+                <SearchX className="h-6 w-6" aria-hidden="true" />
+              </span>
+              <h2 className="t-h3 mt-6 text-[clamp(1.375rem,1.1rem+1vw,1.75rem)]">
+                No listed code matches
+                {filters.q.trim() ? <> “<span className="font-mono">{filters.q.trim()}</span>”</> : ' these filters'}
+              </h2>
+              <p className="t-body mx-auto mt-3 max-w-md">
+                That doesn’t mean we can’t supply it — much of what we source starts as a specific request.
+              </p>
+              <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                <CtaLink href={`/quote${filters.q.trim() ? `?code=${encodeURIComponent(filters.q.trim())}` : ''}`} arrow="tile">
+                  Ask for availability
+                </CtaLink>
+                <CtaButton variant="secondary" onClick={clearAll}>
+                  Clear filters
+                </CtaButton>
               </div>
             </div>
           ) : filters.view === 'grid' ? (
@@ -432,7 +393,7 @@ export default function ProductsPage() {
               ))}
             </ul>
           ) : (
-            <div className="overflow-hidden rounded-2xl border border-rule bg-surface-card shadow-card">
+            <div className="overflow-hidden rounded-2xl border border-rule bg-surface-card shadow-paper">
               <ProductRowHeader />
               <ul>
                 {visible.map((p) => (
@@ -444,16 +405,16 @@ export default function ProductsPage() {
 
           {visible.length < results.length && (
             <div ref={sentinel} className="mt-10 flex justify-center">
-              <button type="button" onClick={() => setLimit((l) => l + PAGE)} className="btn-outline">
-                Show more <span className="text-ink-muted">({results.length - visible.length} remaining)</span>
-              </button>
+              <CtaButton variant="secondary" size="md" onClick={() => setLimit((l) => l + PAGE)}>
+                Show more <span className="font-medium opacity-70">({results.length - visible.length} remaining)</span>
+              </CtaButton>
             </div>
           )}
 
           {results.length > 0 && visible.length >= results.length && (
             <p className="mt-12 text-center text-[14.5px] text-ink-muted">
               That’s all {results.length}. Can’t see the code you need?{' '}
-              <Link href="/quote" className="font-medium text-accent-ink hover:underline">Ask us to source it</Link>.
+              <Link href="/quote" className="font-semibold text-ink underline decoration-accent-line underline-offset-4">Ask us to source it</Link>.
             </p>
           )}
         </div>

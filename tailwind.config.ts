@@ -41,24 +41,33 @@ export default {
         },
         accent: {
           DEFAULT: "var(--accent)",
+          hover: "var(--accent-hover)",
           ink: "var(--accent-ink)",
           soft: "var(--accent-soft)",
+          line: "var(--accent-line)",
         },
         rule: {
           DEFAULT: "var(--rule)",
+          soft: "var(--rule-soft)",
           strong: "var(--rule-strong)",
         },
+        // Light industrial palette (see the "Light theme" block in index.css).
+        ivory: { DEFAULT: "var(--ivory)", deep: "var(--ivory-deep)" },
+        graphite: {
+          DEFAULT: "var(--graphite)",
+          soft: "var(--graphite-soft)",
+          line: "var(--graphite-line)",
+          ink: "var(--graphite-ink)",
+          muted: "var(--graphite-muted)",
+        },
+        bronze: { DEFAULT: "var(--bronze)", deep: "var(--bronze-deep)", text: "var(--bronze-text)", bright: "var(--bronze-bright)" },
+        navy: "var(--navy)",
+        plum: { DEFAULT: "var(--plum)", deep: "var(--plum-deep)" },
+        amethyst: "var(--amethyst)",
+        lavender: "var(--lavender)",
+        champagne: "var(--champagne)",
         success: "var(--success)",
         warning: "var(--warning)",
-        // One tone per machining operation — colour encodes the category.
-        tone: {
-          turning: "#E3B55F",
-          milling: "#4FC7B6",
-          drilling: "#6E9BFF",
-          grooving: "#A98BF5",
-          threading: "#F07E9A",
-          neutral: "#A1A1AA",
-        },
 
         background: "var(--background)",
         foreground: "var(--foreground)",
@@ -73,16 +82,8 @@ export default {
         ring: "var(--ring)",
       },
       fontFamily: {
-        sans: ["Geist", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
-        mono: ["'Geist Mono'", "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
-        serif: ["'Instrument Serif'", "Georgia", "serif"],
-      },
-      fontSize: {
-        display: ["clamp(2.75rem, 6vw, 4.5rem)", { lineHeight: "1.02", letterSpacing: "-0.04em" }],
-        h1: ["clamp(2.25rem, 4.5vw, 3.25rem)", { lineHeight: "1.06", letterSpacing: "-0.035em" }],
-        h2: ["clamp(1.75rem, 3vw, 2.5rem)", { lineHeight: "1.12", letterSpacing: "-0.03em" }],
-        h3: ["1.3125rem", { lineHeight: "1.3", letterSpacing: "-0.018em" }],
-        lead: ["1.1875rem", { lineHeight: "1.6", letterSpacing: "-0.011em" }],
+        sans: ["Manrope", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
+        mono: ["'IBM Plex Mono'", "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -90,12 +91,11 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       boxShadow: {
-        xs: "0 1px 2px rgba(0,0,0,.45)",
-        card: "inset 0 1px 0 rgba(255,255,255,.03), 0 18px 40px -28px rgba(0,0,0,.9)",
-        lift: "inset 0 1px 0 rgba(255,255,255,.05), 0 24px 50px -24px rgba(0,0,0,.85), 0 0 0 1px rgba(142,166,248,.10)",
-        glow: "0 0 0 1px rgba(142,166,248,.07), 0 30px 70px -30px rgba(0,0,0,.95)",
+        // Warm, low and tight — never a glow.
+        paper: "var(--shadow-paper)",
+        raised: "var(--shadow-raised)",
       },
-      maxWidth: { shell: "1200px", prose: "68ch" },
+      maxWidth: { shell: "1200px" },
       keyframes: {
         rise: { from: { opacity: "0", transform: "translateY(10px)" }, to: { opacity: "1", transform: "translateY(0)" } },
         "accordion-down": { from: { height: "0" }, to: { height: "var(--radix-accordion-content-height)" } },

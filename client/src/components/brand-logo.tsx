@@ -1,13 +1,12 @@
 import { company } from '../../../shared/company';
 
 /*
- * Official ShreeRaj emblem (crown and SR monogram), extracted from the supplied
- * logo artwork with its paper background removed. Intrinsic sizes below match
- * the files in client/public/brand/.
+ * Official Sreeraj Tools emblem (crown and SR monogram), extracted from the
+ * supplied logo artwork with its paper background removed. Intrinsic sizes below
+ * match the files in client/public/brand/ (filenames predate the spelling fix).
  *
- * The supplied artwork's lettering reads "SREERAJ"; the brand name is written as
- * "ShreeRaj Tools", so the full lockup pairs the emblem with live text rather
- * than showing the mismatched wordmark.
+ * The full lockup pairs the emblem with live text, so the name stays sharp at
+ * every size and follows data/company.json.
  */
 const EMBLEM = { width: 641, height: 512 };
 const EMBLEM_SM = { width: 200, height: 160 };
@@ -20,9 +19,16 @@ export interface BrandLogoProps {
   className?: string;
   /** Leave empty when a parent link already names the destination. */
   alt?: string;
+  /** Colours for the written name on ivory/white (`light`) or charcoal (`graphite`); both keep "Tools" AA-legible. */
+  surface?: 'light' | 'graphite';
 }
 
-export default function BrandLogo({ variant = 'full', size = 40, className = '', alt = '' }: BrandLogoProps) {
+const NAME_COLOURS: Record<NonNullable<BrandLogoProps['surface']>, { first: string; second: string }> = {
+  light: { first: 'text-ink', second: 'text-bronze-text' },
+  graphite: { first: 'text-graphite-ink', second: 'text-bronze-bright' },
+};
+
+export default function BrandLogo({ variant = 'full', size = 40, className = '', alt = '', surface = 'light' }: BrandLogoProps) {
   const small = size <= 80;
   const file = small ? 'shreeraj-emblem-sm' : 'shreeraj-emblem';
   const dims = small ? EMBLEM_SM : EMBLEM;
@@ -47,15 +53,16 @@ export default function BrandLogo({ variant = 'full', size = 40, className = '',
     return <span className={`inline-flex ${className}`}>{emblem}</span>;
   }
 
+  const colours = NAME_COLOURS[surface];
   return (
     <span className={`inline-flex items-center gap-2.5 ${className}`}>
       {emblem}
       <span
-        className="whitespace-nowrap font-semibold leading-none tracking-[-0.025em] text-ink"
+        className={`whitespace-nowrap font-bold leading-none tracking-[-0.02em] ${colours.first}`}
         style={{ fontSize: Math.max(16, Math.round(size * 0.46)) }}
       >
         {company.wordmark.first}
-        <span className="text-gold"> {company.wordmark.second}</span>
+        <span className={colours.second}> {company.wordmark.second}</span>
       </span>
     </span>
   );

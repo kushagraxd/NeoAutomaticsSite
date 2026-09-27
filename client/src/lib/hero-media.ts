@@ -1,35 +1,31 @@
 /**
- * Homepage hero media.
+ * Homepage hero footage.
  *
- * The hero renders an illustration we own (see HeroShowcase in hero-video.tsx).
- * Video is opt-in and off by default.
+ * Clip: "3 Styles of Inserts for 1 Tool with Tungaloy's DoTripleMill!" by
+ * Tungaloy Corporation, re-encoded from the supplied 1080 × 1920 original
+ * (H.264 Main, faststart, audio removed; footage uncut, embedded branding
+ * intact).
  *
- * The only clip currently on disk is third-party footage (Tungaloy Corporation)
- * kept as a TEMPORARY development asset — the files are gitignored and the flag
- * below is deliberately unset in production, so unlicensed footage cannot be
- * published by accident. To preview it locally, put VITE_HERO_VIDEO=on in .env.
- *
- * When licensed or original footage is available: drop it in client/public/media/,
- * update the entry below (including `credit`), remove the gitignore lines for the
- * files and set VITE_HERO_VIDEO=on in the host's environment.
+ * PRE-LAUNCH RIGHTS ITEM: reuse permission has not been confirmed in writing.
+ * The discreet credit stays until it is, and a credit is not a substitute for
+ * permission. The files are git-ignored, so they are never pushed to the public
+ * repository or included in a GitHub-based deploy; without them the hero
+ * falls back to the owned animation in hero-motion.tsx.
  */
 export interface HeroClip {
   src: string;
   poster: string;
-  /** Seconds to start from, so autoplay opens mid-cut rather than on the clip's opening frames. The clip still loops in full. */
+  /** Seconds to start from when autoplaying, skipping the clip's opening studio frames. The clip still loops in full. */
   startAt: number;
   description: string;
-  /** Shown over the video. Required for third-party footage; empty for our own. */
+  /** Shown over the video while attribution is required. */
   credit: string;
 }
 
-const developmentClip: HeroClip = {
+export const heroVideo: HeroClip | null = {
   src: '/media/hero-machining.mp4',
   poster: '/media/hero-machining-poster.jpg',
   startAt: 2.8,
-  description: 'Machining footage of indexable carbide inserts cutting metal',
-  credit: 'Footage: Tungaloy Corporation',
+  description: 'Face-milling cutter with indexable inserts machining a steel block',
+  credit: 'Source: Tungaloy Corporation',
 };
-
-export const heroVideo: HeroClip | null =
-  import.meta.env.VITE_HERO_VIDEO === 'on' ? developmentClip : null;

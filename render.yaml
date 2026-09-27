@@ -5,7 +5,7 @@
 # secrets are never stored in this file.
 services:
   - type: web
-    name: shreeraj-tools
+    name: sreeraj-tools
     runtime: node
     plan: free # free instances sleep after 15 min idle and have no persistent disk — see LAUNCH.md
     region: singapore
