@@ -10,13 +10,11 @@ Build: `npm ci && npm run build`   Start: `npm start`   Port: `$PORT` (default 5
 
 ## Must be done before the site is public
 
-- [ ] **Hero footage rights** — the homepage hero uses the Tungaloy Corporation
-      "DoTripleMill" clip (git-ignored, in `client/public/media/`), with a
-      discreet "Source: Tungaloy Corporation" credit. Get written permission
-      for commercial reuse before launch; a credit is not permission. Remove the
-      credit only if that permission says attribution isn't required. The files
-      are git-ignored, so a GitHub-based deploy won't include them until then
-      (the hero falls back to an owned animation).
+- [x] **Hero footage rights** — confirmed by the owner (2026-09-27). The
+      Tungaloy Corporation clip is committed in `client/public/media/` with a
+      discreet "Source: Tungaloy Corporation" credit. Keep a copy of the
+      permission on file; remove the credit only if it says attribution isn't
+      required.
 - [ ] **Contact details** — every field in `data/company.json` is
       `confirmed: false`, so nothing renders. Fill in and flip to `true`:
       email, phone, whatsapp, address, city, hours (gstin/iec optional).
@@ -59,3 +57,17 @@ on wide screens if one is ever licensed.
   mounted at `uploads/` or the saved enquiry copies are lost.
 - Health check path: `/` (200).
 - HTTPS is terminated by the host; no certificate work needed in the app.
+
+## Hosting: Vercel (current)
+
+The live site deploys from `main` on Vercel (`vercel.json`): the front end is
+served from `dist/public`, and `/api/*` runs `api/index.ts`, a serverless
+function wrapping the same Express routes. Notes:
+
+- Set `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `RFQ_TO_EMAIL` in
+  Vercel → Project → Settings → Environment Variables, or enquiries return the
+  honest "could not send" message.
+- Serverless storage is temporary (`/tmp`), so the saved copy of each enquiry
+  does not persist — email delivery is the record.
+- Vercel caps a function request body at 4.5 MB, so attachments above that
+  are rejected on Vercel even though the form allows 10 MB.

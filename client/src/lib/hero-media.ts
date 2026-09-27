@@ -6,11 +6,9 @@
  * (H.264 Main, faststart, audio removed; footage uncut, embedded branding
  * intact).
  *
- * PRE-LAUNCH RIGHTS ITEM: reuse permission has not been confirmed in writing.
- * The discreet credit stays until it is, and a credit is not a substitute for
- * permission. The files are git-ignored, so they are never pushed to the public
- * repository or included in a GitHub-based deploy; without them the hero
- * falls back to the owned animation in hero-motion.tsx.
+ * Rights: the site owner confirmed on 2026-09-27 that Sreeraj Tools has the
+ * rights to use this footage on the website. The discreet source credit is
+ * kept; remove it only if the licence says attribution is not required.
  */
 export interface HeroClip {
   src: string;
