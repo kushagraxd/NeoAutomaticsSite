@@ -1,11 +1,12 @@
 import express, { type NextFunction, type Request, type Response } from 'express';
-import { registerRoutes } from '../server/routes';
-import { logger } from '../server/lib/logger';
+import { registerRoutes } from './routes';
+import { logger } from './lib/logger';
 
 /*
  * Vercel serverless entry: the same Express API routes the Node server uses
  * (server/routes.ts), without the static-file and Vite layers — Vercel serves
- * the built front end from dist/public itself. vercel.json rewrites /api/* here.
+ * the static front end itself. scripts/vercel-output.mjs bundles this file into
+ * a self-contained function and routes /api/* to it.
  */
 const app = express();
 app.disable('x-powered-by');
