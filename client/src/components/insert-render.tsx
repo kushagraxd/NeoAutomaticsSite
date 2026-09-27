@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { insertSpec, type Pt } from '../lib/insert-geometry';
-import { TONES } from '../lib/category-tones';
-import type { CategoryId } from '../../../shared/catalog';
+import { categoryById, type CategoryId } from '../../../shared/catalog';
 
 /*
  * Illustrated carbide insert, generated per product code.
@@ -80,8 +79,8 @@ export default function InsertRender({ code, family, category, className, title 
   const r = spec.holeRadius * S;
 
   return (
-    <svg viewBox="0 0 200 170" className={className} role="img" aria-label={title ?? `${code} insert illustration`}>
-      <ellipse cx={CX} cy={baseY + 10} rx={S * 1.15} ry={S * 0.24} fill={`url(#srt-shadow-${category})`} />
+    <svg viewBox="0 0 200 170" className={className} role="img" aria-label={title ?? `Illustration of a ${code} ${categoryById(category)?.short.toLowerCase() ?? ''} insert`}>
+      <ellipse cx={CX} cy={baseY + 10} rx={S * 1.15} ry={S * 0.24} fill="url(#srt-shadow)" />
       <ellipse cx={CX} cy={baseY + 3} rx={S * 0.82} ry={S * 0.1} fill="url(#srt-contact)" />
       <path d={wall} fill="url(#srt-side)" />
       <path d={top} fill="url(#srt-top)" />
@@ -142,12 +141,10 @@ export function InsertRenderDefs() {
           <stop offset="0" stopColor="#000" stopOpacity=".45" />
           <stop offset="1" stopColor="#000" stopOpacity="0" />
         </radialGradient>
-        {Object.entries(TONES).map(([id, t]) => (
-          <radialGradient key={id} id={`srt-shadow-${id}`} cx="50%" cy="50%" r="50%">
-            <stop offset="0" stopColor={`rgb(${t.rgb})`} stopOpacity=".42" />
-            <stop offset="1" stopColor={`rgb(${t.rgb})`} stopOpacity="0" />
-          </radialGradient>
-        ))}
+        <radialGradient id="srt-shadow" cx="50%" cy="50%" r="50%">
+          <stop offset="0" stopColor="#3a332a" stopOpacity=".26" />
+          <stop offset="1" stopColor="#3a332a" stopOpacity="0" />
+        </radialGradient>
       </defs>
     </svg>
   );

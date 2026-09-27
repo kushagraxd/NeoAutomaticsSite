@@ -1,16 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" style="background-color:#070b14;color-scheme:dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="color-scheme" content="dark" />
 
-    <title>ShreeRaj Tools — Carbide Inserts &amp; Cutting Tools</title>
+    <title>Sreeraj Tools — Carbide Inserts &amp; Cutting Tools</title>
     <meta
       name="description"
-      content="ShreeRaj Tools supplies carbide inserts and cutting tools sourced from established producers in China and Taiwan to manufacturers across India. Search by ISO code and request a quotation."
+      content="Sreeraj Tools supplies carbide inserts and cutting tools sourced from established producers in China and Taiwan to manufacturers across India. Search by ISO code and request a quotation."
     />
-    <meta name="theme-color" content="#070b14" />
+    <meta name="theme-color" content="#f7f4ed" />
     <meta name="robots" content="index, follow" />
 
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
@@ -18,15 +17,15 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="ShreeRaj Tools" />
-    <meta property="og:title" content="ShreeRaj Tools — Carbide Inserts &amp; Cutting Tools" />
+    <meta property="og:site_name" content="Sreeraj Tools" />
+    <meta property="og:title" content="Sreeraj Tools — Carbide Inserts &amp; Cutting Tools" />
     <meta
       property="og:description"
       content="Turning, milling, drilling, grooving and threading inserts for manufacturers across India. Search by ISO code and request a quotation."
     />
     <meta property="og:image" content="/brand/shreeraj-og-emblem.png" />
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="ShreeRaj Tools — Carbide Inserts &amp; Cutting Tools" />
+    <meta name="twitter:title" content="Sreeraj Tools — Carbide Inserts &amp; Cutting Tools" />
     <meta
       name="twitter:description"
       content="Carbide inserts and cutting tools for manufacturers across India. Search by ISO code and request a quotation."
@@ -34,13 +33,28 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Manrope for headings and interface text, IBM Plex Mono for product codes. No other families. -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
+    <script>
+      // Apply the saved theme before first paint (no flash). Light unless the visitor chose dark.
+      // Keep the key in step with THEME_STORAGE_KEY in src/lib/theme.tsx.
+      (function () {
+        var theme = 'light';
+        try { if (localStorage.getItem('sreeraj.theme') === 'dark') theme = 'dark'; } catch (e) {}
+        var root = document.documentElement;
+        root.setAttribute('data-theme', theme);
+        root.style.colorScheme = theme;
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', theme === 'dark' ? '#1a1620' : '#f7f4ed');
+      })();
+    </script>
     <style>
-      /* Paint the dark ground before the stylesheet arrives — no white flash. */
-      html, body { background-color: #070b14; color: #e8eef8; }
+      /* Paint the right ground before the stylesheet arrives. */
+      html, body { background-color: #f7f4ed; color: #17191c; }
+      html[data-theme="dark"], html[data-theme="dark"] body { background-color: #1a1620; color: #f3eee6; }
     </style>
   </head>
   <body>

@@ -18,8 +18,9 @@ import {
 } from '../shared/rfq';
 import { categoryById } from '../shared/catalog';
 
-const UPLOAD_DIR = 'uploads';
-const ENQUIRY_LOG_DIR = path.join('uploads', 'enquiries');
+// Serverless hosts (Vercel) only allow writes under /tmp; locally and on a normal server, uploads/.
+const UPLOAD_DIR = process.env.UPLOAD_DIR || (process.env.VERCEL ? '/tmp/uploads' : 'uploads');
+const ENQUIRY_LOG_DIR = path.join(UPLOAD_DIR, 'enquiries');
 
 const upload = multer({
   dest: UPLOAD_DIR,

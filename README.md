@@ -1,6 +1,6 @@
-# ShreeRaj Tools — website
+# Sreeraj Tools — website
 
-Catalogue and enquiry website for **ShreeRaj Tools**, an India-based importer and
+Catalogue and enquiry website for **Sreeraj Tools**, an India-based importer and
 supplier of carbide inserts and cutting tools sourced from producers in China and
 Taiwan.
 

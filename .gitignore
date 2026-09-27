@@ -30,5 +30,6 @@ private/
 
 # Temporary third-party hero footage (publishing rights not confirmed).
 # Kept out of the public repository; the site falls back gracefully without it.
-client/public/media/hero-machining.mp4
-client/public/media/hero-machining-poster.jpg
+
+# Third-party reference material kept locally, never published or committed
+reference/

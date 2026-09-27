@@ -1,40 +1,60 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { Link } from 'wouter';
-import {
-  ArrowRight, ArrowUpRight, Camera, Check, FileSearch, Hash, MessageSquareText, Package, PenTool,
-  Ship, Receipt, X, type LucideIcon,
-} from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Camera, Check, FileText, Hash, Image as ImageIcon, Package, PenTool, type LucideIcon } from 'lucide-react';
 import { usePageMeta } from '../lib/usePageMeta';
 import Reveal from '../components/reveal';
+import PageHero from '../components/page-hero';
+import SectionHeader from '../components/home/section-header';
+import { DrawingBackdrop } from '../components/hero-backdrops';
+import { CtaLink } from '../components/cta';
 import { categories } from '../../../shared/catalog';
-import type { SourcingBasis } from '../../../shared/rfq';
+import { MAX_UPLOAD_BYTES, type SourcingBasis } from '../../../shared/rfq';
+import { company } from '../../../shared/company';
+import { listSentence } from '../lib/number-words';
 
-const enquiryHref = (basis?: SourcingBasis) =>
-  `/contact?${basis ? `basis=${basis}&` : ''}category=special#enquiry`;
+const enquiryHref = (basis?: SourcingBasis) => `/contact?${basis ? `basis=${basis}&` : ''}category=special#enquiry`;
 
-const INPUTS: Array<{ basis: SourcingBasis; icon: LucideIcon; title: string; body: string; example: ReactNode; cta: string }> = [
+const MAX_MB = Math.round(MAX_UPLOAD_BYTES / (1024 * 1024));
+const regions = listSentence(company.sourcingRegions);
+
+/*
+ * Each card takes its own jewel tone on hover and focus — restrained, and only
+ * on interaction, so the page stays one system at rest. `tone` is the fill,
+ * `light` the lighter shade used for text on dark surfaces.
+ */
+const TONES = {
+  plum: { tone: '90, 45, 130', light: '205, 182, 240' },
+  violet: { tone: '107, 63, 160', light: '196, 170, 238' },
+  emerald: { tone: '47, 125, 98', light: '140, 214, 184' },
+  sapphire: { tone: '45, 92, 138', light: '150, 190, 232' },
+} as const;
+
+const INPUTS: Array<{ basis: SourcingBasis; icon: LucideIcon; title: string; body: string; example: ReactNode; cta: string; tone: keyof typeof TONES }> = [
   {
     basis: 'code',
+    tone: 'plum',
     icon: Hash,
     title: 'Product code',
-    body: 'The ISO designation printed on the box you already buy. It tells us shape, size, tolerance and corner radius in one line.',
+    body: 'The ISO designation printed on the box you already buy. It gives shape, size, tolerance and corner radius in one line.',
     example: (
-      <span className="font-mono text-[13.5px] text-ink">
-        CNMG120408<span className="text-brand-bright">-MA</span>
-        <span className="ml-2 font-sans text-[12.5px] text-ink-muted">any brand’s code</span>
+      <span className="font-mono text-[14px] font-semibold text-ink">
+        CNMG120408<span className="text-bronze-text">-MA</span>
       </span>
     ),
     cta: 'Share a product code',
   },
   {
     basis: 'drawing',
+    tone: 'violet',
     icon: PenTool,
     title: 'Technical drawing',
     body: 'A dimensioned drawing for special geometries, form tools or anything that doesn’t follow a standard designation.',
     example: (
       <span className="flex flex-wrap gap-1.5">
-        {['PDF', 'DXF', 'DWG', 'STEP'].map((f) => (
-          <span key={f} className="rounded border border-rule-strong px-1.5 py-0.5 font-mono text-[11.5px] text-ink-soft">{f}</span>
+        {['PDF', 'DWG', 'DXF', 'STEP'].map((f) => (
+          <span key={f} className="code-chip bg-surface-card">
+            {f}
+          </span>
         ))}
       </span>
     ),
@@ -42,314 +62,264 @@ const INPUTS: Array<{ basis: SourcingBasis; icon: LucideIcon; title: string; bod
   },
   {
     basis: 'photo',
+    tone: 'emerald',
     icon: Camera,
     title: 'Photograph',
-    body: 'A clear close-up of the insert or the worn cutting edge. Useful when the code has worn off or the box is gone.',
-    example: <span className="text-[13.5px] text-ink-soft">Close-up, with a ruler or coin for scale</span>,
+    body: 'A clear close-up of the insert or the worn cutting edge — useful when the code has worn off or the box is gone.',
+    example: <span className="text-[14px] text-ink-soft">Close-up, with a ruler or coin for scale</span>,
     cta: 'Send a photograph',
   },
   {
     basis: 'sample',
+    tone: 'sapphire',
     icon: Package,
     title: 'Physical sample',
     body: 'The insert you use today. We measure and match against it, then confirm the specification with you before quoting.',
-    example: <span className="text-[13.5px] text-ink-soft">One piece is usually enough to start</span>,
+    example: <span className="text-[14px] text-ink-soft">One piece is usually enough to start</span>,
     cta: 'Arrange a sample',
   },
 ];
 
-const STEPS: Array<{ icon: LucideIcon; title: string; body: string }> = [
+const STEPS = [
   {
-    icon: MessageSquareText,
     title: 'Share the requirement',
-    body: 'Send a code, drawing, photograph or sample, with the quantity, workpiece material and where it needs to be delivered.',
+    body: 'Send a code, drawing, photograph or sample, with the quantity, workpiece material and delivery location.',
   },
   {
-    icon: FileSearch,
-    title: 'Technical matching & supplier review',
-    body: 'We read the geometry and grade requirement and review it with producers in China and Taiwan. If we can’t find a suitable match, we tell you.',
+    title: 'Technical matching and supplier review',
+    body: `We read the geometry and grade requirement and review it with producers in ${regions}.`,
   },
   {
-    icon: Receipt,
-    title: 'Quote & lead-time confirmation',
-    body: 'You receive a quotation for the specification we can source, with pricing and a lead time confirmed with the supplier — before you commit.',
+    title: 'Quote and lead-time confirmation',
+    body: 'You receive a quotation for the specification we can source, with pricing and a lead time confirmed with the supplier.',
   },
   {
-    icon: Ship,
-    title: 'Order coordination & delivery support',
+    title: 'Order coordination and delivery support',
     body: 'Once you confirm, we coordinate the order, import and dispatch, and keep you informed as it progresses.',
   },
 ];
 
-/** Technical drawing of a triangular insert: inscribed circle, 60° corner, corner radius and thickness. */
-function BlueprintInsert() {
-  const line = { stroke: 'var(--blueprint-line)' };
-  const faint = { stroke: 'var(--blueprint-faint)' };
-  const text = { fill: 'var(--blueprint-text)', fontFamily: "'Geist Mono', ui-monospace, monospace", fontSize: 13 };
+const PRACTICES = [
+  {
+    title: 'Requirements are checked before quotation',
+    body: 'Your code, drawing or sample is reviewed against the geometry and grade you need before any price is given.',
+  },
+  {
+    title: 'Specification and availability are confirmed',
+    body: `We confirm what producers in ${regions} can supply, and tell you plainly when a match isn’t available.`,
+  },
+  {
+    title: 'Lead times follow confirmation',
+    body: 'A lead time is given once the source is confirmed, so the date you plan around is one the supplier has agreed.',
+  },
+  {
+    title: 'No substitution without your approval',
+    body: 'If a different grade or geometry is proposed, you see it and approve it before anything is ordered.',
+  },
+];
 
-  return (
-    <div className="relative overflow-hidden rounded-3xl border border-[rgba(var(--brand-rgb),0.28)] bg-[rgba(var(--night-rgb),0.72)] shadow-glow">
-      <div className="absolute inset-0 blueprint-fine" aria-hidden="true" />
-      <div className="scanline" aria-hidden="true" />
-      <svg
-        viewBox="0 0 520 440"
-        className="relative w-full"
-        role="img"
-        aria-label="Technical drawing of a triangular insert showing its inscribed circle, 60 degree corner, corner radius and thickness"
-      >
-        <defs>
-          <marker id="bp-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path d="M0 0 L10 5 L0 10 z" style={{ fill: 'var(--blueprint-line)' }} />
-          </marker>
-        </defs>
-
-        {/* centre lines */}
-        <g fill="none" strokeWidth="1" strokeDasharray="10 5 2 5" style={faint}>
-          <path d="M260 34 V350" />
-          <path d="M150 233 H370" />
-        </g>
-
-        {/* insert outline, inscribed circle, hole */}
-        <path d="M260 60 L410 319.8 L110 319.8 Z" fill="rgba(var(--brand-rgb),0.06)" strokeWidth="2" strokeLinejoin="round" style={line} />
-        <circle cx="260" cy="233.2" r="86.6" fill="none" strokeWidth="1.2" strokeDasharray="5 5" style={line} />
-        <circle cx="260" cy="233.2" r="21" fill="none" strokeWidth="1.6" style={line} />
-
-        {/* 60° corner */}
-        <path d="M281 96.4 A42 42 0 0 1 239 96.4" fill="none" strokeWidth="1.2" style={{ stroke: 'var(--gold)' }} />
-        <text x="260" y="128" textAnchor="middle" style={text}>60°</text>
-
-        {/* corner radius callout */}
-        <path d="M402 312 L462 262 H500" fill="none" strokeWidth="1" style={line} />
-        <circle cx="402" cy="312" r="3" style={{ fill: 'var(--gold)' }} />
-        <text x="468" y="254" style={text}>R0.8</text>
-
-        {/* inscribed circle dimension */}
-        <g fill="none" strokeWidth="1" style={faint}>
-          <path d="M173.4 233 V366" />
-          <path d="M346.6 233 V366" />
-        </g>
-        <path d="M177 360 H343" fill="none" strokeWidth="1.2" markerStart="url(#bp-arrow)" markerEnd="url(#bp-arrow)" style={line} />
-        <text x="260" y="352" textAnchor="middle" style={text}>IC 9.525</text>
-
-        {/* side view with thickness */}
-        <rect x="110" y="386" width="300" height="22" rx="2" fill="rgba(var(--brand-rgb),0.06)" strokeWidth="1.6" style={line} />
-        <path d="M424 386 H440 M424 408 H440" fill="none" strokeWidth="1" style={faint} />
-        <path d="M434 389 V405" fill="none" strokeWidth="1.2" markerStart="url(#bp-arrow)" markerEnd="url(#bp-arrow)" style={line} />
-        <text x="446" y="402" style={text}>S 4.76</text>
-      </svg>
-      <div className="relative flex flex-wrap items-center justify-between gap-2 border-t border-[rgba(var(--brand-rgb),0.18)] px-5 py-3">
-        <span className="font-mono text-[12px] text-ink-muted">Top &amp; side view · TNMG1604 geometry</span>
-        <span className="font-mono text-[12px] text-ink-muted">ISO 1832</span>
-      </div>
-    </div>
-  );
-}
+const ATTACHMENTS: Array<{ basis: SourcingBasis; icon: LucideIcon; title: string; detail: string }> = [
+  { basis: 'code', icon: Hash, title: 'Product code', detail: 'Typed into the form' },
+  { basis: 'drawing', icon: FileText, title: 'Technical drawing', detail: 'PDF · DWG · DXF · STEP/STP' },
+  { basis: 'photo', icon: ImageIcon, title: 'Photograph', detail: 'JPG · PNG' },
+  { basis: 'sample', icon: Package, title: 'Physical sample', detail: 'Arranged after your enquiry' },
+];
 
 export default function CustomSourcingPage() {
   usePageMeta(
     'Custom Sourcing',
-    'Send a product code, drawing, photograph or sample and ShreeRaj Tools will match standard, uncommon and special-design carbide inserts from producers in China and Taiwan.',
+    `Send a product code, drawing, photograph or sample and Sreeraj Tools will match standard, uncommon and special-design carbide inserts from producers in ${regions}.`,
   );
 
   const enquiryOnly = categories.filter((c) => c.enquiryOnly);
 
   return (
     <>
-      {/* ---------------------------------------------------------------- Hero */}
-      <section className="relative overflow-hidden bg-night">
-        <div className="pointer-events-none absolute inset-0 blueprint" aria-hidden="true" />
-        <div className="pointer-events-none absolute inset-0 glow-brand" aria-hidden="true" />
-        <div className="shell relative grid items-center gap-12 py-16 md:py-24 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
-          <div>
-            <Reveal>
-              <p className="eyebrow">Custom sourcing</p>
-            </Reveal>
-            <Reveal delay={80}>
-              <h1 className="mt-6 text-[clamp(2.6rem,5.6vw,4.6rem)] font-semibold leading-[1] tracking-[-0.045em] text-ink">
-                The insert you need, <span className="accent-word text-brand-bright">even when it isn’t listed</span>
-              </h1>
-            </Reveal>
-            <Reveal delay={160}>
-              <p className="mt-7 max-w-xl text-[18px] leading-relaxed text-ink-soft">
-                Standard geometries, uncommon sizes and special designs. Send us what you have — a code, a drawing, a photo or the
-                insert itself — and we work back to a specification, check it with producers in China and Taiwan, and tell you
-                plainly what we can source.
-              </p>
-            </Reveal>
-            <Reveal delay={240}>
-              <div className="mt-10 flex flex-col gap-3.5 sm:flex-row sm:flex-wrap">
-                <Link href={enquiryHref()} className="btn-primary btn-lg group">
-                  Start a sourcing request
-                  <ArrowRight className="h-[18px] w-[18px] transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
+      <PageHero
+        id="sourcing-title"
+        eyebrow="Custom sourcing"
+        title="Source the insert your application requires"
+        lead="Send an ISO code, technical drawing, photograph or sample. We will review the specification and confirm what can be sourced before quoting."
+        media={<DrawingBackdrop />}
+      >
+        <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <CtaLink href={enquiryHref()} arrow="tile">
+            Start a Sourcing Request
+          </CtaLink>
+          <CtaLink href="/products" variant="secondary">
+            Browse Products
+          </CtaLink>
+        </div>
+      </PageHero>
+
+      {/* -------------------------------------------------- What we need from you */}
+      <section className="section bg-surface" aria-labelledby="inputs-title">
+        <div className="shell">
+          <SectionHeader
+            id="inputs-title"
+            title="What we need from you"
+            lead="Any one of these is enough to start the review. The more you can share, the more precisely we can match and quote."
+          />
+
+          <ul className="mt-12 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            {INPUTS.map((input, i) => (
+              <Reveal key={input.basis} as="li" delay={i * 70} className="h-full">
+                <Link
+                  href={enquiryHref(input.basis)}
+                  className="need-card group flex h-full flex-col p-6 md:p-7"
+                  style={{ '--tone': TONES[input.tone].tone, '--tone-light': TONES[input.tone].light } as CSSProperties}
+                >
+                  <span className="need-icon">
+                    <input.icon className="h-5 w-5" aria-hidden="true" />
+                  </span>
+                  <h3 className="t-h3 mt-6 text-[20px]">{input.title}</h3>
+                  <p className="t-body mt-2.5 text-[15px]">{input.body}</p>
+                  <div className="need-example mt-5 rounded-lg border px-3.5 py-3">
+                    <p className="t-label">Example</p>
+                    <div className="mt-1.5">{input.example}</div>
+                  </div>
+                  <span className="need-action mt-auto pt-6 text-[14.5px]">
+                    {input.cta}
+                    <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                  </span>
                 </Link>
-                <Link href="/products" className="btn-outline btn-lg">Browse the catalogue</Link>
-              </div>
-            </Reveal>
-          </div>
-          <Reveal delay={200}>
-            <BlueprintInsert />
-          </Reveal>
+              </Reveal>
+            ))}
+          </ul>
         </div>
       </section>
 
-      {/* --------------------------------------------------- What we need from you */}
-      <section className="relative bg-surface py-20 md:py-28">
+      {/* ------------------------------------------------ How custom sourcing works */}
+      <section className="section border-y border-rule bg-surface-subtle" aria-labelledby="process-title">
         <div className="shell">
+          <SectionHeader
+            id="process-title"
+            title="How custom sourcing works"
+            lead="Four steps, with the specification confirmed before anything is quoted."
+          />
+
+          <Reveal delay={80}>
+            <ol className="panel mt-12 grid overflow-hidden shadow-paper lg:grid-cols-4">
+              {STEPS.map((s, i) => (
+                <li
+                  key={s.title}
+                  className="relative border-b border-rule-soft p-6 last:border-b-0 md:p-8 lg:border-b-0 lg:border-r lg:last:border-r-0"
+                >
+                  <p className="text-[42px] font-bold leading-none tracking-[-0.04em] text-bronze-text">
+                    <span className="sr-only">Step </span>
+                    {String(i + 1).padStart(2, '0')}
+                  </p>
+                  <h3 className="t-h3 mt-6 text-[19px]">{s.title}</h3>
+                  <p className="t-body mt-2.5 text-[15px]">{s.body}</p>
+                  {i < STEPS.length - 1 && (
+                    <span
+                      className="absolute -right-3.5 top-10 z-10 hidden h-7 w-7 items-center justify-center rounded-full border border-rule bg-surface-card text-ink-muted lg:flex"
+                      aria-hidden="true"
+                    >
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ol>
+          </Reveal>
+
+          <div className="mt-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <p className="text-[15.5px] text-ink-soft">
+              <span className="font-bold text-ink">Also sourced on enquiry</span> — categories without a fixed list.
+            </p>
+            <ul className="flex flex-wrap gap-2">
+              {enquiryOnly.map((c) => (
+                <li key={c.id}>
+                  <Link href={`/products/${c.slug}`} className="chip h-9 px-3.5 transition-colors hover:border-accent-line hover:text-accent-ink">
+                    {c.name} <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* ------------------------------------------------------ Sourcing practice */}
+      <section className="on-charcoal section" aria-labelledby="practice-title">
+        <div className="shell grid gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-20">
           <Reveal>
-            <p className="eyebrow">What we need from you</p>
-            <div className="mt-5 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-              <h2 className="max-w-2xl text-[clamp(2rem,4vw,3.25rem)] font-semibold leading-[1.05] tracking-[-0.04em] text-ink">
-                Any one of these <span className="accent-word text-brand-bright">is enough to start</span>
-              </h2>
-              <p className="max-w-sm text-[16px] leading-relaxed text-ink-muted">
-                Choose the one you have. The more you can share, the more precisely we can match and quote.
+            <p className="text-[15px] font-semibold text-bronze-bright">Sourcing practice</p>
+            <h2 id="practice-title" className="t-h2 mt-4 text-graphite-ink">
+              Transparent from the first message
+            </h2>
+            <p className="mt-5 max-w-md text-[16.5px] leading-relaxed text-graphite-muted">
+              Sourcing works best when everyone knows what has been confirmed. This is how every request is handled.
+            </p>
+          </Reveal>
+          <ul className="grid gap-x-10 sm:grid-cols-2">
+            {PRACTICES.map((p, i) => (
+              <Reveal key={p.title} as="li" delay={(i % 2) * 80} className="border-t border-graphite-line py-7">
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-amethyst text-ivory" aria-hidden="true">
+                  <Check className="h-4 w-4" />
+                </span>
+                <h3 className="mt-4 text-[17.5px] font-bold leading-snug tracking-[-0.015em] text-graphite-ink">{p.title}</h3>
+                <p className="mt-2 text-[15px] leading-relaxed text-graphite-muted">{p.body}</p>
+              </Reveal>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* --------------------------------------------------- Attachment-led CTA */}
+      <section className="section bg-surface-subtle" aria-labelledby="start-title">
+        <div className="shell grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
+          <Reveal>
+            <p className="t-eyebrow">Start a sourcing request</p>
+            <h2 id="start-title" className="t-h2 mt-4">
+              Start with the information already available
+            </h2>
+            <p className="t-lead mt-5 max-w-lg">
+              A product code, drawing, photograph or sample is enough to begin the sourcing review.
+            </p>
+            <div className="mt-9 flex flex-col items-start gap-3">
+              <CtaLink href={enquiryHref()} arrow="tile">
+                Start a Sourcing Request
+              </CtaLink>
+              <p className="flex items-center gap-1.5 text-[13.5px] text-ink-muted">
+                Opens the enquiry form with custom sourcing selected
+                <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
               </p>
             </div>
           </Reveal>
 
-          <ul className="mt-14 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            {INPUTS.map((input, i) => (
-              <Reveal key={input.basis} as="li" delay={i * 80} className="h-full">
-                <Link href={enquiryHref(input.basis)} className="card-interactive group flex h-full flex-col p-6 md:p-7">
-                  <span className="icon-badge transition-colors duration-300 group-hover:bg-brand group-hover:text-white group-focus-visible:bg-brand group-focus-visible:text-white">
-                    <input.icon className="h-5 w-5" aria-hidden="true" />
-                  </span>
-                  <h3 className="mt-6 text-[21px] font-semibold tracking-[-0.02em] text-ink">{input.title}</h3>
-                  <p className="mt-2.5 text-[15px] leading-relaxed text-ink-muted">{input.body}</p>
-                  <div className="mt-5 rounded-xl border border-rule bg-surface-subtle px-3.5 py-3">
-                    <p className="label text-ink-muted">Example</p>
-                    <div className="mt-1.5">{input.example}</div>
-                  </div>
-                  <span className="mt-auto inline-flex items-center gap-1.5 pt-6 text-[14.5px] font-semibold text-brand-bright">
-                    {input.cta}
-                    <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none" aria-hidden="true" />
-                  </span>
-                </Link>
-              </Reveal>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* -------------------------------------------------- How custom sourcing works */}
-      <section className="relative overflow-hidden border-y border-rule bg-surface-subtle py-20 md:py-28">
-        <div className="pointer-events-none absolute inset-0 blueprint opacity-40" aria-hidden="true" />
-        <div className="shell relative">
-          <Reveal>
-            <p className="eyebrow">How custom sourcing works</p>
-            <h2 className="mt-5 max-w-2xl text-[clamp(2rem,4vw,3.25rem)] font-semibold leading-[1.05] tracking-[-0.04em] text-ink">
-              Four steps, <span className="accent-word text-brand-bright">one point of contact</span>
-            </h2>
-          </Reveal>
-
-          <ol className="relative mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-            <span
-              className="pointer-events-none absolute left-6 right-6 top-6 hidden h-px bg-gradient-to-r from-transparent via-[rgba(var(--brand-rgb),0.5)] to-transparent lg:block"
-              aria-hidden="true"
-            />
-            {STEPS.map((s, i) => (
-              <Reveal key={s.title} as="li" delay={i * 90} className="relative">
-                <div className="flex items-center gap-3">
-                  <span className="step-node">
-                    <s.icon className="h-5 w-5" aria-hidden="true" />
-                  </span>
-                  <span className="font-mono text-[12px] font-medium tracking-[0.12em] text-gold">STEP {i + 1}</span>
-                </div>
-                <div className="card mt-5 h-[calc(100%-4.25rem)] p-6">
-                  <h3 className="text-[19px] font-semibold leading-snug tracking-[-0.02em] text-ink">{s.title}</h3>
-                  <p className="mt-2.5 text-[15px] leading-relaxed text-ink-muted">{s.body}</p>
-                </div>
-              </Reveal>
-            ))}
-          </ol>
-        </div>
-      </section>
-
-      {/* --------------------------------------------------------- Expectations */}
-      <section className="bg-surface py-20 md:py-28">
-        <div className="shell grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-          <Reveal>
-            <p className="eyebrow">Straight answers</p>
-            <h2 className="mt-5 text-[clamp(2rem,4vw,3rem)] font-semibold leading-[1.05] tracking-[-0.04em] text-ink">
-              What we can and <span className="accent-word text-brand-bright">cannot promise</span>
-            </h2>
-            <p className="mt-5 max-w-md text-[16.5px] leading-relaxed text-ink-muted">
-              Sourcing flexibility is not the same as guaranteed availability, and we would rather be clear about that from the start.
-            </p>
-          </Reveal>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Reveal delay={80}>
-              <div className="card h-full p-6 md:p-7">
-                <p className="flex items-center gap-2 text-[16px] font-semibold text-ink">
-                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[rgba(var(--success-rgb),0.14)]">
-                    <Check className="h-4 w-4 text-success" aria-hidden="true" />
-                  </span>
-                  We will
-                </p>
-                <ul className="mt-5 space-y-3.5 text-[15px] leading-relaxed text-ink-soft">
-                  <li>Check your requirement against the producers we work with.</li>
-                  <li>Tell you the specification, quantity and lead time we can actually get.</li>
-                  <li>Say so plainly when something isn’t available to us.</li>
-                </ul>
+          <Reveal delay={100}>
+            <div className="panel overflow-hidden shadow-raised">
+              <div className="flex items-center justify-between gap-4 border-b border-rule-soft px-6 py-4">
+                <p className="text-[15px] font-bold text-ink">What you can send</p>
+                <span className="t-meta">Up to {MAX_MB} MB per file</span>
               </div>
-            </Reveal>
-            <Reveal delay={160}>
-              <div className="card h-full p-6 md:p-7">
-                <p className="flex items-center gap-2 text-[16px] font-semibold text-ink">
-                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-surface-panel">
-                    <X className="h-4 w-4 text-ink-muted" aria-hidden="true" />
-                  </span>
-                  We won’t
-                </p>
-                <ul className="mt-5 space-y-3.5 text-[15px] leading-relaxed text-ink-soft">
-                  <li>Quote a specification we haven’t confirmed with a supplier.</li>
-                  <li>Promise a lead time before the source is confirmed.</li>
-                  <li>Substitute a different grade or geometry without telling you.</li>
-                </ul>
-              </div>
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      {/* ---------------------------------------------- Categories sourced on enquiry */}
-      <section className="border-t border-rule bg-surface py-14">
-        <div className="shell flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
-          <p className="text-[16px] text-ink-soft">
-            <span className="font-semibold text-ink">Also sourced on enquiry</span> — categories we don’t hold a fixed list for.
-          </p>
-          <ul className="flex flex-wrap gap-2">
-            {enquiryOnly.map((c) => (
-              <li key={c.id}>
-                <Link href={`/products/${c.slug}`} className="chip chip-link">
-                  {c.name} <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* ----------------------------------------------------------------- CTA */}
-      <section className="bg-surface pb-24 md:pb-28">
-        <div className="shell">
-          <Reveal>
-            <div className="cta-band">
-              <div className="pointer-events-none absolute inset-0 blueprint opacity-60" aria-hidden="true" />
-              <div className="relative flex flex-col items-start gap-8 md:flex-row md:items-center md:justify-between">
-                <div>
-                  <h2 className="text-[clamp(1.9rem,3.6vw,2.8rem)] font-semibold leading-[1.05] tracking-[-0.04em] text-ink">
-                    Start with what you have
-                  </h2>
-                  <p className="mt-3 max-w-xl text-[16.5px] leading-relaxed text-ink-soft">
-                    Attach a drawing or photograph directly to the enquiry form — up to 10 MB.
-                  </p>
-                </div>
-                <Link href={enquiryHref()} className="btn-primary btn-lg group shrink-0">
-                  Start a sourcing request
-                  <ArrowRight className="h-[18px] w-[18px] transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
-                </Link>
-              </div>
+              <ul>
+                {ATTACHMENTS.map((a) => (
+                  <li key={a.basis} className="border-b border-rule-soft last:border-b-0">
+                    <Link
+                      href={enquiryHref(a.basis)}
+                      className="group flex items-center gap-4 px-6 py-4 transition-colors hover:bg-accent-soft focus-visible:bg-accent-soft"
+                    >
+                      <span className="icon-tile h-10 w-10 group-hover:border-accent group-hover:bg-accent group-hover:text-ivory">
+                        <a.icon className="h-[18px] w-[18px]" aria-hidden="true" />
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-[15px] font-bold text-ink">{a.title}</span>
+                        <span className={`block text-[13.5px] text-ink-muted ${a.basis === 'drawing' || a.basis === 'photo' ? 'font-mono' : ''}`}>{a.detail}</span>
+                      </span>
+                      <ArrowRight
+                        className="h-4 w-4 shrink-0 text-ink-muted transition-transform duration-200 group-hover:translate-x-[3px] group-hover:text-accent-ink"
+                        aria-hidden="true"
+                      />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <p className="border-t border-rule-soft bg-surface px-6 py-3.5 text-[13px] text-ink-muted">
+                Accepted files: <span className="font-mono">PDF, XLS/XLSX, JPG/PNG, DWG, DXF, STEP/STP</span> — attach one to the enquiry form.
+              </p>
             </div>
           </Reveal>
         </div>

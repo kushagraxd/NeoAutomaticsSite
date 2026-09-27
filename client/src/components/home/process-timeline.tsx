@@ -1,98 +1,155 @@
 import { useEffect, useRef, useState } from 'react';
-import { MessageSquareText, SearchCheck, FileText, Truck } from 'lucide-react';
+import SectionHeader from './section-header';
+import { company } from '../../../../shared/company';
+import { capitalise, listSentence, numberWord } from '../../lib/number-words';
+import { useReducedMotion } from '../../lib/useReducedMotion';
 
 const STEPS = [
-  { icon: MessageSquareText, title: 'Send the requirement', body: 'An ISO code, a drawing, a photograph of a worn insert, or the part you currently buy. Tell us the quantity and where it needs to go.' },
-  { icon: SearchCheck, title: 'We confirm the source', body: 'We check specification, grade and availability with producers in China and Taiwan — and say so if something can’t be sourced.' },
-  { icon: FileText, title: 'You receive a quotation', body: 'Pricing, lead time and packing against your actual requirement, rather than a list price that may not fit the job.' },
-  { icon: Truck, title: 'We import and supply', body: 'Documentation and delivery against your confirmed order, for customers in India and buyers abroad.' },
+  {
+    title: 'Send the requirement',
+    body: 'An ISO code, a drawing, a photograph of a worn insert, or the part you currently buy. Tell us the quantity and where it needs to go.',
+  },
+  {
+    title: 'We confirm the source',
+    body: `We check specification, grade and availability with producers in ${listSentence(company.sourcingRegions)} — and say so if something can’t be sourced.`,
+  },
+  {
+    title: 'You receive a quotation',
+    body: 'Pricing, lead time and packing against your actual requirement, rather than a list price that may not fit the job.',
+  },
+  {
+    title: 'We import and supply',
+    body: 'Documentation and delivery against your confirmed order.',
+  },
 ];
 
+const WIDE = '(min-width: 1024px)';
+
 /**
- * Timeline whose rail fills as the visitor scrolls through it; each step lights
- * up as the fill reaches it. Shows fully lit when motion is reduced.
+ * Four steps on a progress line that fills as the section scrolls through the
+ * viewport — horizontal on desktop, vertical below 1024 px. Scroll is only
+ * observed while the section is near the viewport and is never captured.
+ * Reduced motion shows every step at once.
  */
 export default function ProcessTimeline() {
   const listRef = useRef<HTMLOListElement>(null);
+  const reduced = useReducedMotion();
   const [progress, setProgress] = useState(0);
+  const [current, setCurrent] = useState(-1);
+  const [reached, setReached] = useState(0);
 
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const el = listRef.current;
+    if (!el) return;
+    if (reduced) {
       setProgress(1);
+      setCurrent(STEPS.length - 1);
+      setReached(STEPS.length);
       return;
     }
+
+    const wide = window.matchMedia(WIDE);
     let frame = 0;
+
     const update = () => {
       frame = 0;
-      const el = listRef.current;
-      if (!el) return;
       const r = el.getBoundingClientRect();
-      const anchor = window.innerHeight * 0.6;
-      setProgress(Math.min(1, Math.max(0, (anchor - r.top) / r.height)));
+      const vh = window.innerHeight;
+      let p: number;
+      let at: number;
+      if (wide.matches) {
+        // The row fills as it rises from 85 % to 40 % of the viewport.
+        p = Math.min(1, Math.max(0, (vh * 0.85 - r.top) / (vh * 0.45)));
+        // A step lights as the fill reaches its dot.
+        at = r.top < vh * 0.85 ? Math.floor(p * (STEPS.length - 1) + 0.04) : -1;
+      } else {
+        // The fill follows a reading line at 70 % of the viewport.
+        const line = vh * 0.7;
+        p = Math.min(1, Math.max(0, (line - r.top) / r.height));
+        at = -1;
+        el.querySelectorAll<HTMLElement>(':scope > li').forEach((step, i) => {
+          if (step.getBoundingClientRect().top < line) at = i;
+        });
+      }
+      setProgress(p);
+      setCurrent(at);
+      setReached((n) => Math.max(n, at + 1));
     };
-    const onScroll = () => { if (!frame) frame = requestAnimationFrame(update); };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+
+    let listening = false;
+    const listen = (on: boolean) => {
+      if (on === listening) return;
+      listening = on;
+      if (on) {
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll);
+        update();
+      } else {
+        window.removeEventListener('scroll', onScroll);
+        window.removeEventListener('resize', onScroll);
+      }
+    };
+
+    // Only follow scroll while the list is near the viewport.
+    const io =
+      typeof IntersectionObserver !== 'undefined'
+        ? new IntersectionObserver(([entry]) => listen(entry.isIntersecting), { rootMargin: '25% 0px 25% 0px' })
+        : null;
+    if (io) io.observe(el);
+    else listen(true);
     update();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
+
     return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
+      io?.disconnect();
+      listen(false);
       if (frame) cancelAnimationFrame(frame);
     };
-  }, []);
+  }, [reduced]);
 
   return (
-    <section className="bg-surface-subtle py-24 md:py-32">
-      <div className="shell grid gap-14 lg:grid-cols-[.85fr_1.15fr]">
-        <div className="lg:sticky lg:top-32 lg:self-start">
-          <p className="eyebrow mb-6">How it works</p>
-          <h2 className="text-[clamp(2.25rem,4.6vw,3.75rem)] font-semibold leading-[1.02] tracking-[-0.04em]">
-            From first message to <span className="accent-word text-accent-ink">delivered</span>
-          </h2>
-          <p className="mt-6 max-w-md text-[17px] leading-relaxed text-ink-muted">
-            Four steps, one point of contact. You never coordinate with an overseas supplier yourself.
-          </p>
-          <p className="mt-8 font-mono text-[13px] text-ink-muted" aria-hidden="true">
-            <span className="text-[34px] font-semibold tracking-[-0.04em] text-ink">
-              {String(Math.min(STEPS.length, Math.max(1, Math.ceil(progress * STEPS.length + 0.001)))).padStart(2, '0')}
-            </span>{' '}
-            / {String(STEPS.length).padStart(2, '0')}
-          </p>
-        </div>
+    <section className="section bg-surface" aria-labelledby="process-title">
+      <div className="shell">
+        <SectionHeader
+          id="process-title"
+          title="How sourcing works"
+          lead={`${capitalise(numberWord(STEPS.length))} steps, one point of contact. You never coordinate with an overseas supplier yourself.`}
+        />
 
-        <ol ref={listRef} className="relative">
-          {/* Rail */}
-          <span className="absolute bottom-6 left-[23px] top-6 w-[2px] rounded-full bg-rule" aria-hidden="true" />
-          <span
-            className="absolute left-[23px] top-6 w-[2px] rounded-full bg-gradient-to-b from-accent-ink to-accent"
-            style={{ height: `calc((100% - 3rem) * ${progress})` }}
-            aria-hidden="true"
-          />
+        <div className="proc relative mt-14" data-static={reduced}>
+          {/* Horizontal track — first dot to last dot */}
+          <span className="proc-track absolute left-0 top-0 hidden h-[2px] w-3/4 lg:block" aria-hidden="true">
+            <span className="proc-fill proc-fill-x" style={{ transform: `scaleX(${progress})` }} />
+          </span>
+          {/* Vertical track */}
+          <span className="proc-track absolute bottom-6 left-[5px] top-3 w-[2px] lg:hidden" aria-hidden="true">
+            <span className="proc-fill proc-fill-y" style={{ transform: `scaleY(${progress})` }} />
+          </span>
 
-          {STEPS.map((s, i) => {
-            const lit = progress >= i / STEPS.length + 0.04 || progress === 1;
-            return (
-              <li key={s.title} className="relative flex gap-7 pb-12 last:pb-0">
-                <span
-                  className={`relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-500 ${
-                    lit ? 'border-brand-bright bg-brand text-white shadow-lift' : 'border-rule-strong bg-surface-card text-ink-muted'
-                  }`}
-                >
-                  <s.icon className="h-5 w-5" aria-hidden="true" />
-                </span>
-                <div
-                  className={`flex-1 rounded-2xl border bg-surface-card p-6 transition-all duration-500 md:p-7 ${
-                    lit ? 'translate-x-0 border-rule-strong opacity-100 shadow-card' : 'translate-x-2 border-rule opacity-45'
-                  }`}
-                >
-                  <p className="font-mono text-[12px] font-medium text-accent-ink">STEP {String(i + 1).padStart(2, '0')}</p>
-                  <h3 className="mt-2 text-[22px] font-semibold tracking-[-0.025em] text-ink">{s.title}</h3>
-                  <p className="mt-2.5 text-[15.5px] leading-relaxed text-ink-muted">{s.body}</p>
-                </div>
-              </li>
-            );
-          })}
+        <ol ref={listRef} className="grid gap-2 pl-9 lg:grid-cols-4 lg:gap-0 lg:pl-0">
+          {STEPS.map((s, i) => (
+            <li
+              key={s.title}
+              className="proc-step relative pb-8 lg:pb-0 lg:pr-6 lg:pt-8"
+              data-reached={i < reached}
+              data-current={i === current}
+              data-lit={i <= current}
+            >
+              <span className="proc-dot absolute -left-9 top-[5px] lg:-top-[7px] lg:left-0" aria-hidden="true" />
+              <div className="proc-card">
+                <p className="font-mono text-[13px] font-semibold text-accent-ink">
+                  <span className="sr-only">Step </span>
+                  {String(i + 1).padStart(2, '0')}
+                </p>
+                <h3 className="t-h3 mt-3">{s.title}</h3>
+                <p className="t-body mt-3 max-w-[34ch]">{s.body}</p>
+              </div>
+            </li>
+          ))}
         </ol>
+        </div>
       </div>
     </section>
   );

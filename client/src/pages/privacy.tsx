@@ -1,8 +1,9 @@
 import { usePageMeta } from '../lib/usePageMeta';
+import PageHero from '../components/page-hero';
 import { company, confirmed } from '../../../shared/company';
 
 export default function PrivacyPage() {
-  usePageMeta('Privacy Policy', 'How ShreeRaj Tools handles the information you share through the website enquiry form.');
+  usePageMeta('Privacy Policy', 'How Sreeraj Tools handles the information you share through the website enquiry form.');
   const email = confirmed(company.contact.email);
 
   const sections: Array<[string, string[]]> = [
@@ -27,33 +28,33 @@ export default function PrivacyPage() {
 
   return (
     <>
-      <section className="bg-night py-14 text-night-ink">
-        <div className="shell max-w-3xl">
-          <span className="accent-rule-dark mb-5" />
-          <h1 className="text-h1">Privacy Policy</h1>
-          <p className="mt-4 text-[16px] text-night-muted">
-            How {company.displayName} handles the information you share through this website.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        id="privacy-title"
+        eyebrow="Privacy"
+        title="Privacy Policy"
+        lead={`How ${company.displayName} handles the information you share through this website.`}
+        size="sm"
+      />
 
-      <section className="py-14 md:py-20">
+      <section className="section-tight bg-surface">
         <div className="shell max-w-3xl">
-          {sections.map(([title, paras]) => (
-            <div key={title} className="mb-10">
-              <h2 className="text-h3">{title}</h2>
-              {paras.map((p) => (
-                <p key={p} className="mt-3 text-[16px] leading-relaxed text-ink-soft">{p}</p>
-              ))}
+          <div className="panel divide-y divide-rule-soft">
+            {sections.map(([title, paras]) => (
+              <div key={title} className="px-6 py-7 md:px-8">
+                <h2 className="t-h3 text-[19px]">{title}</h2>
+                {paras.map((p) => (
+                  <p key={p} className="mt-3 text-[16px] leading-relaxed text-ink-soft">{p}</p>
+                ))}
+              </div>
+            ))}
+            <div className="bg-surface-panel px-6 py-7 md:px-8">
+              <h2 className="t-h3 text-[19px]">Questions</h2>
+              <p className="mt-3 text-[16px] leading-relaxed text-ink-soft">
+                {email
+                  ? <>Write to us at <a href={`mailto:${email}`} className="font-semibold text-ink underline decoration-accent-line underline-offset-4">{email}</a>.</>
+                  : 'Please use the enquiry form and we will respond directly.'}
+              </p>
             </div>
-          ))}
-          <div className="rounded-lg border border-rule bg-surface-subtle p-6">
-            <h2 className="text-h3">Questions</h2>
-            <p className="mt-2 text-[16px] leading-relaxed text-ink-soft">
-              {email
-                ? <>Write to us at <a href={`mailto:${email}`} className="text-accent-ink hover:underline">{email}</a>.</>
-                : 'Please use the enquiry form and we will respond directly.'}
-            </p>
           </div>
         </div>
       </section>
